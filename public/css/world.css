@@ -1,0 +1,556 @@
+/*Importando as fonts: Cinzel, Cardo e Pirata One do google fonts.*/
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cardo&family=Pirata+One&display=swap');
+
+/* Estilos gerais */
+*{
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+text-decoration: none;
+list-style: none;
+}
+
+:root{
+--color-1: #0D2837;
+--color-2: #87EDFF;
+--color-3: #FCB646;
+--color-4: #4C5F62;
+--color-5: #292626;
+--color-6: #90B4B9;
+--color-7: #740000;
+--color-8: #221b1b;
+--color-9: #d9d9d9;
+
+--family-1: 'Cardo', serif;
+--family-2: 'Cinzel', serif;
+--family-3: 'Pirata One', cursive;
+}
+
+/* Estilo do body */
+body {
+    width: 100vw;
+    height: 100vh;
+    
+    background: linear-gradient(90deg, #c9d6ff 0%, #e2e2e2 100%);
+}
+
+/* Estilo para o cabeçalho */
+header {
+    width: 100%;
+    
+    background-color: var(--color-1);
+    
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 84px;
+}
+
+/* Estilo para o logotipo */
+header .title {
+color: var(--color-2);
+font-size: 1rem;
+font-family: var(--family-2);
+letter-spacing: 0.12rem;
+}
+
+nav ul{
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    
+    color: var(--color-2);
+    font-size: 1.15rem;
+    font-family: var(--family-2);
+    letter-spacing: 0.12rem;
+}
+
+nav a{
+    color: var(--color-2);
+}
+
+#dropbtn{
+    background: none;
+    border: none;
+    
+    cursor: pointer;
+}
+
+#dropbtn img{
+    border: none;
+    
+    width: 50px;
+}
+
+/* Estilos da paginá */
+section{
+    width: 100%;
+    height: 100%;
+}
+
+.container{
+    width: 90%;
+
+    margin: 45px auto;
+
+    border: 0.5px solid var(--color-5);
+    border-radius: 12px;
+}
+
+.content{
+    display: grid;
+    grid-template-columns: 1fr 25%;
+}
+
+/* Painel padrão */
+
+.painel{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 20px 0;
+}
+
+.painel .vector{
+    font-size: 1.5rem;
+    font-family: var(--family-1);
+    font-weight: 700;
+    letter-spacing: 0.5rem;
+    color: var(--color-5)
+}
+
+.painel .blockOpt{
+    width: 90%;
+    height: 160px;
+    
+    display: grid;
+    grid-template-columns: 1fr 20%;
+
+    border: 0.5px solid var(--color-5);
+}
+
+.painel .blockOpt .blockText{
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.painel .blockOpt .blockText .txt{
+    width: 100%;
+
+    padding: 7px 5px;
+
+    font-size: 1rem;
+    font-weight: 800;
+    font-family: var(--family-1);
+}
+
+.painel .blockOpt .blockText .exp{
+    width: 100%;
+
+    text-align: center;
+    font-family: var(--family-1);
+    
+    border-top: 1px solid var(--color-5);
+    background: var(--color-6);
+}
+
+.painel .blockOpt .expBar{
+    width: 20%;
+    height: 19px;
+
+    position: absolute;
+    bottom: 0;
+    left: 0;
+
+    padding: 0 10px;
+    
+    background: var(--color-2);
+    border-top: 1px solid var(--color-5);
+    opacity: 50%;
+
+    font-family: var(--family-2);
+}
+
+.painel .blockOpt .options{
+    border-left: 1px solid var(--color-5);
+}
+
+.painel .blockOpt .options .directions{
+    display: grid;
+    grid-template-rows: repeat(3,1fr);
+    grid-template-columns: repeat(3,1fr);
+}
+
+.painel .blockOpt .options .directions button{
+    display: block;
+    width: 100%;
+    height: 53px;
+
+    font-size: 0.957rem;
+    font-weight: 700;
+    font-family: var(--family-2);
+
+    background: var(--color-4);
+    color: #fff;
+    border: none;
+    border-top: 1px solid var(--color-5);
+    border-bottom: 1px solid var(--color-5);
+}
+
+.painel .blockOpt .options .directions button:hover{
+    background: var(--color-6);
+    color: var(--color-5);
+}
+
+.card{
+    border-left: 1px solid var(--color-5);
+    border-radius: 0 12px 12px 0;
+
+    background: var(--color-5);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    padding: 30px 45px;
+}
+
+.card .cardImg img{
+    width: 300px;
+
+    border-radius: 12px;
+}
+
+.card .cardText>.description{
+    font-size: 1.1rem;
+    font-family: var(--family-2);
+    font-weight: 800;
+    text-align: center;
+
+    color: #fff;
+}
+
+.card .cardBtnGroup{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 12px;
+}
+
+.card .cardBtnGroup button{
+    width: 300px;
+    
+    padding: 12px 0;
+
+    background: var(--color-3);
+    color: var(--color-5);
+
+    border: 0.5px solid var(--color-5);
+    border-radius: 8px;
+
+    font-family: var(--family-1);
+    font-weight: 700;
+    font-size: 1.085rem;
+    text-transform: uppercase;
+
+    cursos: pointer;
+}
+
+.card .cardBtnGroup button:hover{
+    background: #bd8832;
+    color: #fff;
+}
+
+/* Painel de batalha */
+
+.painelBatle{
+    width: 100%;
+
+    align-self: end;
+    
+    display: grid;
+    grid-template-rows: 30px 1fr;
+    align-items: end;
+}
+
+.painelBatle .info{
+    width: 100%;
+}
+
+.painelBatle .info .hp{
+    width: 100%;
+    
+    background: #1B9FB4;
+    border-top: 1px solid var(--color-5);
+}
+
+.painelBatle .info .mp{
+    width: 100%;
+    
+    background: var(--color-2);
+    border-top: 1px solid var(--color-5);
+    border-bottom: 1px solid var(--color-5);
+}
+
+.painelBatle .options{
+    width: 100%;
+    height: 160px;
+    
+    display: grid;
+    grid-template-columns: 1fr 20% 15%;
+}
+
+.painelBatle .options .actions{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 12px;
+    
+    padding: 25px;
+    /* border: 1px solid red; */
+}
+
+.painelBatle .options .pocions{
+    border-left: 1px solid var(--color-5);
+    border-right: 1px solid var(--color-5);
+}
+
+.painelBatle .options .actions button,
+.painelBatle .options .pocions button{
+    background: #1d282c;
+    color: #fff;
+
+    border: none;
+
+    font-family: var(--family-2);
+    font-weight: 800;
+
+    cursor: pointer;
+}
+
+.painelBatle .options .actions button{
+    height: 45px;
+
+    font-size: 1rem;
+    letter-spacing: 0.1rem;
+    
+    border-radius: 8px; 
+}
+
+.painelBatle .options .pocions button{
+    width: 100%;
+    height: 40px;
+}
+
+.painelBatle .options .actions button:hover,
+.painelBatle .options .pocions button:hover{
+    color: var(--color-5);
+    background: var(--color-6);
+}
+
+.painelBatle .options .effects{
+    overflow-y: auto;
+}
+
+.painelBatle .options .effects ul>li{
+    width: 100%;
+
+    padding: 5px 7px;
+    
+    border: 1px solid var(--color-5);
+
+}
+
+/* Menu */
+
+
+.menu{
+    width: 100%;
+    height: 750px;
+
+    border-left: 1px solid var(--color-5);
+    border-radius: 0 12px 12px 0;
+
+    background: var(--color-9);
+    color: var(--color-5);
+
+    font-family: var(--family-1);
+    font-size: 1rem;
+
+    display: grid;
+    grid-template-rows: 10% 85% 5%;
+}
+
+.menu .menuHeader{
+    width: 100%;
+    
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.menu .menuHeader #btnClose{
+    border: none;
+    background: none;
+
+    justify-self: start;
+
+    font-family: var(--family-2);
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--color-7);
+}
+
+.menu .menuHeader #btnClose:hover{
+    color: var(--color-8);
+}
+
+.menu .menuHeader .title{
+    justify-self: center;
+    text-align: center;
+
+    color: var(--color-9);
+    font-size: 1.8rem;
+
+    padding: 3px 22px;
+    
+    background: var(--color-5)
+}
+
+.menu .menuContent{
+    align-self: center;
+}
+
+.menu .menuContent .menuList{
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.menu .menuContent .menuList .menuListItem button{
+    width: 100%;
+    height: 62px;
+    
+    border: none;
+    background: var(--color-5);
+    color: var(--color-9);
+
+    font-family: var(--family-1);
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: .2rem;
+}
+
+.menu .menuContent .menuList .menuListItem button:hover{
+    background: var(--color-7);
+    color: #fff;
+}
+
+.menu .menuContent .menuList .menuListItem{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 22px;
+    
+    font-size: 1.2rem;
+    font-weight: 700;
+    font-family: var(--family-2);
+    text-transform: uppercase;
+}
+
+.menu .menuContent .menuList .menuListItem .status>input{
+    width: 50px;
+
+    margin-left: 20px;
+
+    padding: 3px;
+    
+    font-family: var(--family-2);
+    font-size: 1.2rem;
+    font-weight: 800;
+    text-align: center;
+    
+}
+
+.menu .menuContent .menuList .menuListItem #addStatus{
+    width: 10%;
+    height: 50px;
+    
+    background: var(--color-4);
+}
+
+.menu .menuContent .menuList .menuListItem #addStatus:hover{
+    background: var(--color-6);
+}
+
+.menu .menuContent .menuList .menuListItem .skills{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 22px;
+    font-size: 1.2rem;
+}
+
+.menu .menuContent .menuList .menuListItem .skills img{
+    width: 30px;
+}
+
+.menu .menuFooter{
+    width: 100%;
+
+    align-self: end;
+
+    text-align: center;
+    font-size: 1rem;
+    font-family: var(--family-1);
+    font-weight: 500;
+    letter-spacing: 0.2rem;
+    
+    background: var(--color-5);
+    color: var(--color-9);
+    
+}
+
+/* Estilos que pode ser utilizado em todo css */
+
+.title{
+    font-weight: 800;
+}
+
+.hiddenComponet{
+    display: none;
+    /* animation: slideClose 1s; */
+
+}
+
+.show{
+    animation: slideOpen 1s;
+}
+
+@keyframes slideClose{
+    0%{
+        margin-right: 0px;
+    }
+
+    100%{
+        margin-right: -150px;
+    }
+}
+
+@keyframes slideOpen{
+    0%{
+        margin-right: -150px;
+    }
+
+    100%{
+        margin-right: 0px;
+    }
+}

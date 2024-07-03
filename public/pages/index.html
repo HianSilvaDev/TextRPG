@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="public/css/index.css">
+<title>RPG de Texto</title>
+</head>
+<body>
+  <span id="closeForm">X</span>
+  <div class="container">
+    <div id="init">
+      <div class="text">
+        <h2>Sombras da Eternidade</h2>
+        <p>Em Sombras da Eternidade, suas escolhas moldarão o destino do mundo. Seja você um guerreiro destemido, um mago poderoso ou um ladrão astuto, cada decisão sua influenciará a narrativa, oferecendo uma experiência única e inesquecível.</p>
+        <h3>Cadastre-se agora e comece sua jornada!</h3>
+      </div>
+      <div class="buttons">
+        <button onclick="dropForm('login')">LOGIN</button>
+        <button onclick="dropForm('cadastro')">CADASTRO</button>
+      </div>
+    </div>
+    <div class="Forms" id="loginForm">
+      <h2>Entrar em sua conta</h2>
+        <form method="post">
+          <div>
+            <label for="login_nome">Nome:</label><br />
+            <input type="text" id="login_nome" name="nome"/><br/><br/>
+          </div>
+          <div>
+            <label for="login_senha">Senha:</label><br />
+            <input type="password" id="login_senha" name="senha" autocomplete="on" /><br/><br/>
+          </div>
+          <p id="error-msg"></p>
+        </form>
+        <button id="loginSubmit">Entrar</button>
+        <p>Não tem uma conta? <a onclick="dropForm('cadastro')">Cadastre-se</a></p>
+      </div>
+    <div class="Forms" id="cadForm">
+
+      <div>
+        <h2>Cadastro de Usuário</h2>
+        <form action="/user" method="post">
+        
+          <div>
+            <label for="cad_nome">Nome:</label><br>
+            <input type="text" id="cad_nome" name="nome" required><br><br>
+          </div>
+
+          <div>
+            <label for="cad_senha">Senha:</label><br>
+            <input type="password" id="cad_senha" name="senha" autocomplete="on" required><br><br>
+          </div>
+        
+          <div>
+            <label for="email">Email:</label><br>
+            <input type="email" id="cad_email" name="email" autocomplete="on" required><br><br>
+          </div>
+        </form>
+        <button id="btnRegister">Cadastrar-se</button>
+        <p>Já tem uma conta? <a onclick="dropForm('login')">Fazer login</a> </p>
+      </div>
+      <div class="classes" >
+        <div class="card" data-value="archer">
+          <div class="flip_card_content">
+            <div class="flip_card_front">
+              <div class="class_img">
+                <img src="public/assets/img/archer_icon.png" alt="archer">
+              </div>
+              <p>Mestre das flechas, usa velocidade e precisão para atacar inimigos à distância, garantindo vantagem tática em qualquer batalha.</p>
+            </div>
+            <div class="flip_card_back">
+              <span>HP: 60</span>
+              <span>MP: 20</span>
+              <span>FORÇA: 10</span>
+              <span>DEFESA: 9</span>
+              <span>DESTREZA: 15</span>
+              <span>RESISTENCIA: 2</span>
+              <span>INTELIGENCIA: 5</span>
+            </div>
+          </div>
+        </div>
+        <div class="card" data-value="mage">
+          <div class="flip_card_content">
+            <div class="flip_card_front">
+              <div class="class_img">
+                <img src="public/assets/img/mage_icon.png" alt="archer">
+              </div>
+              <p>Manipula os elementos com precisão. Utiliza feitiços poderosos e encantamentos para controlar o campo de batalha.</p>
+            </div>
+            <div class="flip_card_back">
+              <span>HP: 60</span>
+              <span>MP: 100</span>
+              <span>FORÇA: 10</span>
+              <span>DEFESA: 5</span>
+              <span>DESTREZA: 10</span>
+              <span>RESISTENCIA: 2</span>
+              <span>INTELIGENCIA: 15</span>
+            </div>
+          </div>
+        </div>
+        <div class="card" data-value="swordsman">
+          <div class="flip_card_content">
+            <div class="flip_card_front">
+              <div class="class_img">
+                <img src="public/assets/img/swordsman_icon.png" alt="archer">
+              </div>
+              <p>Especialista em combate corpo a corpo, o espadachim utiliza agilidade e precisão, dominando o campo de batalha com destreza.</p>
+            </div>
+            <div class="flip_card_back">
+              <span>HP: 60</span>
+              <span>MP: 100</span>
+              <span>FORÇA: 10</span>
+              <span>DEFESA: 5</span>
+              <span>DESTREZA: 10</span>
+              <span>RESISTENCIA: 2</span>
+              <span>INTELIGENCIA: 15</span>
+            </div>
+          </div>
+        </div>
+        <div class="card" data-value="barbarian">
+          <div class="flip_card_content">
+            <div class="flip_card_front">
+              <div class="class_img">
+                <img src="public/assets/img/barbarian_icon.png" alt="archer">
+              </div>
+              <p>Confia na força bruta e na resistência. Usa fúria avassaladora e habilidades de combate corpo a corpo para destruir seus inimigos com força bruta</p>
+            </div>
+            <div class="flip_card_back">
+              <span>HP: 60</span>
+              <span>MP: 100</span>
+              <span>FORÇA: 10</span>
+              <span>DEFESA: 5</span>
+              <span>DESTREZA: 10</span>
+              <span>RESISTENCIA: 2</span>
+              <span>INTELIGENCIA: 15</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+  <script type="module" src="/public/js/validationForm.js"></script>
+</body>
+</html>
