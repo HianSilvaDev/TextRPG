@@ -4,6 +4,7 @@ window.onload = getPlayer;
 const username  = document.getElementById('username');
 const className = document.getElementById('class');
 const level     = document.getElementById('lvl');
+const gold     = document.getElementById('gold');
 const list      = document.querySelectorAll('.listing')
 
 function listing(component,data, isListingSkills)
@@ -33,23 +34,18 @@ btnInventory.addEventListener('click',()=>{
   inventory.classList.toggle('hiddenComponet')
 })
 
-const explore = document.getElementById('explore')
-
-explore.addEventListener('click', () => {
-  console.log('verificando se existe um player')
-})
-
 function getPlayer() {
   try {
     fetch('/player/get')
       .then(res => res.json())
       .then((data) =>{
         if(data.error) throw new Error(data.error)
-        player = data.player
-
+        player = data
+        
+        addElementValue(gold, `# ${player.gold}`)
         addElementValue(username, player.name)
         addElementValue(className, player.class)
-        addElementValue(level, player.level)
+        addElementValue(level, `lvl: ${player.level}`)
 
         listing(list[1],player.skills,true)
         listing(list[0],{

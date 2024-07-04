@@ -12,3 +12,5 @@ function map(x, y){
 }
 
 map(100, 100);
+
+console.log(mapCord);
