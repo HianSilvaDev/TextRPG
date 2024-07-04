@@ -1,4 +1,4 @@
- // Controle dos Formulários
+// Controle dos Formulários
 const loginForm = document.getElementById('loginForm');
 const cadForm = document.getElementById('cadForm');
 const initDiv = document.getElementById('init');
@@ -85,6 +85,7 @@ if(btnLogin)
     }).then((res) => res.json())
       .then((data) => {
         if(data.error){
+          console.log(data.error)
           createAlert(data.error)
         }
         if(data.redirect){

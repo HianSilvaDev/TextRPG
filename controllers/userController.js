@@ -29,33 +29,35 @@ const create = async (req, res) => {
   }
 };
 
+
 const login = async (req, res) => {
-  console.log(req.body)
-  const {emailOrName, password} = req.body;
-  try{
-    let user;
-    user = await User.getByEmail(emailOrName);
-    if(!user){
-      user = await User.getByName(emailOrName);
-    }
+  const { name, password } = req.body;
+  let user = await User.getByEmail(name);
+  if(!user){
+    user = await User.getByName(name);
+  };
+  
+  try {
     if(user){
       if(user.password === password){
         req.session.user = user;
-        res.status(200).json({ message: "Login realizado com sucesso!" });
+        res.status(200).json({ redirect: "/home" });
       }else{
-        res.status(401).json({ error: "Senha incorreta!" });
+        res.status(400).json({ error: "Senha incorreta!" });
       }
+    }else{
+      res.status(400).json({ error: "Usuário não encontrado!" });
     }
   }catch(err){
-    res.status(500).json({ error: "Erro ao realizar login!" });
+    res.status(500).json({ error: "Erro ao logar!" });
   }
-};
+}
 
 const logout = (req, res) => {
   if(req.session.user){
     req.session.destroy();
   }
-  return res.json({ redirect: "/" });
+  return res.status(200).json({ redirect: "/" });
 }
 
 module.exports = {

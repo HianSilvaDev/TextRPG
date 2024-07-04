@@ -2,9 +2,13 @@ const coordinates = document.getElementById("coordinates")
 
 coordinates.textContent = '--,--'
 
-function newCoordinates(x,y)
+let coordinatesX = 0;
+let coordinatesY = 0;
+
+function newCoordinates(newX,newY)
 {
-  let newCoordinatesX = x
-  newCoordinatesX += x
-  coordinates.textContent = `${x},${y}`
+  coordinatesX = coordinatesX + newX
+  coordinatesY = coordinatesY + newY
+
+  coordinates.textContent = `(${coordinatesX},${coordinatesY})`
 }
