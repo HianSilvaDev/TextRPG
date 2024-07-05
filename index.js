@@ -12,22 +12,25 @@ app.use(session({
 }))
 
 app.use("/public", express.static(__dirname + "/public"));
+
 // Importando Rotas:
 const index = require("./router/indexRoutes.js");
-
-const user = require("./router/userRoutes.js");
-
-const player = require("./router/playerRoutes.js");
-
-const enemy = require("./router/enemyRoutes.js");
-
 app.use('/', index)
 
+const user = require("./router/userRoutes.js");
 app.use('/user', user)
 
+const player = require("./router/playerRoutes.js");
 app.use('/player', player)
 
+const enemy = require("./router/enemyRoutes.js");
 app.use('/enemy', enemy)
+
+const map = require("./router/mapRoutes.js");
+app.use('/map', map)
+
+const region = require("./router/regionRoutes.js");
+app.use('/region', region)
 
 app.listen(3000, () => {
   console.log('server started');

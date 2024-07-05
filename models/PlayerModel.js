@@ -12,7 +12,7 @@ class Player{
     this.applyClass(classe)
   }
   
-  static applyClass(classe) {
+  applyClass(classe) {
     for(let key in classe){
       this[key] = classe[key];
     }
