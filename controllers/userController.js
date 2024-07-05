@@ -17,7 +17,7 @@ const create = async (req, res) => {
   try{
     const newUser = new User(name, password, email);
     if(userEmail || userName){
-      res.status(400).json({ error: "Usuário e Email em uso!" })
+      res.status(400).json({ error: "Usuário ou Email em uso!" })
     }else{
       newUser.save();
       req.session.user = newUser;
@@ -25,7 +25,7 @@ const create = async (req, res) => {
     }
   }catch(err){
     console.log(err)
-    res.status(500).json({redirect:  "/home"});
+    res.status(500).json({error: "Erro ao criar o usuário!"});
   }
 };
 

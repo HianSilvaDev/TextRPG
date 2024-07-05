@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const filePath = path.join(__dirname, '../data/players.json');
+const filePath = path.join(__dirname, '../data/player.json');
 
 class Player{
   constructor(id, name, classe = {}){
@@ -12,7 +12,7 @@ class Player{
     this.applyClass(classe)
   }
   
-  static applyClass(classe) {
+  applyClass(classe) {
     for(let key in classe){
       this[key] = classe[key];
     }
