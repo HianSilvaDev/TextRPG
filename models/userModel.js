@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const uuid = require('uuid');
+const Terrain = require('./cordModel');
 
 const filePath = path.join(__dirname, '../data/users.json');
 

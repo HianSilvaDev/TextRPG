@@ -1,0 +1,126 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+nav{
+  width: 100%;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  position: fixed;
+  background: #000;
+  top: 0;
+  left: 0;
+}
+
+nav button{
+  font-size: 20px;
+  padding: 10px;
+  background: none;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+nav button:hover{
+  color: red;
+}
+
+.container {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 500px;
+  text-align: center;
+}
+
+.FormRegion h2 {
+  margin-bottom: 1.5rem;
+  color: #007bff;
+}
+
+.FormRegion label {
+  display: block;
+  text-align: left;
+  margin-bottom: 0.5rem;
+  color: #555;
+}
+
+.FormRegion input[type="text"], textarea {
+  width: calc(100% - 20px);
+  padding: 0.5rem;
+  margin-top: 0.2rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.FormRegion textarea {
+  resize: vertical;
+}
+
+.FormRegion button {
+  background-color: #007bff;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 1rem;
+  margin-top: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.FormRegion button:hover {
+  background-color: #0056b3;
+}
+
+
+.CordinatesForm h2 {
+  margin-bottom: 1.5rem;
+  color: #007bff;
+}
+
+.CordinatesForm label {
+  display: block;
+  text-align: left;
+  margin-bottom: 0.5rem;
+  color: #555;
+}
+
+.CordinatesForm input[type="text"], input[type="number"] {
+  width: calc(100% - 20px);
+  padding: 0.5rem;
+  margin-top: 0.2rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.CordinatesForm button {
+  background-color: #007bff;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 1rem;
+  margin-top: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.CordinatesForm button:hover {
+  background-color: #0056b3;
+}

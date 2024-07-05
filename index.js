@@ -26,8 +26,8 @@ app.use('/player', player)
 const enemy = require("./router/enemyRoutes.js");
 app.use('/enemy', enemy)
 
-const map = require("./router/mapRoutes.js");
-app.use('/map', map)
+const cord = require("./router/cordRoutes.js");
+app.use('/map', cord)
 
 const region = require("./router/regionRoutes.js");
 app.use('/region', region)
