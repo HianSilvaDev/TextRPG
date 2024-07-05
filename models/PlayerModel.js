@@ -55,7 +55,7 @@ class Player{
     })
   }
   
-  getById(id){
+  static getById(id){
     return new Promise(async (resolve, reject) => {
       try{
         const players = await Player.getAll();
@@ -67,7 +67,7 @@ class Player{
     })
   }
 
-  uptade(player){
+  static uptade(player){
     return new Promise(async (resolve, reject) => {
       try{
         const players = await Player.getAll();
