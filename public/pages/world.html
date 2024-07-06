@@ -8,6 +8,7 @@
   <title>Mundo</title>
 </head>
 <body>
+  <canvas id="mapCanvas" style="display: none;"></canvas>
   <section>
     <div class="container">
 
@@ -33,15 +34,15 @@
             </div>
             <div class="options">
               <div class="directions">
-                <button onclick="newCoordinates(-1, 1)">1</button>
-                <button onclick="newCoordinates(0, 1)">2</button>
-                <button onclick="newCoordinates(1, 1)">3</button>
-                <button onclick="newCoordinates(-1, 0)">4</button>
+                <button onclick="newCordinates(-3, 3)">1</button>
+                <button onclick="newCordinates(0, 3)">2</button>
+                <button onclick="newCordinates(3, 3)">3</button>
+                <button onclick="newCordinates(-3, 0)">4</button>
                 <button id="openMenu">M</button>
-                <button onclick="newCoordinates(1, 0)">5</button>
-                <button onclick="newCoordinates(-1, -1)">6</button>
-                <button onclick="newCoordinates(0, -1)">7</button>
-                <button onclick="newCoordinates(1, -1)">8</button>
+                <button onclick="newCordinates(3, 0)">5</button>
+                <button onclick="newCordinates(-3, -3)">6</button>
+                <button onclick="newCordinates(0, -3)">7</button>
+                <button onclick="newCordinates(3, -3)">8</button>
               </div>
             </div>
           </div>
