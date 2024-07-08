@@ -4,6 +4,7 @@ const openMenu = document.getElementById('openMenu')
 const card      = document.querySelector('.card')
 const containerContent = document.querySelector('.content')
 
+
 coordinates.textContent = '--,--'
 
 let cordinatesX = 550;
@@ -38,15 +39,58 @@ img.onload = function() {
 };
 
 openMenu.addEventListener('click',()=>{
-
     card.classList.add('hiddenComponet')
-    const menu = createMenu()
-    
+
+    const menu = createMenu(['Status','Habilidades','Inventário'])
+    const menuListItem = document.querySelectorAll('.menuListItem>button') ?? ''
     const closeMenu = document.getElementById('btnClose')
-    
+
+    menuListItem[0].addEventListener('click',()=>{
+      const list = menu.childNodes[1].childNodes[0]
+
+      list.innerHTML = ''
+      
+      getPlayer((player)=>{
+          listItem = {
+            hp: player.hp,
+            mp: player.mp,
+            strenght: player.strenght,
+            defense: player.defense,
+            dexterity: player.dexterity,
+            resistence: player.resistence,
+            intelligence: player.intelligence,
+            luck: player.luck
+          }        
+
+          Object.entries(listItem).forEach((item)=>{
+            [key, value] = item
+
+            createAndInsertElement('li','','',`${key}: ${value}`,list,'beforeend')
+          })
+      })
+
+    }) ?? ''
+
+    menuListItem[1].addEventListener('click',()=>{
+      const list = menu.childNodes[1].childNodes[0]
+
+      list.innerHTML = ''
+      
+      getPlayer((player)=>{
+          
+          Object.entries(player.skills).forEach((item)=>{
+            [key, value] = item
+            
+            createAndInsertElement('li','','',value.name,list,'beforeend')
+          })
+      })
+
+    })?? ''
+
+    console.log(menuListItem[0])
+
     closeMenu.addEventListener('click',()=>{
         card.classList.remove('hiddenComponet')
-        // menu.classList.add('hiddenComponet')
         
         containerContent.removeChild(menu)
 
@@ -75,7 +119,7 @@ function update(){
     txt.textContent = currentRegion;
 };
 
-function createMenu()
+function createMenu(menuContent)
 {   
 
     if(document.querySelector('.menu')){
@@ -83,7 +127,6 @@ function createMenu()
     }
 
     const containerContent = document.querySelector('.content')
-    const itemForListing = ['Status','Habilidades','Inventário']
 
     const menu      = createAndInsertElement('div','menu','','',containerContent,'beforeend')
 
@@ -94,11 +137,7 @@ function createMenu()
     const content   = createAndInsertElement('div','menuContent','','',menu,'beforeend')
     const list      = createAndInsertElement('ul','menuList','','',content,'beforeend')
 
-    itemForListing.forEach((item)=>{
-
-        const listItem  = createAndInsertElement('li','menuListItem','','',list,'beforeend')
-        const listItemBtn  = createAndInsertElement('button','','',item,listItem,'beforeend')
-    })
+    contentMenu(menuContent,list)
 
     const footer        = createAndInsertElement('div','menuFooter','','',menu,'beforeend')
     const textFooter    = createAndInsertElement('span','','','Sombras da Eternidade',footer,'beforeend')
@@ -130,6 +169,31 @@ function createAndInsertElement(element,className,idName = '',elementText = '',i
     return newElement
 }
 
+function contentMenu(insert,insertIn)
+{
+
+  insert.forEach((item)=>{
+      const listItem  = createAndInsertElement('li','menuListItem','','',insertIn,'beforeend')
+      const listItemBtn  = createAndInsertElement('button','','',item,listItem,'beforeend')
+  })
+
+}
+
+// Pegando dados da classe player
+function getPlayer(callback) {
+    try {
+      fetch('/player/get')
+        .then(res => res.json())
+        .then((data) =>{
+          if(data.error) throw new Error(data.error)
+          player = data
+          
+          callback(player)
+        })
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
 /*
         <div class="menu">
           <div class="menuHeader">
