@@ -6,7 +6,6 @@ const filePath = path.join(__dirname, '../data/enemies.json');
 
 class Enemy{
   constructor(atb){
-    this.id = uuid.v4();
     this.applyAtb(atb);
   }
 

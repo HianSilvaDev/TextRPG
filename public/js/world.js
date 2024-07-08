@@ -3,12 +3,12 @@ const txt = document.querySelector(".txt")
 
 coordinates.textContent = '--,--'
 
-let cordinatesX = 550;
-let cordinatesY = 100;
+let cordinatesX = 3;
+let cordinatesY = 3;
 let currentRegion;
 
 const canvas = document.getElementById('mapCanvas');
-const ctx = canvas.getContext('2d');
+const ctx = canvas.getContext('2d', {willReadFrequently: true});
 const img = new Image();
 img.src = '/public/assets/img/2DMAP.png';
 
@@ -35,6 +35,7 @@ function getPixelColor(x, y) {
 
 function getLocalityNameByColor(x, y) {
     const color = getPixelColor(x, y);
+    console.log(color)
     return colorToLocality[color] || currentRegion;
 }
 
@@ -44,12 +45,25 @@ img.onload = function() {
     ctx.drawImage(img, 0, 0);
 };
 
-function newCordinates(newx, newy){
-    cordinatesX = cordinatesX + newx;
-    cordinatesY = cordinatesY + newy;
-    currentRegion = getLocalityNameByColor(cordinatesX, cordinatesY);
-    update();
-};
+function limitValue(value, min, max) {
+    return Math.min(Math.max(value, min), max);
+}
+
+function newCordinates(newx, newy) {
+
+    x = cordinatesX + newx;
+    y = cordinatesY + newy;
+
+    if (x < 1 || x >= canvas.width || y < 0 || y >= canvas.height) {
+        console.log("Out of Bonds!")
+    }else{
+        cordinatesX = limitValue(x, 1, canvas.width - 1);
+        cordinatesY = limitValue(y, 1, canvas.height - 1);
+        currentRegion = getLocalityNameByColor(cordinatesX, cordinatesY);
+        update();
+    }
+}
+
 
 function update(){
     coordinates.textContent = cordinatesX + ", " + cordinatesY;
