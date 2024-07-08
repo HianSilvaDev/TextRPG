@@ -1,5 +1,6 @@
 [
   {
+<<<<<<< HEAD
     "id": "Terrain1",
     "matrix": [
       {
@@ -51008,5 +51009,46 @@
         "name": "Floresta da Perdição"
       }
     ]
+=======
+    nome: "Cidade Shanti",
+    descricao: "Descrição da Cidade 1",
+    type: "Cidade",
+    eventos: null,
+    NPCs: null,
+    x: 293,
+    y: 297}
+  },
+  {
+    nome: "Cidade XiWangMu",
+    descricao: "Descrição da Cidade 2",
+    eventos: null,
+    NPCs: null,
+    x: 293,
+    y: 297}
+  },
+  {
+    nome: "Cidade ZaoShen",
+    descricao: "Descrição da Cidade 2",
+    eventos: null,
+    NPCs: null,
+    x: 293,
+    y: 297}
+  },
+  {
+    nome: "Cidade NuWa",
+    descricao: "Descrição da Cidade 2",
+    eventos: null,
+    NPCs: null,
+    x: 293,
+    y: 297}
+  },
+  {
+    nome: "Cidade LongWang",
+    descricao: "Descrição da Cidade 2",
+    eventos: null,
+    NPCs: null,
+    x: 293,
+    y: 297}
+>>>>>>> 0e99606f07e99bab820cd6b296e2df381756b0dc
   }
 ]
