@@ -42,7 +42,7 @@ function getPlayer() {
         if(data.error) throw new Error(data.error)
         player = data
         
-        addElementValue(gold, `# ${player.gold}`)
+        addElementValue(gold, `# ${player.wallet}`)
         addElementValue(username, player.name)
         addElementValue(className, player.class)
         addElementValue(level, `lvl: ${player.level}`)

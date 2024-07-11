@@ -108,14 +108,6 @@ function getLocalityNameByColor(x, y) {
     return colorToLocality[color] || currentRegion;
 }
 
-<<<<<<< HEAD
-function newCordinates(newx, newy){
-    cordinatesX = cordinatesX + newx;
-    cordinatesY = cordinatesY + newy;
-    currentRegion = getLocalityNameByColor(cordinatesX, cordinatesY);
-    update();
-};
-=======
 img.onload = function() {
     canvas.width = img.width;
     canvas.height = img.height;
@@ -140,8 +132,6 @@ function newCordinates(newx, newy) {
         update();
     }
 }
-
->>>>>>> 0e99606f07e99bab820cd6b296e2df381756b0dc
 
 function update(){
     coordinates.textContent = `${cordinatesX} , ${cordinatesY}`;
@@ -223,6 +213,7 @@ function getPlayer(callback) {
       console.log(error.message)
     }
   }
+
 /*
         <div class="menu">
           <div class="menuHeader">

@@ -4,7 +4,7 @@
         "name": "Junin",
         "level": 1,
         "class": "Mago",
-        "gold": 100,
+        "wallet": 100,
         "hp": 100,
         "mp": 80,
         "strenght": 10,
@@ -13,6 +13,7 @@
         "resistence": 10,
         "intelligence": 10,
         "luck": 1,
+        "statusPoint": 5,
         "skills": [
             {
                 "type": "magico",
