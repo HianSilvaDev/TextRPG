@@ -1,6 +1,6 @@
+/* fonts google */
+@import url('https://fonts.googleapis.com/css2?family=Cardo:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@400..900&family=Pirata+One&display=swap');
 
-/*Importando as fonts: Cinzel, Cardo e Pirata One do google fonts.*/
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cardo&family=Pirata+One&display=swap');
 
 /*Collors:
 rgb(26, 26, 46) Azul Escuro Profundo
@@ -9,94 +9,224 @@ rgb(255, 215, 0) Dourado Real
 rgb(41, 128, 185) Azul Místico
 */
 
-body {
-  background: url("/public/assets/img/backgrounds/paisagem_index.jpg") no-repeat center center fixed;
-  background-size: cover;
-  color: #FFFFFF;
-  font-family: Arial, sans-serif;
+
+*{
   margin: 0;
   padding: 0;
-  height: 100vh;
+  box-sizing: border-box;
 }
+
+:root{
+  --color-1: #F2B544;
+  --color-2: #F2D8A7;
+
+  --btn-bg-1: #F25D07;
+  --btn-bg-2: #D9420B;
+}
+
+input{
+  all: unset;
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+
+  background: url("/public/assets/img/backgrounds/paisagem_index.jpg") no-repeat center center fixed;
+  background-size: cover;
+}
+
+button{
+  background-color: var(--btn-bg-2); 
+  color: var(--color-2); 
+
+  border: none;
+  border-radius: 8px;
+
+  font-size: 1em;
+  font-family: 'Cardo', serif;
+  font-weight: bold;
+
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: var(--btn-bg-1); 
+}
+
 .container{
   width: 100%;
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: rgb(26, 26, 46, 0.4);
+  background: rgba(0, 0, 0, 0.62);
+  mix-blend-mode: multiply;mix-blend-mode: multiply;
 }
 
 #init {
-  text-align: center;
-  padding: 20px;
+  max-width: 797px;
+
+  background: rgba(50, 57, 64, 0.6);
   border: 1px solid #ffffff; 
-  border-radius: 10px;
-  background-color: rgba(28, 41, 58, 0.7);
-  max-width: 500px;
-  box-shadow: -1px 2px 17px 4px rgb(255, 215, 0, 0.3);
-  margin: auto;
+  border-radius: 8px;
+
+  text-align: center;
+
+  padding: 40px;
   transition: 2s;
+
+  display: none;
 }
 
-h2 {
-  color: #FFD700; 
+#init .text{
+  display: flex;
+  flex-direction: column;
+  gap: 45px;
+  
   font-family: 'Cinzel', serif;
-  font-size: 2em;
 }
 
-#init h3 {
-  color: #5cbeff; 
-  margin-top: 20px;
+#init .text h1{
+  color: var(--color-1);
+}
+
+#init .text p{
+  color: var(--color-2);
+  font-size: 1.3rem;
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  line-height: 41px;
+  letter-spacing: 0.08em;
+}
+
+#init .text span {
   font-family: 'Pirata One', cursive;
+  font-size: 1.625rem;
+  font-weight: 400;
   letter-spacing: 0.2rem;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.96);
+  color: var(--color-1);
 }
 
-#init p {
-  font-size: 1.1em;
-  line-height: 1.6;
-  font-family: 'Cardo', serif;
+.btnGroup {
+  margin-top: 26px;
+
+  display: flex;
+  justify-content: center;
+  gap: 75px;
 }
 
-.buttons {
-  margin-top: 20px;
-}
-
-button {
-  background-color: #FFD700; 
-  color: #1A1A2E; 
-  border: none;
+.btnGroup button {
   width: 30%;
-  padding: 5px 0px;
-  margin: 5px;
-  cursor: pointer;
-  font-size: 1em;
-  border-radius: 5px;
-  font-family: 'Cardo', serif;
-  font-weight: bold;
-}
-
-button:hover {
-  background-color: #C0392B; 
-  color: #FFFFFF;
-}
-
-@media (max-width: 600px) {
-  .container{
-    display: none;
-  }
+  height: 49px;
 }
 
 /*Formulários*/
+#loginForm,
+#register{
+  /* display: none; */
+  background: rgba(50, 57, 64, 0.6);
+  border: 1px solid #ffffff; 
+  border-radius: 8px;
+
+  padding: 40px;
+}
+
+#loginForm h2,
+#registerForm h2{
+  font-size: 2.125rem;
+  font-family: 'Cinzel', serif;
+  color: var(--color-1);
+  font-weight: 900;
+  letter-spacing: 0.05em;
+}
+
+#loginForm .formControll,
+#registerForm .formControll{
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+
+  margin-top: 40px;
+}
+
+#loginForm .formControll .formControlItem,
+#registerForm .formControll .formControlItem{
+  display: flex;
+  flex-direction: column;
+}
+
+#loginForm .formControll .formControlItem .formControlLabel,
+#registerForm .formControll .formControlItem .formControlLabel{
+  font-size: 1rem;
+  font-family: 'Cardo', serif;
+  font-weight: 400;
+  line-height: 22px;
+  letter-spacing: 0.2rem;
+  text-transform: uppercase;
+  color: var(--color-1);
+
+  margin-left: 8px;
+}
+
+#loginForm .formControll .formControlItem .formControlInput,
+#registerForm .formControll .formControlItem .formControlInput{
+  width: 100%;
+  height: 20px;
+
+  background: #ECECEC;
+  border-radius: 8px;
+
+  padding: 10px;
+
+  font-size: 1rem;
+}
+
+#loginForm .formControll .formControlItem .formControlInput:focus-within,
+#registerForm .formControll .formControlItem .formControlInput:focus-within{
+  inset: 0;
+  border: 2px solid var(--color-1);
+}
+
+#loginForm #loginSubmit,
+#registerForm #registerSubmit{
+  width: 220px;
+  height: 50px;
+
+  font-size: 1.25rem;
+
+  margin-bottom: 40px;
+  margin-top: 10px;
+}
+
+#loginForm p,
+#registerForm p{
+  font-size: 1rem;
+  color: var(--color-2);
+
+  text-align: center;
+}
+
+#loginForm p>a,
+#registerForm p>a{
+  font-size: 1rem;
+  color: var(--color-1);
+}
+
 #loginForm{
-  display: none;
-  max-width: 400px;
+  max-width: 1210px;
 }
-#cadForm{
+
+
+#register{
+  max-width: 1460px;
+
   display: none;
-  max-width: 700px;      
+  flex-direction: row;
+  gap: 80px;
 }
+
+/*
 .Forms{
   transition: 2s;
   width: 100%;
@@ -107,6 +237,7 @@ button:hover {
   box-shadow: -1px 2px 17px 4px rgb(255, 215, 0, 0.3);
   text-align: center;
 }
+
 label {
   color: #FFD700;
   font-size: 1,3rem;

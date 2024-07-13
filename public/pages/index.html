@@ -9,57 +9,66 @@
 <body>
   <span id="closeForm">X</span>
   <div class="container">
+
     <div id="init">
       <div class="text">
-        <h2>Sombras da Eternidade</h2>
+        <h1>Sombras da Eternidade</h1>
         <p>Em Sombras da Eternidade, suas escolhas moldarão o destino do mundo. Seja você um guerreiro destemido, um mago poderoso ou um ladrão astuto, cada decisão sua influenciará a narrativa, oferecendo uma experiência única e inesquecível.</p>
-        <h3>Cadastre-se agora e comece sua jornada!</h3>
+        <span>Cadastre-se agora e comece sua jornada!</span>
       </div>
-      <div class="buttons">
+      <div class="btnGroup">
         <button onclick="dropForm('login')">LOGIN</button>
         <button onclick="dropForm('cadastro')">CADASTRO</button>
       </div>
     </div>
+
     <div class="Forms" id="loginForm">
       <h2>Entrar em sua conta</h2>
-        <form method="post">
-          <div>
-            <label for="login_nome">Nome:</label><br />
-            <input type="text" id="login_nome" name="nome"/><br/><br/>
+        <form class="formControll" method="post">
+           <div class="formControlItem">
+            <label class="formControlLabel" for="login_nome">Nome</label>
+            <input class="formControlInput" type="text" id="login_nome" name="nome" placeholder="Insira seu nome ou email"/>
           </div>
-          <div>
-            <label for="login_senha">Senha:</label><br />
-            <input type="password" id="login_senha" name="senha" autocomplete="on" /><br/><br/>
+           <div class="formControlItem">
+            <label class="formControlLabel" for="login_senha">Senha</label>
+            <input class="formControlInput" type="password" id="login_senha" name="senha" autocomplete="on" placeholder="Insira sua senha"/>
           </div>
           <p id="error-msg"></p>
         </form>
-        <button id="loginSubmit">Entrar</button>
-        <p>Não tem uma conta? <a onclick="dropForm('cadastro')">Cadastre-se</a></p>
-      </div>
-    <div class="Forms" id="cadForm">
+      <button id="loginSubmit">Entrar</button>
+      <p>Não tem uma conta? <a onclick="dropForm('cadastro')">Cadastre-se</a> | <a href="#">esqueci minha senha</a></p>
+    </div>
 
-      <div>
+    <div class="Forms" id="register">
+
+      <div id="registerForm">
+
         <h2>Cadastro de Usuário</h2>
-        <form action="/user" method="post">
         
-          <div>
-            <label for="cad_nome">Nome:</label><br>
-            <input type="text" id="cad_nome" name="nome" required><br><br>
+        <form class="formControll" action="/user" method="post">
+        
+          <div class="formControlItem">
+            <label class="formControlLabel" for="cad_nome">Nome</label>
+            <input class="formControlInput" type="text" id="cad_nome" name="nome" required>
           </div>
 
-          <div>
-            <label for="cad_senha">Senha:</label><br>
-            <input type="password" id="cad_senha" name="senha" autocomplete="on" required><br><br>
+          <div class="formControlItem">
+            <label class="formControlLabel" for="cad_senha">Senha</label>
+            <input class="formControlInput" type="password" id="cad_senha" name="senha" autocomplete="on" required>
           </div>
         
-          <div>
-            <label for="email">Email:</label><br>
-            <input type="email" id="cad_email" name="email" autocomplete="on" required><br><br>
+          <div class="formControlItem">
+            <label class="formControlLabel" for="email">Email</label>
+            <input class="formControlInput" type="email" id="cad_email" name="email" autocomplete="on" required>
           </div>
         </form>
-        <button id="btnRegister">Cadastrar-se</button>
-        <p>Já tem uma conta? <a onclick="dropForm('login')">Fazer login</a> </p>
+
+        <button id="registerForm">Cadastrar-se</button>
+
+        <p>Já tem uma conta? <a onclick="dropForm('login')">Fazer login</a></p>
+
       </div>
+
       <div class="classes" >
         <div class="card" data-value="archer">
           <div class="flip_card_content">
@@ -138,6 +147,7 @@
           </div>
         </div>
       </div>
+
     </div>
     </div>
   </div>
