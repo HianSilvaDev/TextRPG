@@ -1,398 +1,275 @@
 /* fonts google */
 @import url('https://fonts.googleapis.com/css2?family=Cardo:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@400..900&family=Pirata+One&display=swap');
 
-
-/*Collors:
-rgb(26, 26, 46) Azul Escuro Profundo
-rgb(192, 57, 43) Vermelho Escarlate
-rgb(255, 215, 0) Dourado Real
-rgb(41, 128, 185) Azul Místico
-*/
-
-
 *{
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
-
-:root{
-  --color-1: #F2B544;
-  --color-2: #F2D8A7;
-
-  --btn-bg-1: #F25D07;
-  --btn-bg-2: #D9420B;
+  text-decoration: none;
+  list-style: none;
 }
 
 input{
   all: unset;
 }
 
-body {
+:root{
+  --color-1: #F2B544;
+  --color-2: #F2D8A7;
+  --color-3: #323940;
+
+  --btn-bg-1: #F25D07;
+  --btn-bg-2: #D9420B;
+
+  --cardo: 'Cardo', serif;
+  --cinzel: 'Cinzel', serif;
+  --pirata: 'Pirata One', serif;
+}
+
+body{
   width: 100vw;
   height: 100vh;
 
+  
   background: url("/public/assets/img/backgrounds/paisagem_index.jpg") no-repeat center center fixed;
   background-size: cover;
 }
 
-button{
-  background-color: var(--btn-bg-2); 
-  color: var(--color-2); 
+.bg{
+  width: 100vw;
+  height: 100vh;
 
-  border: none;
-  border-radius: 8px;
-
-  font-size: 1em;
-  font-family: 'Cardo', serif;
-  font-weight: bold;
-
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: var(--btn-bg-1); 
+  background: rgba(0, 0, 0, 60%);
 }
 
 .container{
-  width: 100%;
+  width: 80%;
   height: 100%;
+
+  margin: 0 auto;
+}
+
+.container,
+#init,
+.text{
   display: flex;
   justify-content: center;
   align-items: center;
-  background: rgba(0, 0, 0, 0.62);
-  mix-blend-mode: multiply;mix-blend-mode: multiply;
 }
 
-#init {
-  max-width: 797px;
+#init{
+  width: 797px;
 
+  flex-direction: column;
+  gap: 26px;
+}
+
+#init,
+#login,
+#register{
   background: rgba(50, 57, 64, 0.6);
-  border: 1px solid #ffffff; 
+  border: 1px solid #FFFFFF;
   border-radius: 8px;
 
-  text-align: center;
-
   padding: 40px;
-  transition: 2s;
-
-  display: none;
 }
 
-#init .text{
-  display: flex;
+.text{
+  color: var(--color-2);
+  font-family: var(--cinzel);
+
   flex-direction: column;
-  gap: 45px;
-  
-  font-family: 'Cinzel', serif;
+  gap: 46px;
 }
 
-#init .text h1{
+.title{
+  font-size: 2.125rem;
+  font-weight: 800;
+  /* text-align: center; */
+
   color: var(--color-1);
 }
 
-#init .text p{
-  color: var(--color-2);
-  font-size: 1.3rem;
-  font-family: 'Cinzel', serif;
-  font-weight: 700;
-  line-height: 41px;
-  letter-spacing: 0.08em;
+.text p{
+  font-size: 1.5rem;
+  text-align: center;
 }
 
-#init .text span {
-  font-family: 'Pirata One', cursive;
+.text span{
+  font-family: var(--pirata);
   font-size: 1.625rem;
   font-weight: 400;
-  letter-spacing: 0.2rem;
+  line-height: 33px;
+  letter-spacing: 0.08em;
+
   color: var(--color-1);
 }
 
-.btnGroup {
-  margin-top: 26px;
-
+.btnGroup{
   display: flex;
-  justify-content: center;
-  gap: 75px;
+  gap: 129px;
 }
 
-.btnGroup button {
-  width: 30%;
-  height: 49px;
-}
-
-/*Formulários*/
-#loginForm,
-#register{
-  /* display: none; */
-  background: rgba(50, 57, 64, 0.6);
-  border: 1px solid #ffffff; 
+button{
+  background: var(--btn-bg-2);
+  color: var(--color-2);
+  border: none;
   border-radius: 8px;
 
-  padding: 40px;
-}
-
-#loginForm h2,
-#registerForm h2{
-  font-size: 2.125rem;
-  font-family: 'Cinzel', serif;
-  color: var(--color-1);
-  font-weight: 900;
-  letter-spacing: 0.05em;
-}
-
-#loginForm .formControll,
-#registerForm .formControll{
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-
-  margin-top: 40px;
-}
-
-#loginForm .formControll .formControlItem,
-#registerForm .formControll .formControlItem{
-  display: flex;
-  flex-direction: column;
-}
-
-#loginForm .formControll .formControlItem .formControlLabel,
-#registerForm .formControll .formControlItem .formControlLabel{
   font-size: 1rem;
-  font-family: 'Cardo', serif;
-  font-weight: 400;
+  font-family: var(--cardo);
+  font-weight: 700;
   line-height: 22px;
-  letter-spacing: 0.2rem;
-  text-transform: uppercase;
-  color: var(--color-1);
 
-  margin-left: 8px;
+  padding: 10px 45px;
 }
 
-#loginForm .formControll .formControlItem .formControlInput,
-#registerForm .formControll .formControlItem .formControlInput{
-  width: 100%;
-  height: 20px;
+button:hover{
+  background: var(--btn-bg-1);
+}
+
+#login{
+  width: 709px;
+
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  gap: 40px;
+}
+
+#login .title,
+#login p,
+#register .title,
+#register p{
+  text-align: center;
+}
+
+.formControll .formControlItem{
+  margin-bottom: 40px;
+}
+
+.formControll .formControlItem .formControlLabel{
+  font-size: 1rem;
+  font-family: var(--cardo);
+  color: var(--color-1);
+  text-transform: uppercase;
+}
+
+.formControll .formControlItem .formControlInput{
+  width: 97%;
+  height: 30px;
+
+  display: block;
+  padding: 10px;
 
   background: #ECECEC;
   border-radius: 8px;
+} 
 
-  padding: 10px;
-
-  font-size: 1rem;
-}
-
-#loginForm .formControll .formControlItem .formControlInput:focus-within,
-#registerForm .formControll .formControlItem .formControlInput:focus-within{
+.formControll .formControlItem .formControlInput:focus-within{
   inset: 0;
-  border: 2px solid var(--color-1);
+  border: 3px solid var(--color-1);
 }
 
-#loginForm #loginSubmit,
-#registerForm #registerSubmit{
-  width: 220px;
-  height: 50px;
-
-  font-size: 1.25rem;
-
-  margin-bottom: 40px;
-  margin-top: 10px;
-}
-
-#loginForm p,
-#registerForm p{
-  font-size: 1rem;
+#login p,
+#register p{
   color: var(--color-2);
-
-  text-align: center;
+  font-size: 0.785rem;
+  font-family: var(--cinzel);
+  font-weight: 900;
+  line-height: 22px;
+  letter-spacing: 0.2px;
 }
 
-#loginForm p>a,
-#registerForm p>a{
-  font-size: 1rem;
+a{
   color: var(--color-1);
+  text-decoration: underline;
 }
-
-#loginForm{
-  max-width: 1210px;
-}
-
 
 #register{
-  max-width: 1460px;
+  width: 1460px;
 
-  display: none;
-  flex-direction: row;
-  gap: 80px;
-}
-
-/*
-.Forms{
-  transition: 2s;
-  width: 100%;
-  padding: 20px;
-  background-color: rgba(28, 41, 58, 0.7);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
-  box-shadow: -1px 2px 17px 4px rgb(255, 215, 0, 0.3);
-  text-align: center;
-}
-
-label {
-  color: #FFD700;
-  font-size: 1,3rem;
-  font-weight: regular;
-  font-family: 'Pirata One', cursive;
-  letter-spacing: 0.2rem;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.96);
-}
-.Forms form{
-  text-align: left;
-}
-
-input[type="text"],
-input[type="password"],
-input[type="email"]{
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 15px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-}
-
-.Forms p{
-  font-family: 'Cardo', serif;
-  align-self: center;
-}
-.Forms p a{
-  color: #FFD700;
-  text-decoration: none;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-#closeForm{
-  display: none;
-  position: absolute;
-  font-size: 5em;
-  top: 10px;
-  right: 10px; 
-  cursor: pointer;
-  font-weigth: bold;
-  margin: 20px;
-  color: #000;
-  user-select: none;
-}
-
-/*Div Para Alerta de Erros*/
-.alert {
-  background: red;
-  color: white;
-  text-align: center;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  padding: 10px 0px;
-  letter-spacing: 1px;
-  font-weight: bold;
-}
-
-/*Escolha de Classes*/
-
-.classes{
   display: grid;
-  margin-left: 20px;
+  grid-template-columns: repeat(2, 1fr);
+
+  padding: 40px;
+}
+
+#register .title{
+  margin-bottom: 40px;
+}
+
+#register button{
+  width: 100%;
+
+  font-size: 1.2rem;
+
+  margin-bottom: 40px;
+}
+
+#register #registerForm .formControll .formControlItem{
+  margin-bottom: 60px;
+}
+
+#register .cardGroup{
+  display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(2, 1fr);
-  row-gap: 10px;
-  column-gap: 10px;
-  height: auto;
-  border-radius: 10px;
-  justify-content: center;
+  border-radius: 8px;
+  justify-items: center;
+  gap: 40px;
 }
 
-.card{
-  background: transparent;
-  width: 150px;
-  height: 250px;
-  border-radius: 10px;
+#register .cardGroup>.card{
+  width: 220px;
+  height: 105%;
+
+  background: #ECECEC;
+  border-radius: 8px;
   cursor: pointer;
   perspective: 1000px;
+
+  overflow: hidden;
 }
 
-.flip_card_content{
-  position: relative;
+#register .cardGroup .card>.cardImg{
+  width: 80%;
+}
+
+#register .cardGroup .card .cardImg>img{
   width: 100%;
-  height: 100%;
-  transition: transform 0.8s;
-  transform-style: preserve-3d;
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
 }
 
-.card:hover .flip_card_content {
+#register .cardGroup .card .cardDescription{
+  font-size: 0.785rem;
+  color: var(--color-3);
+
+  padding: 5px;
+}
+
+#register .cardGroup .card .cardBack{
   transform: rotateY(180deg);
+
+  padding: 20px;
 }
 
-.flip_card_front, .flip_card_back {
-  position: absolute;
-  border-radius: 10px;
-  width: 100%;
-  height: 100%;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
+#register .cardGroup .card .cardBack ul{
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: space-around;
-  overflow: hidden;
+  gap: 18px;
 }
 
-.flip_card_front {
-  background-color: #ffffff;
-  color: black;
-  align-items: center;
-}
-.flip_card_back {
-  background-color: rgb(41, 128, 185);
-  color: white;
-  transform: rotateY(180deg);
-  align-items: start;
-  font-family: cinzel, serif;
-}
-.class_img{
-  width: 80%;
-  height: 45%;
-  overflow: hidden;
-  border-radius: 10px;
-}
-.class_img img{
-  width: 100%;
-  height: 100%;
-}
-.flip_card_front p{
-  font-size: 0.7em;
-  margin: 0px 12px;
+#register .cardGroup .card .cardBack ul li{
+  font-family: var(--cardo);
   font-weight: 800;
-  text-align: start;
-}
-.flip_card_back span{
-  font-size: 0.785em;
-  text-align: justify;
-  margin-left: 10px;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
-
-.chosen{
-  animation: choose 1s infinite alternate;
-}
-
-@keyframes choose{
-  0%{
-    box-shadow: 1px 0px 10px 2px rgba(255, 215, 0, 0);
-  }
-  100%{
-    box-shadow: 1px 0px 10px 2px rgba(255, 215, 0, 1);
-  }
+#init,
+#register,
+.cardBack{
+  display: none;
 }
