@@ -58,7 +58,7 @@ body{
 }
 
 #init{
-  width: 797px;
+  width: 650px;
 
   flex-direction: column;
   gap: 26px;
@@ -79,11 +79,11 @@ body{
   font-family: var(--cinzel);
 
   flex-direction: column;
-  gap: 46px;
+  gap: 40px;
 }
 
 .title{
-  font-size: 2.125rem;
+  font-size: 2rem;
   font-weight: 800;
   /* text-align: center; */
 
@@ -91,13 +91,15 @@ body{
 }
 
 .text p{
-  font-size: 1.5rem;
+  font-size: 1rem;
   text-align: center;
+  line-height: 1.8rem;
+  letter-spacing: 0.15em;
 }
 
 .text span{
   font-family: var(--pirata);
-  font-size: 1.625rem;
+  font-size: 1.25rem;
   font-weight: 400;
   line-height: 33px;
   letter-spacing: 0.08em;
@@ -107,7 +109,7 @@ body{
 
 .btnGroup{
   display: flex;
-  gap: 129px;
+  gap: 98px;
 }
 
 button{
@@ -116,12 +118,13 @@ button{
   border: none;
   border-radius: 8px;
 
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-family: var(--cardo);
-  font-weight: 700;
+  font-weight: 800;
   line-height: 22px;
+  letter-spacing: 0.15em;
 
-  padding: 10px 45px;
+  padding: 10px 20px;
 }
 
 button:hover{
@@ -129,12 +132,12 @@ button:hover{
 }
 
 #login{
-  width: 709px;
+  width: 500px;
 
   display: flex;
   flex-direction: column;
   align-content: center;
-  gap: 40px;
+  gap: 28px;
 }
 
 #login .title,
@@ -145,22 +148,24 @@ button:hover{
 }
 
 .formControll .formControlItem{
-  margin-bottom: 40px;
+  margin-bottom: 25px;
 }
 
 .formControll .formControlItem .formControlLabel{
-  font-size: 1rem;
+  font-size: 0.785rem;
   font-family: var(--cardo);
   color: var(--color-1);
   text-transform: uppercase;
+
+  margin-left: 5px;
 }
 
 .formControll .formControlItem .formControlInput{
   width: 97%;
-  height: 30px;
+  height: 25px;
 
   display: block;
-  padding: 10px;
+  padding: 8px;
 
   background: #ECECEC;
   border-radius: 8px;
@@ -176,7 +181,7 @@ button:hover{
   color: var(--color-2);
   font-size: 0.785rem;
   font-family: var(--cinzel);
-  font-weight: 900;
+  font-weight: 800;
   line-height: 22px;
   letter-spacing: 0.2px;
 }
@@ -187,89 +192,92 @@ a{
 }
 
 #register{
-  width: 1460px;
+  width: 1000px;
 
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
 
-  padding: 40px;
+  padding: 30px;
 }
 
 #register .title{
-  margin-bottom: 40px;
+  margin-bottom: 30px;
 }
 
 #register button{
   width: 100%;
 
-  font-size: 1.2rem;
-
-  margin-bottom: 40px;
+  margin-bottom: 20px;
 }
 
 #register #registerForm .formControll .formControlItem{
-  margin-bottom: 60px;
+  margin-bottom: 30px;
 }
 
 #register .cardGroup{
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(2, 1fr);
+  grid-template-rows: repeat(4, 90px);
   border-radius: 8px;
-  justify-items: center;
+  align-items: center;
   gap: 40px;
 }
 
 #register .cardGroup>.card{
-  width: 220px;
-  height: 105%;
+  width: 100%;
+  height: 100%;
 
   background: #ECECEC;
   border-radius: 8px;
   cursor: pointer;
-  perspective: 1000px;
+  /* perspective: 1000px; */
 
   overflow: hidden;
 }
 
-#register .cardGroup .card>.cardImg{
-  width: 80%;
+#register .cardGroup .card:hover .cardDescription{
+  opacity: 0;
+  transition: 700ms;
+}
+
+#register .cardGroup .card .cardContent .cardFront{
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
 }
 
 #register .cardGroup .card .cardImg>img{
-  width: 100%;
+  width: 90px;
 }
 
 #register .cardGroup .card .cardDescription{
-  font-size: 0.785rem;
+  font-size: 0.725rem;
   color: var(--color-3);
 
-  padding: 5px;
-}
-
-#register .cardGroup .card .cardBack{
-  transform: rotateY(180deg);
-
-  padding: 20px;
+  text-align: start;
 }
 
 #register .cardGroup .card .cardBack ul{
   display: flex;
-  flex-direction: column;
-  gap: 18px;
+  flex-direction: row;
+  gap: 5px 18px;
+  flex-wrap: wrap;
 }
 
 #register .cardGroup .card .cardBack ul li{
+  font-size: 0.785rem;
   font-family: var(--cardo);
   font-weight: 800;
+}
 
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+#register .cardGroup .card .cardBack ul li span{
+  color: var(--btn-bg-2);
 }
 
 #init,
-#register,
+#login,
 .cardBack{
   display: none;
 }

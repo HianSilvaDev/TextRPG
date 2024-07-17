@@ -60,23 +60,23 @@
               <form class="formControll" action="/user" method="post">
               
                 <div class="formControlItem">
-                  <label class="formControlLabel" for="cad_nome">nome</label>
-                  <input class="formControlInput" type="text" id="cad_nome" placeholder="Insira uma nome" name="nome" required>
+                  <label class="formControlLabel" for="userNameRegister">nome</label>
+                  <input class="formControlInput" type="text" id="userNameRegister" placeholder="Insira uma nome" name="name" required>
                 </div>
       
                 <div class="formControlItem">
-                  <label class="formControlLabel" for="cad_senha">email</label>
-                  <input class="formControlInput" type="password" id="cad_senha" name="senha" placeholder="Insira um email" required>
+                  <label class="formControlLabel" for="emailRegister">email</label>
+                  <input class="formControlInput" type="email" id="emailRegister" name="email" placeholder="Insira um email" required>
                 </div>
               
                 <div class="formControlItem">
-                  <label class="formControlLabel" for="email">senha</label>
-                  <input class="formControlInput" type="email" id="cad_email" name="email" placeholder="Insira uma senha" required>
+                  <label class="formControlLabel" for="passwordRegister">senha</label>
+                  <input class="formControlInput" type="password" id="passwordRegister" name="password" placeholder="Insira uma senha" required>
                 </div>
               
                 <div class="formControlItem">
-                  <label class="formControlLabel" for="email">Insira a senha novamente</label>
-                  <input class="formControlInput" type="email" id="cad_email" name="email" placeholder="Insira a senha novamente" required>
+                  <label class="formControlLabel" for="passwordAgain">Insira a senha novamente</label>
+                  <input class="formControlInput" type="password" id="passwordAgain" placeholder="Insira a senha novamente" required>
                 </div>
 
               </form>
@@ -95,18 +95,19 @@
                       <img src="public/assets/img/archer_icon.png" alt="archer">
                     </div>
                     <p class="cardDescription">Mestre das flechas, usa velocidade e precisão para atacar inimigos à distância, garantindo vantagem tática em qualquer batalha.</p>
+                    <div class="cardBack">
+                      <ul>
+                        <li>HP: <span>60</span></li>
+                        <li>MP: <span>20</span></li>
+                        <li>FORÇA: <span>10</span></li>
+                        <li>DEFESA: <span>9</span></li>
+                        <li>DESTREZA: <span>15</span></li>
+                        <li>RESISTENCIA: <span>2</span></li>
+                        <li>INTELIGENCIA: <span>5</span></li>
+                      </ul>
+                    </div>
                   </div>
-                  <div class="cardBack">
-                    <ul>
-                      <li>HP: <span>60</span></li>
-                      <li>MP: <span>20</span></li>
-                      <li>FORÇA: <span>10</span></li>
-                      <li>DEFESA: <span>9</span></li>
-                      <li>DESTREZA: <span>15</span></li>
-                      <li>RESISTENCIA: <span>2</span></li>
-                      <li>INTELIGENCIA: <span>5</span></li>
-                    </ul>
-                  </div>
+                  
                 </div>
               </div>
               <div class="card" data-value="mage">
@@ -116,18 +117,18 @@
                       <img src="public/assets/img/mage_icon.png" alt="archer">
                     </div>
                     <p class="cardDescription">Manipula os elementos com precisão. Utiliza feitiços poderosos e encantamentos para controlar o campo de batalha.</p>
-                  </div>
-                  <div class="cardBack">
-                    <ul>
-                      <li>HP: <span>60</span></li>
-                      <li>MP: <span>100</span></li>
-                      <li>FORÇA: <span>10</span></li>
-                      <li>DEFESA: <span>5</span></li>
-                      <li>DESTREZA: <span>10</span></li>
-                      <li>RESISTENCIA: <span>2</span></li>
-                      <li>INTELIGENCIA: <span>15</span></li>
-                    </ul>
-                    
+                    <div class="cardBack">
+                      <ul>
+                        <li>HP: <span>60</span></li>
+                        <li>MP: <span>100</span></li>
+                        <li>FORÇA: <span>10</span></li>
+                        <li>DEFESA: <span>5</span></li>
+                        <li>DESTREZA: <span>10</span></li>
+                        <li>RESISTENCIA: <span>2</span></li>
+                        <li>INTELIGENCIA: <span>15</span></li>
+                      </ul>
+                      
+                    </div>
                   </div>
                 </div>
               </div>
@@ -138,18 +139,18 @@
                       <img src="public/assets/img/swordsman_icon.png" alt="archer">
                     </div>
                     <p class="cardDescription">Especialista em combate corpo a corpo, o espadachim utiliza agilidade e precisão, dominando o campo de batalha com destreza.</p>
-                  </div>
-                  <div class="cardBack">
-                    <ul>
-                      <li>HP: <span>60</span></li>
-                      <li>MP: <span>100</span></li>
-                      <li>FORÇA: <span>10</span></li>
-                      <li>DEFESA: <span>5</span></li>
-                      <li>DESTREZA: <span>10</span></li>
-                      <li>RESISTENCIA: <span>2</span></li>
-                      <li>INTELIGENCIA: <span>15</span></li>
-                    </ul>
-
+                    <div class="cardBack">
+                      <ul>
+                        <li>HP: <span>60</span></li>
+                        <li>MP: <span>100</span></li>
+                        <li>FORÇA: <span>10</span></li>
+                        <li>DEFESA: <span>5</span></li>
+                        <li>DESTREZA: <span>10</span></li>
+                        <li>RESISTENCIA: <span>2</span></li>
+                        <li>INTELIGENCIA: <span>15</span></li>
+                      </ul>
+  
+                    </div>
                   </div>
                 </div>
               </div>
@@ -160,17 +161,17 @@
                       <img src="public/assets/img/barbarian_icon.png" alt="archer">
                     </div>
                     <p class="cardDescription">Confia na força bruta e na resistência. Usa sua força avassaladora para destruir seus inimigos com força bruta</p>
-                  </div>
-                  <div class="cardBack">
-                    <ul>
-                      <li>HP: <span>60</span></li>
-                      <li>MP: <span>10</span></li>
-                      <li>FORÇA: <span>10</span></li>
-                      <li>DEFESA: <span>5</span></li>
-                      <li>DESTREZA: <span>10</span></li>
-                      <li>RESISTENCIA: <span>2</span></li>
-                      <li>INTELIGENCIA: <span>15</span></li>
-                    </ul>
+                    <div class="cardBack">
+                      <ul>
+                        <li>HP: <span>60</span></li>
+                        <li>MP: <span>10</span></li>
+                        <li>FORÇA: <span>10</span></li>
+                        <li>DEFESA: <span>5</span></li>
+                        <li>DESTREZA: <span>10</span></li>
+                        <li>RESISTENCIA: <span>2</span></li>
+                        <li>INTELIGENCIA: <span>15</span></li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -183,6 +184,6 @@
     </div>
   </section>
 
-  <script type="module" src="/public/js/validationForm.js"></script>
+  <!-- <script type="module" src="/public/js/validationForm.js"></script> -->
 </body>
 </html>
