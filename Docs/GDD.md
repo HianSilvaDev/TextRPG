@@ -73,10 +73,188 @@
 
 ## Enemies
 
-### **Nome:**
-### **Descrição:**
-### **Disponibilidade:**
+### **Nome:** *Urso Negro*
+### **Descrição:** 
+### **Disponibilidade:** *Exploração: Floresta da Perdição*
+### **Raridade:** *0*
 ### **Skills:**
+___
+
+### **Nome:** *Raposa Vermelha*
+### **Descrição:** 
+### **Disponibilidade:** *Exploração: Floresta da Perdição*
+### **Raridade:** *2*
+### **Hostilidade:** *Não*
+### **Skills:**
+___
+
+### **Nome:** *Coelho*
+### **Descrição:** 
+### **Disponibilidade:** *Exploração: Floresta da Perdição*
+### **Raridade:** *0*
+### **Hostilidade:** *Não*
+### **Skills:**
+___
+
+### **Nome:** *Aguia*
+### **Descrição:** 
+### **Disponibilidade:** *Exploração: Floresta da Perdição*
+### **Raridade:** *3*
+### **Hostilidade:** *Não*
+### **Skills:**
+___
+
+### **Nome:** *Salamandra*
+### **Descrição:** 
+### **Disponibilidade:** *Exploração: Floresta da Perdição*
+### **Raridade:** *2*
+### **Hostilidade:** *Sim*
+### **Skills:**
+___
+
+### **Nome:** *Cobra*
+### **Descrição:** 
+### **Disponibilidade:** *Exploração: Floresta da Perdição*
+### **Raridade:** *1*
+### **Hostilidade:** *Sim*
+### **Skills:**
+___
+
+### **Nome:** *Centopeia*
+### **Descrição:** 
+### **Disponibilidade:** *Exploração: Floresta da Perdição*
+### **Raridade:** *0*
+### **Hostilidade:** *Sim*
+### **Skills:**
+___
+
+### **Nome:** *Aranha*
+### **Descrição:** 
+### **Disponibilidade:** *Exploração: Floresta da Perdição*
+### **Raridade:** *0*
+### **Hostilidade:** *Sim*
+### **Skills:**
+___
+
+### **Nome:** *Lobos*
+### **Descrição:** 
+### **Disponibilidade:** *Exploração: Floresta da Perdição*
+### **Raridade:** *0*
+### **Hostilidade:** *Sim*
+### **Skills:**
+___
+
+### **Nome:** *Elementais*
+### **Descrição:** 
+### **Disponibilidade:** *Exploração: Floresta da Perdição*
+### **Raridade:** *4*
+### **Hostilidade:** *Sin*
+### **Skills:**
+___
+
+### **Nome:** *Aparições* 
+### **Descrição:** 
+### **Disponibilidade:** *Exploração: Floresta da Perdição*
+### **Raridade:** *2*
+### **Hostilidade:** *Sim*
+### **Skills:**
+___
+
+### **Nome:** *Cães Infernais*
+### **Descrição:** 
+### **Disponibilidade:** *Exploração: Cavernas*
+### **Raridade:** *0*
+### **Hostilidade:** *Sim*
+### **Skills:**
+___
+
+### **Nome:** *Soldado Esqueleto*
+### **Descrição:** 
+### **Disponibilidade:** *Exploração: Floresta da Perdição*
+### **Raridade:** *0*
+### **Hostilidade:** *Sim*
+### **Skills:**
+___
+
+### **Nome:** *Lich*
+### **Descrição:** 
+### **Disponibilidade:** *Exploração: Floresta da Perdição*
+### **Raridade:** *5*
+### **Hostilidade:** *Sim*
+### **Skills:**
+___
+
+### **Nome:** *General Esqueleto*
+### **Descrição:** 
+### **Disponibilidade:** *Exploração: Floresta da Perdição*
+### **Raridade:** *3*
+### **Hostilidade:** *Sim*
+### **Skills:**
+___
+
+### **Nome:** *Demonios*
+### **Descrição:** 
+### **Disponibilidade:** *Exploração: Floresta da Perdição*
+### **Raridade:** *3*
+### **Hostilidade:** *Sim*
+### **Skills:**
+___
+
+### **Nome:** *Plantas*
+### **Descrição:** 
+### **Disponibilidade:** *Exploração: Floresta da Perdição*
+### **Raridade:** *1*
+### **Hostilidade:** *Sim*
+### **Skills:**
+___
+
+### **Nome:** *Lamia*
+### **Descrição:** 
+### **Disponibilidade:** *Exploração: Floresta da Perdição*
+### **Raridade:** *2*
+### **Hostilidade:** *Sim*
+### **Skills:**
+___
+
+### **Nome:** *Trent*
+### **Descrição:** 
+### **Disponibilidade:** *Exploração: Floresta da Perdição*
+### **Raridade:** *3*
+### **Hostilidade:** *Não*
+### **Skills:**
+___
+
+### **Nome:** *Lodo*
+### **Descrição:** 
+### **Disponibilidade:** *Exploração: Floresta da Perdição*
+### **Raridade:** *1*
+### **Hostilidade:** *Sim*
+### **Skills:**
+___
+
+### **Nome:** *Cocatriz*
+### **Descrição:** 
+### **Disponibilidade:** *Exploração: Floresta da Perdição*
+### **Raridade:** *2*
+### **Hostilidade:** *Sim*
+### **Skills:**
+___
+
+### **Nome:** *Gargula*
+### **Descrição:** 
+### **Disponibilidade:** *Exploração: Floresta da Perdição*
+### **Raridade:** *5*
+### **Hostilidade:** *Sim*
+### **Skills:**
+___
+
+### **Nome:** *Globins*
+### **Descrição:** 
+### **Disponibilidade:** *Exploração: Floresta da Perdição*
+### **Raridade:** *0*
+### **Hostilidade:** *Não*
+### **Skills:**
+___
 
 ## NPCs
 

@@ -147,11 +147,8 @@ if(btnRegister)
       .then((data) => {
         if(data.error){
           createAlert(data.error)
-          console.log("user")
-        }
-        if(data.redirect){
-          createPlayer(user)
-          window.location.href = data.redirect
+        }else{
+          createPlayer(user);
         }
       })
   })
@@ -196,7 +193,6 @@ function highlightCard(selectedCard) {
 
 
 function createPlayer(user){
-  console.log(user)
   fetch("/player/new", {
     method: "POST",
     headers: {
@@ -206,5 +202,14 @@ function createPlayer(user){
       classe: currentJob,
       name: user.nome
     })
-  })
+  }).then(res => res.json())
+    .then((data) => {
+      if(data.error){
+        console.log(data.error)
+        createAlert(data.error)
+      }
+      if(data.message){
+        window.location = "/home"
+      }
+    })
 }

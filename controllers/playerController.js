@@ -8,6 +8,7 @@ const create = (req, res) => {
     newPlayer.save();
     res.status(201).json({ message: "Pesornagens criado com sucesso!" });
   }catch(err){
+    console.log(err)
     res.status(500).json({ error: "Erro ao criar personagens!" });
   }
 }
@@ -22,6 +23,7 @@ const get = async (req, res) => {
       res.status(404).json({ error: "Personagem não encontrado!" });
     }
   }catch(err){
+    console.log(err)
     res.status(500).json({ error: "Erro ao buscar o Personagem!" });
   }
 }
@@ -32,6 +34,7 @@ const update = (req, res) => {
     Player.update(player);
     res.status(200).json({ message: "Personagem atualizado com sucesso!" })
   }catch(err){
+    console.log(err)
     res.status(500).json({ error: "Erro ao atualizar o Personagem!" })
   }
 }

@@ -1,101 +1,102 @@
 [
-  {
-    "id": "e5e9e07e-23c9-4209-9693-3e68de58c162",
-    "name": "Junin",
-    "level": 1,
-    "class": "Mago",
-    "hp": 100,
-    "mp": 80,
-    "strenght": 10,
-    "defense": 10,
-    "dexterity": 10,
-    "resistence": 10,
-    "intelligence": 10,
-    "luck": 1,
-    "skills": [
-      {
-        "type": "magico",
-        "name": "Watereball",
-        "description": "Arremessa uma bola de agúa que causa dano em um unico inimigo",
-        "power": 50,
-        "manaCost": 20,
-        "cooldown": 5,
-        "duration": 0,
-        "effectType": "damage"
-      },
-      {
-        "type": "magico",
-        "name": "Fireball",
-        "description": "Arremessa uma bola de fogo que causa dano em um unico inimigo",
-        "power": 50,
-        "manaCost": 20,
-        "cooldown": 5,
-        "duration": 0,
-        "effectType": "damage"
-      }
-    ],
-    "inventory": [
-      {
-        "type": "armor",
-        "name": "cajado velho",
-        "damage": "10",
-        "quant": 1
-      },
-      {
-        "type": "consumivel",
-        "name": "poção de vida",
-        "quant": 2
-      },
-      {
-        "type": "consumivel",
-        "name": "poção de mana",
-        "quant": 2
-      }
-    ]
-  },
-  {
-    "id": "bd17d4e6-34f3-4679-b41b-4f7dde1628bb",
-    "name": "JimAdolat",
-    "level": 1,
-    "wallet": 0,
-    "class": "Espadachim",
-    "hp": 100,
-    "mp": 80,
-    "strenght": 10,
-    "defense": 10,
-    "dexterity": 10,
-    "resistence": 10,
-    "intelligence": 10,
-    "luck": 1,
-    "skills": [
-      {
-        "type": "fisico",
-        "name": "corte pesado",
-        "describe": "um ataque de espada fortacido",
-        "power": 10,
-        "manaCost": 0,
-        "cooldown": 0,
-        "duration": 0,
-        "effectType": "damage"
-      }
-    ],
-    "inventory": [
-      {
-        "type": "armor",
-        "name": "espada de madeira",
-        "damage": "10",
-        "quant": 1
-      },
-      {
-        "type": "consumivel",
-        "name": "poção de vida",
-        "quant": 2
-      },
-      {
-        "type": "consumivel",
-        "name": "poção de mana",
-        "quant": 2
-      }
-    ]
-  }
+    {
+        "id": "e5e9e07e-23c9-4209-9693-3e68de58c162",
+        "name": "Junin",
+        "level": 1,
+        "class": "Mago",
+        "wallet": 100,
+        "hp": 100,
+        "mp": 80,
+        "strenght": 10,
+        "defense": 10,
+        "dexterity": 10,
+        "resistence": 10,
+        "intelligence": 10,
+        "luck": 1,
+        "statusPoint": 5,
+        "skills": [
+            {
+                "type": "magico",
+                "name": "Watereball",
+                "description": "Arremessa uma bola de agúa que causa dano em um unico inimigo",
+                "power": 50,
+                "manaCost": 20,
+                "cooldown": 5,
+                "duration": 0,
+                "effectType": "damage"
+            },
+            {
+                "type": "magico",
+                "name": "Fireball",
+                "description": "Arremessa uma bola de fogo que causa dano em um unico inimigo",
+                "power": 50,
+                "manaCost": 20,
+                "cooldown": 5,
+                "duration": 0,
+                "effectType": "damage"
+            }
+        ],
+        "inventory": [
+            {
+                "type": "armor",
+                "name": "cajado velho",
+                "damage": "10",
+                "quant": 1
+            },
+            {
+                "type": "consumivel",
+                "name": "poção de vida",
+                "quant": 2
+            },
+            {
+                "type": "consumivel",
+                "name": "poção de mana",
+                "quant": 2
+            }
+        ]
+    },
+    {
+        "id": "da30d5c2-b27c-4cb0-884a-031fbcc97a1b",
+        "level": 1,
+        "wallet": 0,
+        "class": "Espadachim",
+        "hp": 100,
+        "mp": 80,
+        "strenght": 10,
+        "defense": 10,
+        "dexterity": 10,
+        "resistence": 10,
+        "intelligence": 10,
+        "luck": 1,
+        "skills": [
+            {
+                "type": "fisico",
+                "name": "corte pesado",
+                "describe": "um ataque de espada fortacido",
+                "power": 10,
+                "manaCost": 0,
+                "cooldown": 0,
+                "duration": 0,
+                "effectType": "damage"
+            }
+        ],
+        "inventory": [
+            {
+                "type": "armor",
+                "name": "espada de madeira",
+                "damage": "10",
+                "quant": 1
+            },
+            {
+                "type": "consumivel",
+                "name": "poção de vida",
+                "quant": 2
+            },
+            {
+                "type": "consumivel",
+                "name": "poção de mana",
+                "quant": 2
+            }
+        ]
+    }
 ]

@@ -1,18 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ADMIN</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Enemy</title>
+    <link rel="stylesheet" href="/public/css/admin.css">
 </head>
 <body>
-  <nav>
-    <button class="enemy">Enemys</button>
-    <button class="region">Region</button>
-    <button class="NPC">NPC</button>
-  </nav>
-  <section id="container"></section>
-  <footer></footer>
+    <form id="enemyForm">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+        <label for="desc">Descrição:</label>
+        <input type="text" id="desc" name="desc" required>
+
+        <label for="hp">HP:</label>
+        <input type="number" id="hp" name="hp" required>
+
+        <label for="strength">Strength:</label>
+        <input type="number" id="strength" name="strength" required>
+
+        <label for="defense">Defense:</label>
+        <input type="number" id="defense" name="defense" required>
+
+        <label for="dexterity">Dexterity:</label>
+        <input type="number" id="dexterity" name="dexterity" required>
+
+        <label for="resistence">Resistence:</label>
+        <input type="number" id="resistence" name="resistence" required>
+
+        <label for="intelligence">Intelligence:</label>
+        <input type="number" id="intelligence" name="intelligence" required>
+
+        <label for="luck">Luck:</label>
+        <input type="number" id="luck" name="luck" required>
+
+        <label for="hostility">Hostility:</label>
+        <input type="checkbox" id="hostility" name="hostility">
+
+        <label for="availability">Availability:</label>
+        <input type="text" id="availability" name="availability" required>
+
+        <label for="drops">Drops (comma separated):</label>
+        <input type="text" id="drops" name="drops" required>
+
+        <button type="submit">Create Enemy</button>
+    </form>
+    <script src="/public/js/admin.js"></script>
 </body>
 </html>
