@@ -85,7 +85,6 @@ body{
 .title{
   font-size: 2rem;
   font-weight: 800;
-  /* text-align: center; */
 
   color: var(--color-1);
 }
@@ -276,7 +275,7 @@ a{
   color: var(--btn-bg-2);
 }
 
-#init,
+#register,
 #login,
 .cardBack{
   display: none;
