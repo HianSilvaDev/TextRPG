@@ -1,0 +1,134 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int      @id @default(autoincrement())
+  name     String   @unique
+  email    String   @unique
+  password String
+  player   Player[]
+
+  @@map("user")
+}
+
+model Skill {
+  id_skill Int           @id @default(autoincrement())
+  name     String        @unique
+  desc     String
+  power    Float
+  cooldown Float
+  cost     Float
+  effect   String
+  type     String
+  duration Float?
+  interval Float?
+  players  PlayerSkill[]
+
+  @@map("skill")
+}
+
+model Item {
+  item_id     Int           @id @default(autoincrement())
+  name        String        @unique
+  desc        String
+  url_img     String?
+  effect      String?
+  type        String
+  price       Float
+  class       String?
+  atb         String?
+  PlayerItens PlayerItens[]
+  Loot        Loot[]
+
+  @@map("item")
+}
+
+model Player {
+  userId       Int           @id
+  name         String        @unique
+  class        String
+  hp           Int
+  mp           Int
+  strength     Int
+  defense      Int
+  dexterity    Int
+  resistance   Int
+  intelligence Int
+  luck         Int
+  wallet       Float         @default(0)
+  skills       PlayerSkill[]
+  user         User          @relation(fields: [userId], references: [id])
+  inventory    PlayerItens[]
+}
+
+model PlayerSkill {
+  playerId Int
+  skillId  Int
+  equiped  Boolean @default(false)
+  player   Player  @relation(fields: [playerId], references: [userId])
+  skill    Skill   @relation(fields: [skillId], references: [id_skill])
+
+  @@id([playerId, skillId])
+}
+
+model PlayerItens {
+  playerId Int
+  itemId   Int
+  qtd      Int
+  equiped  Boolean @default(false)
+  player   Player  @relation(fields: [playerId], references: [userId])
+  item     Item    @relation(fields: [itemId], references: [item_id])
+
+  @@id([playerId, itemId])
+}
+
+model Enemy {
+  enemy_id     Int          @id @default(autoincrement())
+  name         String       @unique
+  desc         String?
+  level        Int
+  spawnrate    Float
+  hp           Int
+  mp           Int
+  strength     Int
+  defense      Int
+  dexterity    Int
+  resistance   Int
+  intelligence Int
+  luck         Int
+  Loot         Loot[]
+  Spawnpoint   Spawnpoint[]
+
+  @@map("enemy")
+}
+
+model Loot {
+  enemyId Int
+  itemId  Int
+  Enemy   Enemy @relation(fields: [enemyId], references: [enemy_id])
+  item    Item  @relation(fields: [itemId], references: [item_id])
+
+  @@id([enemyId, itemId])
+}
+
+model Region {
+  name       String       @id
+  desc       String
+  image_urls String
+  Spawnpoint Spawnpoint[]
+}
+
+model Spawnpoint {
+  regionName String
+  enemyId    Int
+  Region     Region @relation(fields: [regionName], references: [name])
+  Enemy      Enemy  @relation(fields: [enemyId], references: [enemy_id])
+
+  @@id([regionName, enemyId])
+}
