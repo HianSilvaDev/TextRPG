@@ -1,24 +1,24 @@
 import {swordsman, archer, mage, barbarian} from './objects/classes.js';
 
-fetch("/user", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({
-    name: 'Junin',
-    email: 'junin@gameplays.com',
-    password: '123456',
-    classe: mage,
-  })
-}).then(res => res.json())
-  .then((data) => {
-    if(data.error){
-      console.log(data.error)
-      createAlert(data.error)
-    }
-    console.log('ok')
-  })
+// fetch("/user", {
+//   method: "POST",
+//   headers: {
+//     "Content-Type": "application/json"
+//   },
+//   body: JSON.stringify({
+//     name: 'Junin',
+//     email: 'junin@gameplays.com',
+//     password: '123456',
+//     classe: mage,
+//   })
+// }).then(res => res.json())
+//   .then((data) => {
+//     if(data.error){
+//       console.log(data.error)
+//       createAlert(data.error)
+//     }
+//     console.log('ok')
+//   })
 
 // Controle dos Formulários
 const loginForm = document.getElementById('loginForm');
