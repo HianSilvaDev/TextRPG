@@ -1,10 +1,7 @@
 const express = require('express');
 const router = express.Router(); 
 
-const {create, update, get} = require('../controllers/playerController');
-
-// Criar um novo jogador
-router.post('/new', create);
+const {update, get} = require('../controllers/playerController');
 
 // Atualizar um jogador
 router.post('/update', update);
