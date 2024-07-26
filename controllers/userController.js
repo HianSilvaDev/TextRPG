@@ -14,7 +14,6 @@ const create = async (req, res) => {
 
 const login = async (req, res) => {
   const { name, password } = req.body;
-  console.log(name, password);
   try {
     const user = await userModel.getUserByEmail(name);
     if (user) {
@@ -24,10 +23,10 @@ const login = async (req, res) => {
           id: user.id,
         });
       } else {
-        throw new Error("Usuário ou senha inválida!2");
+        throw new Error("Usuário ou senha inválidos!");
       }
     } else {
-      throw new Error("Usuário ou senha inválida!1");
+      throw new Error("Usuário ou senha inválidos!");
     }
   } catch (err) {
     return res.status(500).json({ error: err.message });

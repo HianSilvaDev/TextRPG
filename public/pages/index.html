@@ -8,8 +8,7 @@
 </head>
 <body>
 
-  <section>
-    <!-- <span id="closeForm">X</span> -->
+  <button id="closeBtn"><img src="/public/assets/img/close.png" alt=""></button>
     <div class="bg">
 
       <div class="container">
@@ -29,31 +28,31 @@
 
           </div>
       
-          <div class="Forms" id="login">
+          <div class="Forms" id="loginForm">
             <h2 class="title">Entrar em sua conta</h2>
       
             <form class="formControll" method="post">
               <div class="formControlItem">
-                <label class="formControlLabel" for="login_nome">Nome</label>
-                <input class="formControlInput" type="text" id="login_nome" name="nome" placeholder="Insira seu nome ou email"/>
+                <label class="formControlLabel" for="userLogin">Nome</label>
+                <input class="formControlInput" type="text" id="userLogin" name="user" placeholder="Insira seu nome ou email"/>
               </div>
             
               <div class="formControlItem">
-                <label class="formControlLabel" for="login_senha">Senha</label>
-                <input class="formControlInput" type="password" id="login_senha" name="senha" autocomplete="on" placeholder="Insira sua senha"/>
+                <label class="formControlLabel" for="passwordLogin">Senha</label>
+                <input class="formControlInput" type="password" id="passwordLogin" name="password" placeholder="Insira sua senha"/>
               </div>
 
             </form>
-      
             <button id="loginSubmit">Entrar</button>
+      
       
             <p>Não tem uma conta? <a onclick="dropForm('cadastro')">Cadastre-se</a> | <a href="#">esqueci minha senha</a></p>
       
           </div>
       
-          <div class="Forms" id="register">
+          <div class="Forms" id="registerForm">
       
-            <div id="registerForm">
+            <div id="registerFormForm">
       
               <h2 class="title">Cadastro de Usuário</h2>
               
@@ -81,7 +80,7 @@
 
               </form>
       
-              <button id="registerForm">Cadastrar-se</button>
+              <button id="registerSubmit">Cadastrar-se</button>
       
               <p>Já tem uma conta? <a onclick="dropForm('login')">Fazer login</a></p>
       
@@ -184,6 +183,6 @@
     </div>
   </section>
 
-  <script type="module" src="/public/js/validationForm.js"></script>
+  <script type="module" src="/public/js/script.js"></script>
 </body>
 </html>
