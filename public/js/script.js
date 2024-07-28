@@ -81,133 +81,134 @@ function highlightCard(selectedCard) {
 const btnLogin = document.getElementById('loginSubmit')
 const btnRegister = document.getElementById('registerSubmit')
 
-if(btnLogin)
-{
-  btnLogin.addEventListener('click', () => {
-    const name      = document.getElementById('userLogin')
-    const password  = document.getElementById('passwordLogin')
 
-    if(name.value === '' || password.value === '')
-    {
-      createAlert('Preencha todos os campos')
-      return
-    }
+btnLogin.addEventListener('click', () => {
+  const name      = document.getElementById('userLogin')
+  const password  = document.getElementById('passwordLogin')
 
-    let user = {
-      name: name.value,
-      password: password.value
-    }
+  const sanitizeData = ()=>{
+    name.value = DOMPurify.sanitize(name.value)
+    password.value = DOMPurify.sanitize(password.value)
+  }
 
-    const body = JSON.stringify(user)
-    fetch('user/login',{
-      method: 'POST',
-      headers: {'content-type': 'application/json'},
-      body: body
-    }).then((res) => res.json())
-      .then((data) => {
-        if(data.error){
-          createAlert(data.error)
-          return
-        }
-        // if(data.redirect){
-          window.location.href = '/home'
-        // }
-      })
-  })
-}
+  sanitizeData()
 
-if(btnRegister)
-{
-  
-  btnRegister.addEventListener('click', () => {
-    console.log('ok')
+  if(name.value === '' || password.value === '')
+  {
+    createAlert('Preencha todos os campos')
+    return
+  }
 
-    const name = document.getElementById('userNameRegister')
-    const email = document.getElementById('emailRegister')
-    const password = document.getElementById('passwordRegister')
-    const passwordAgain = document.getElementById('passwordAgain')
+  let user = {
+    name: name.value,
+    password: password.value
+  }
 
-    if(name.value === '' || password.value === '' || passwordAgain.value === '' ||email.value === '')
-    {
-      createAlert('Preencha todos os campos')
-      return
-    }
-
-    if(!currentJob){
-      createAlert('Selecione uma classe')
-      console.log(currentJob)
-      return
-    }
-
-    if (name.value.length < 3) 
-    {
-      createAlert('Nome deve ter no mínimo 3 caracteres')
-      name.focus()
-      return
-    }
-
-    if (password.value.length < 6) 
-    {
-      createAlert('Senha deve ter no mínimo 6 caracteres')
-      password.focus()
-      return
-    }
-
-    if(passwordAgain.value !== password.value)
-    {
-      createAlert('As senhas devem ser iguais!')
-      passwordAgain.focus
-      return
-    }
-
-    if(email.value.length < 6 || !email.value.includes("@")) 
-    {
-      createAlert("Insira um email válido!")
-      email.focus()
-      return
-    }
-
-    const emailExplode = (text)=>{
-      const explode = text.split('@')
-
-      if(explode[1].length < 2)
-      {
-        createAlert("Insira um email válido!")
-        email.focus()
+  const body = JSON.stringify(user)
+  fetch('user/login',{
+    method: 'POST',
+    headers: {'content-type': 'application/json'},
+    body: body
+  }).then((res) => res.json())
+    .then((data) => {
+      if(data.error){
+        createAlert(data.error)
         return
       }
-    }
+      // if(data.redirect){
+        // window.location.href = '/home'
+      // }
+    })
+})
 
-    emailExplode(email.value)
-    
+  
+btnRegister.addEventListener('click', () => {
 
-    let user = {
-      name: name.value,
-      password: password.value,
-      email: email.value, 
-      class: currentJob
+  const name = document.getElementById('userNameRegister')
+  const email = document.getElementById('emailRegister')
+  const password = document.getElementById('passwordRegister')
+  const passwordAgain = document.getElementById('passwordAgain')
+  
+  const sanitizeData = ()=>{
+    name.value = DOMPurify.sanitize(name.value)
+    email.value = DOMPurify.sanitize(email.value)
+    password.value = DOMPurify.sanitize(password.value)
+    passwordAgain.value = DOMPurify.sanitize(passwordAgain.value)
+  }
+
+  sanitizeData()
+
+  if(name.value === '' || password.value === '' || passwordAgain.value === '' ||email.value === '')
+  {
+    createAlert('Preencha todos os campos')
+    return
+  }
+
+  if(!currentJob){
+    createAlert('Selecione uma classe')
+    console.log(currentJob)
+    return
+  }
+
+  if (name.value.length < 3) 
+  {
+    createAlert('Nome deve ter no mínimo 3 caracteres')
+    name.focus()
+    return
+  }
+
+  if (password.value.length < 6) 
+  {
+    createAlert('Senha deve ter no mínimo 6 caracteres')
+    password.focus()
+    return
+  }
+
+  if(passwordAgain.value !== password.value)
+  {
+    createAlert('As senhas devem ser iguais!')
+    passwordAgain.focus
+    return
+  }
+
+  const emailExplode = (text)=>{
+    const explode = text.split('@')
+
+    if(explode[1].length < 4)
+    {
+      return true;
     }
-    
-    // const body = JSON.stringify(user)
-    // fetch('/user/create',{
-    //   method: 'POST',
-    //   headers: {'content-type': 'application/json'},
-    //   body: JSON.stringify({
-    //     name: user.name,
-    //     password: user.password,
-    //     email: user.email,
-    //     class: user.class
-    //   })
-    // }).then((res) => res.json())
-    //   .then((data) => {
-    //     if(data.error){
-    //       createAlert(data.error)
-    //     }else{
-          
-    //     }
-    //   })
-  })
-}
+  }
+
+  if(email.value.length < 6 || !email.value.includes("@") || emailExplode(email.value)) 
+  {
+    createAlert("Insira um email válido!")
+    email.focus()
+    return
+  }
+
+  let user = {
+    name: name.value,
+    password: password.value,
+    email: email.value,
+    class: currentJob
+  }
+  
+  const body = JSON.stringify(user)
+  fetch('user/create',{
+    method: 'POST',
+    headers: {'content-type': 'application/json'},
+    body: body
+  }).then((res) => res.json())
+    .then((data) => {
+      if(data.error){
+        createAlert(data.error)
+      }
+    })
+    .catch((error) =>{
+      console.log(`error: ${error}`)
+    })
+})
 
 function createAlert(msg)
 {
