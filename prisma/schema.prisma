@@ -18,17 +18,19 @@ model User {
 }
 
 model Skill {
-  id_skill Int           @id @default(autoincrement())
-  name     String        @unique
-  desc     String
-  power    Float
-  cooldown Float
-  cost     Float
-  effect   String
-  type     String
-  duration Float?
-  interval Float?
-  players  PlayerSkill[]
+  id_skill    Int           @id @default(autoincrement())
+  name        String        @unique
+  desc        String
+  class       String?
+  power       Float
+  cooldown    Float
+  cost        Float
+  effect      String?
+  type        String
+  duration    Float?
+  interval    Float?
+  players     PlayerSkill[]
+  EnemySkills EnemySkills[]
 
   @@map("skill")
 }
@@ -65,6 +67,7 @@ model Player {
   skills       PlayerSkill[]
   user         User          @relation(fields: [userId], references: [id])
   inventory    PlayerItens[]
+  Save         Save[]
 }
 
 model PlayerSkill {
@@ -89,8 +92,8 @@ model PlayerItens {
 }
 
 model Enemy {
-  enemy_id     Int          @id @default(autoincrement())
-  name         String       @unique
+  enemy_id     Int           @id @default(autoincrement())
+  name         String        @unique
   desc         String?
   level        Int
   spawnrate    Float
@@ -104,8 +107,18 @@ model Enemy {
   luck         Int
   Loot         Loot[]
   Spawnpoint   Spawnpoint[]
+  EnemySkills  EnemySkills[]
 
   @@map("enemy")
+}
+
+model EnemySkills {
+  enemyId Int
+  skillId Int
+  Enemy   Enemy @relation(fields: [enemyId], references: [enemy_id])
+  Skill   Skill @relation(fields: [skillId], references: [id_skill])
+
+  @@id([enemyId, skillId])
 }
 
 model Loot {
@@ -131,4 +144,14 @@ model Spawnpoint {
   Enemy      Enemy  @relation(fields: [enemyId], references: [enemy_id])
 
   @@id([regionName, enemyId])
+}
+
+model Save {
+  playerId    Int
+  playerCords String
+  currentXp   Int    @default(0)
+  player      Player @relation(fields: [playerId], references: [userId])
+
+  @@id([playerId])
+  @@map("save")
 }

@@ -1,4 +1,7 @@
 const express = require("express");
+// const { cadSkill } = require("./models/admin.js");
+
+// cadSkill();
 
 const app = express();
 
@@ -18,9 +21,6 @@ app.use("/player", player);
 
 const enemy = require("./router/enemyRoutes.js");
 app.use("/enemy", enemy);
-
-const region = require("./router/regionRoutes.js");
-app.use("/region", region);
 
 app.listen(3000, () => {
   console.log("server started");
