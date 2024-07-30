@@ -1,9 +1,9 @@
 const express = require("express");
-const { cadSkill, seedEventPhrases } = require("./models/admin.js");
+// const { cadSkill, seedEventPhrases } = require("./models/admin.js");
 
-seedEventPhrases();
+// seedEventPhrases();
 
-const { getByName } = require("./models/regionModel");
+// const { getByName } = require("./models/regionModel");
 
 const app = express();
 
