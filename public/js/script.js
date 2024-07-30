@@ -115,9 +115,7 @@ btnLogin.addEventListener('click', () => {
         createAlert(data.error)
         return
       }
-      // if(data.redirect){
-        // window.location.href = '/home'
-      // }
+        window.location.href = '/home'
     })
 })
 
@@ -191,11 +189,11 @@ btnRegister.addEventListener('click', () => {
     name: name.value,
     password: password.value,
     email: email.value,
-    class: currentJob
+    classe: currentJob
   }
   
   const body = JSON.stringify(user)
-  fetch('user/create',{
+  fetch('user',{
     method: 'POST',
     headers: {'content-type': 'application/json'},
     body: body

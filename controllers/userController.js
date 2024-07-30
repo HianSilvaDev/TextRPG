@@ -17,7 +17,7 @@ const login = async (req, res) => {
   try {
     const user = await userModel.getUserByEmail(name);
     if (user) {
-      if (bcrypt.compare(password, user.password)) {
+      if (await bcrypt.compare(password, user.password)) {
         res.status(200).json({
           name: user.name,
           id: user.id,

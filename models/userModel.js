@@ -23,6 +23,8 @@ const createUser = async (name, email, hashedPassword, classe) => {
         },
       },
     });
+
+    console.log(classe.class)
     console.log("User created in database:", newUser);
     return newUser;
   } catch (err) {
