@@ -1,7 +1,9 @@
 const express = require("express");
-// const { cadSkill } = require("./models/admin.js");
+const { cadSkill, seedEventPhrases } = require("./models/admin.js");
 
-// cadSkill();
+seedEventPhrases();
+
+const { getByName } = require("./models/regionModel");
 
 const app = express();
 
@@ -18,9 +20,6 @@ app.use("/user", user);
 
 const player = require("./router/playerRoutes.js");
 app.use("/player", player);
-
-const enemy = require("./router/enemyRoutes.js");
-app.use("/enemy", enemy);
 
 app.listen(3000, () => {
   console.log("server started");

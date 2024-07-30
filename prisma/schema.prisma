@@ -131,10 +131,11 @@ model Loot {
 }
 
 model Region {
-  name       String       @id
-  desc       String
-  image_urls String
-  Spawnpoint Spawnpoint[]
+  name        String        @id
+  desc        String
+  image_urls  String
+  Spawnpoint  Spawnpoint[]
+  EventPhrase EventPhrase[]
 }
 
 model Spawnpoint {
@@ -154,4 +155,12 @@ model Save {
 
   @@id([playerId])
   @@map("save")
+}
+
+model EventPhrase {
+  region_name String
+  phrase_id   Int    @id @default(autoincrement())
+  eventType   String
+  text        String @unique
+  Region      Region @relation(fields: [region_name], references: [name])
 }

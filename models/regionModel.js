@@ -1,63 +1,60 @@
-const { rejects } = require('assert');
-const { resolve } = require('dns');
-const fs = require('fs');
-const path = require('path');
+const prisma = require("./prismaClient");
 
-const filePath = path.join(__dirname, '../data/regions.json');
-
-class Region{
-  constructor(name, descriptions, images){
-    this.name = name;
-    this.description = descriptions;
-    this.image = images;
-  }
-
-  static getAll(){
-    return new Promise ((resolve, reject) => {
-      fs.readFile(filePath, 'utf8', (err, data) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(JSON.parse(data));
-        }
-      })
-    })
-  }
-
-  static saveAll(regions){
-    return new Promise(async (resolve, reject) => {
-      fs.writeFile(filePath, JSON.stringify(regions), (err) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve();
-        }
-      })
-    })
-  }
-  
-  save(){
-    return new Promise(async (resolve, reject) => {
-      try{
-        const regions = await Region.getAll();
-        regions.push(this);
-        await Region.saveAll(regions);
-        resolve();
-      }catch(err){
-        reject(err);
-      }
-    })
-  }
-
-  static getByName(name){
-    return new Promise(async (resolve, reject) => {
-      try{
-        const regions = await Region.getAll();
-        const region = regions.find(r => r.name === name);
-        resolve(region);
-      }catch(err){
-        reject(err);
-      }
-    })
+async function getByName(regionName) {
+  try {
+    const regionWithEnemies = await prisma.region.findUnique({
+      where: {
+        name: regionName,
+      },
+      include: {
+        Spawnpoint: {
+          include: {
+            Enemy: {
+              include: {
+                Loot: {
+                  include: {
+                    Item: true,
+                  },
+                },
+              },
+              include: {
+                EnemySkills: {
+                  include: {
+                    Skill: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+    if (regionWithEnemies) {
+      const formattedRegion = {
+        name: region.name,
+        desc: region.desc,
+        image_urls: region.image_urls,
+        enemies: region.Spawnpoint.map((spawnpoint) => ({
+          enemy_id: spawnpoint.Enemy.enemy_id,
+          name: spawnpoint.Enemy.name,
+          desc: spawnpoint.Enemy.desc,
+          level: spawnpoint.Enemy.level,
+          spawnrate: spawnpoint.Enemy.spawnrate,
+          hp: spawnpoint.Enemy.hp,
+          mp: spawnpoint.Enemy.mp,
+          strength: spawnpoint.Enemy.strength,
+          defense: spawnpoint.Enemy.defense,
+          dexterity: spawnpoint.Enemy.dexterity,
+          resistance: spawnpoint.Enemy.resistance,
+          intelligence: spawnpoint.Enemy.intelligence,
+          luck: spawnpoint.Enemy.luck,
+          Loot: spawnpoint.Enemy.Loot,
+          EnemySkills: spawnpoint.Enemy.EnemySkills,
+        })),
+      };
+      console.log(formattedRegion);
+    }
+  } catch (err) {
+    console.log(err);
   }
 }
