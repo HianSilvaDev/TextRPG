@@ -21,6 +21,9 @@ app.use("/user", user);
 const player = require("./router/playerRoutes.js");
 app.use("/player", player);
 
+const region = require("./router/regionRoutes.js");
+app.use("/region", region)
+
 app.listen(3000, () => {
   console.log("server started");
 });
