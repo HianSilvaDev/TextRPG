@@ -58,3 +58,7 @@ async function getByName(regionName) {
     console.log(err);
   }
 }
+
+module.exports = {
+  getByName
+}
