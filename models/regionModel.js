@@ -7,34 +7,15 @@ async function getByName(regionName) {
         name: regionName,
       },
       include: {
-        Spawnpoint: {
-          include: {
-            Enemy: {
-              include: {
-                Loot: {
-                  include: {
-                    Item: true,
-                  },
-                },
-              },
-              include: {
-                EnemySkills: {
-                  include: {
-                    Skill: true,
-                  },
-                },
-              },
-            },
-          },
-        },
+        EventPhrase: true,
       },
     });
-    return region
+    return region;
   } catch (err) {
     console.log(err);
   }
 }
 
 module.exports = {
-  getByName
-}
+  getByName,
+};

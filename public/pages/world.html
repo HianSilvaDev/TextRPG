@@ -1,264 +1,262 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="./public/css/world.css">
-  <title>Mundo</title>
-</head>
-<body>
-  <canvas id="mapCanvas" style="display: none;"></canvas>
-  <main>
-    <section>
-      <div class="container">
-  
-        <div class="containerContent">
-  
-          <div class="painel">
-  
-            <div class="map">
-              <img src="../assets/img/2DMAP.png" alt="">
-            </div>
-
-            <div class="blockOpt">
-              <div class="text">
-                <p>Você está em ...</p>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./public/css/world.css" />
+    <title>Mundo</title>
+  </head>
+  <body>
+    <canvas id="mapCanvas" class="hiddenComponet"></canvas>
+    <main>
+      <section>
+        <div class="container">
+          <div class="containerContent">
+            <div class="painel">
+              <div class="map">
+                <img src="public/assets/2DMap.png" alt="" />
               </div>
 
+              <div class="blockOpt">
+                <div class="text">
+                  <p>Você está em ...</p>
+                </div>
 
-              <div class="directions">
-                <button class="btnDirections" onclick="newCordinates(-3, 3)">
-                  <img src="../assets/leftAndTop.png" alt="">
-                </button>
+                <div class="directions">
+                  <button class="btnDirections" onclick="newCordinates(-3, 3)">
+                    <img
+                      src="public/assets/img/imgDirections/leftAndTop.png"
+                      alt=""
+                    />
+                  </button>
 
-                <button class="btnDirections" onclick="newCordinates(0, 3)">
-                  <img src="../assets/top.png" alt="">
-                </button>
+                  <button class="btnDirections" onclick="newCordinates(0, 3)">
+                    <img src="public/assets/img/imgDirections/top.png" alt="" />
+                  </button>
 
-                <button class="btnDirections" onclick="newCordinates(3, 3)">
-                  <img src="../assets/rigthAndTop.png" alt="">
-                </button>
+                  <button class="btnDirections" onclick="newCordinates(3, 3)">
+                    <img
+                      src="public/assets/img/imgDirections/rigthAndTop.png"
+                      alt=""
+                    />
+                  </button>
 
-                <button class="btnDirections" onclick="newCordinates(-3, 0)">
-                  <img src="../assets/left.png" alt="">
-                </button>
+                  <button class="btnDirections" onclick="newCordinates(-3, 0)">
+                    <img
+                      src="public/assets/img/imgDirections/left.png"
+                      alt=""
+                    />
+                  </button>
 
-                <button class="btnDirections" id="openMenu">
-                  <img src="../assets/img/Ellipse.png" alt="">
-                </button>
+                  <button class="btnDirections" id="openMenu">
+                    <img src="public/assets/img/Ellipse.png" alt="" />
+                  </button>
 
-                <button class="btnDirections" onclick="newCordinates(3, 0)">
-                  <img src="../assets/rigth.png" alt="">
-                </button>
+                  <button class="btnDirections" onclick="newCordinates(3, 0)">
+                    <img
+                      src="public/assets/img/imgDirections/rigth.png"
+                      alt=""
+                    />
+                  </button>
 
-                <button class="btnDirections" onclick="newCordinates(-3, -3)">
-                  <img src="../assets/leftAndDown.png" alt="">
-                </button>
+                  <button class="btnDirections" onclick="newCordinates(-3, -3)">
+                    <img
+                      src="public/assets/img/imgDirections/leftAndDown.png"
+                      alt=""
+                    />
+                  </button>
 
-                <button class="btnDirections" onclick="newCordinates(0, -3)">
-                  <img src="../assets/down.png" alt="">
-                </button>
+                  <button class="btnDirections" onclick="newCordinates(0, -3)">
+                    <img
+                      src="public/assets/img/imgDirections/down.png"
+                      alt=""
+                    />
+                  </button>
 
-                <button class="btnDirections" onclick="newCordinates(3, -3)">
-                  <img src="../assets/righAndDown.png" alt="">
-                </button>
-
-              </div>
-
-            </div>
-            
-          </div>
-
-          <div class="painelBatle">
-            <div class="map">
-              <img src="../assets/img/2DMAP.png" alt="">
-            </div>
-            
-            <div class="info">
-              <div class="hp">...</div>
-              <div class="mp">...</div>
-            </div>
-  
-            <div class="options">
-              <div class="actions">
-                <button>Atacar</button>
-                <button>Defender</button>
-                <button>Skill 1</button>
-                <button>Skill 2</button>
-                <button>Skill 3</button>
-                <button>Skill 4</button>
-              </div>
-  
-              <div class="pocions">
-                <button>Poção de recuperação</button>
-                <button>Poção de recuperação</button>
-                <button>Poção Antidoto</button>
-                <button>Poção de fortalecimento</button>
-              </div>
-  
-              <div class="effects">
-                <ul>
-                  <li>Debuff <span>20s</span></li>
-                  <li>Debuff <span>20s</span></li>
-                  <li>buff <span>20s</span></li>
-                  <li>buff <span>20s</span></li>
-                  <li>Debuff <span>20s</span></li>
-                  <li>Debuff <span>20s</span></li>
-                  <li>buff <span>20s</span></li>
-                  <li>buff <span>20s</span></li>
-                  <li>Debuff <span>20s</span></li>
-                  <li>Debuff <span>20s</span></li>
-                  <li>buff <span>20s</span></li>
-                  <li>buff <span>20s</span></li>
-                  <li>Debuff <span>20s</span></li>
-                  <li>Debuff <span>20s</span></li>
-                  <li>buff <span>20s</span></li>
-                  <li>buff <span>20s</span></li>
-                  <li>Debuff <span>20s</span></li>
-                  <li>Debuff <span>20s</span></li>
-                  <li>buff <span>20s</span></li>
-                  <li>buff <span>20s</span></li>
-                  <li>Debuff <span>20s</span></li>
-                  <li>Debuff <span>20s</span></li>
-                  <li>buff <span>20s</span></li>
-                  <li>buff <span>20s</span></li>
-                </ul>
+                  <button class="btnDirections" onclick="newCordinates(3, -3)">
+                    <img
+                      src="public/assets/img/imgDirections/righAndDown.png"
+                      alt=""
+                    />
+                  </button>
+                </div>
               </div>
             </div>
-            
-          </div>
-         
-          <div class="card">
-          
-            <div class="cardImg">        
-              <img src="https://i.pinimg.com/736x/31/4f/2a/314f2a1f891f259d70d75b603616827a.jpg" alt="">
-            </div>
-  
-            <div class="cardText">
-              <p class="description">Este mob se chama snoop dog é um cachorro inofensivel porem é capaz de fazer coisas  normalmente impossiveis</p>
-            </div>
-  
-            <div class="cardBtnGroup">
-              <button>Opção 1</button>
-              <button>Opção 2</button>
-              <button>Opção 3</button>
-            </div>
-          </div>
 
-          <div class="menu">
-            <div class="menuHeader">
-              <h2 class="title">Menu</h2>
+            <div class="painelBatle">
+              <div class="map">
+                <img src="../assets/img/2DMAP.png" alt="" />
+              </div>
+
+              <div class="info">
+                <div class="hp">...</div>
+                <div class="mp">...</div>
+              </div>
+
+              <div class="options">
+                <div class="actions">
+                  <button>Atacar</button>
+                  <button>Defender</button>
+                  <button>Skill 1</button>
+                  <button>Skill 2</button>
+                  <button>Skill 3</button>
+                  <button>Skill 4</button>
+                </div>
+
+                <div class="pocions">
+                  <button>Poção de recuperação</button>
+                  <button>Poção de recuperação</button>
+                  <button>Poção Antidoto</button>
+                  <button>Poção de fortalecimento</button>
+                </div>
+
+                <div class="effects">
+                  <ul>
+                    <li>Debuff <span>20s</span></li>
+                    <li>Debuff <span>20s</span></li>
+                    <li>buff <span>20s</span></li>
+                    <li>buff <span>20s</span></li>
+                    <li>Debuff <span>20s</span></li>
+                    <li>Debuff <span>20s</span></li>
+                    <li>buff <span>20s</span></li>
+                    <li>buff <span>20s</span></li>
+                    <li>Debuff <span>20s</span></li>
+                    <li>Debuff <span>20s</span></li>
+                    <li>buff <span>20s</span></li>
+                    <li>buff <span>20s</span></li>
+                    <li>Debuff <span>20s</span></li>
+                    <li>Debuff <span>20s</span></li>
+                    <li>buff <span>20s</span></li>
+                    <li>buff <span>20s</span></li>
+                    <li>Debuff <span>20s</span></li>
+                    <li>Debuff <span>20s</span></li>
+                    <li>buff <span>20s</span></li>
+                    <li>buff <span>20s</span></li>
+                    <li>Debuff <span>20s</span></li>
+                    <li>Debuff <span>20s</span></li>
+                    <li>buff <span>20s</span></li>
+                    <li>buff <span>20s</span></li>
+                  </ul>
+                </div>
+              </div>
             </div>
-            <div class="menuContent">
-              <ul class="menuList">
-                <!-- <li class="menuListItem"><button>Status</button></li>
+
+            <div class="card">
+              <div class="cardImg">
+                <img
+                  src="https://i.pinimg.com/736x/31/4f/2a/314f2a1f891f259d70d75b603616827a.jpg"
+                  alt=""
+                />
+              </div>
+
+              <div class="cardText">
+                <p class="description">
+                  Este mob se chama snoop dog é um cachorro inofensivel porem é
+                  capaz de fazer coisas normalmente impossiveis
+                </p>
+              </div>
+
+              <div class="cardBtnGroup">
+                <button>Opção 1</button>
+                <button>Opção 2</button>
+                <button>Opção 3</button>
+              </div>
+            </div>
+
+            <div class="menu">
+              <div class="menuHeader">
+                <h2 class="title">Menu</h2>
+              </div>
+              <div class="menuContent">
+                <ul class="menuList">
+                  <!-- <li class="menuListItem"><button>Status</button></li>
                 <li class="menuListItem"><button>Habilidades</button></li>
                 <li class="menuListItem"><button>Inventário</button></li> -->
-  
-                <li class="menuListItem">
-                  
-                  <div class="status">
-                    <span>hp</span>
-                    <input type="number" value="10">
-                  </div>
 
-                  <button id="addStatus">+</button>
+                  <li class="menuListItem">
+                    <div class="status">
+                      <span>hp</span>
+                      <input type="number" value="10" />
+                    </div>
 
-                </li> 
-                <li class="menuListItem">
-                  
-                  <div class="status">
-                    <span>hp</span>
-                    <input type="number" value="10">
-                  </div>
+                    <button id="addStatus">+</button>
+                  </li>
+                  <li class="menuListItem">
+                    <div class="status">
+                      <span>hp</span>
+                      <input type="number" value="10" />
+                    </div>
 
-                  <button id="addStatus">+</button>
+                    <button id="addStatus">+</button>
+                  </li>
+                  <li class="menuListItem">
+                    <div class="status">
+                      <span>hp</span>
+                      <input type="number" value="10" />
+                    </div>
 
-                </li> 
-                <li class="menuListItem">
-                  
-                  <div class="status">
-                    <span>hp</span>
-                    <input type="number" value="10">
-                  </div>
+                    <button id="addStatus">+</button>
+                  </li>
+                  <li class="menuListItem">
+                    <div class="status">
+                      <span>hp</span>
+                      <input type="number" value="10" />
+                    </div>
 
-                  <button id="addStatus">+</button>
+                    <button id="addStatus">+</button>
+                  </li>
+                  <li class="menuListItem">
+                    <div class="status">
+                      <span>hp</span>
+                      <input type="number" value="10" />
+                    </div>
 
-                </li> 
-                <li class="menuListItem">
-                  
-                  <div class="status">
-                    <span>hp</span>
-                    <input type="number" value="10">
-                  </div>
+                    <button id="addStatus">+</button>
+                  </li>
+                  <li class="menuListItem">
+                    <div class="status">
+                      <span>hp</span>
+                      <input type="number" value="10" />
+                    </div>
 
-                  <button id="addStatus">+</button>
+                    <button id="addStatus">+</button>
+                  </li>
+                  <li class="menuListItem">
+                    <div class="status">
+                      <span>hp</span>
+                      <input type="number" value="10" />
+                    </div>
 
-                </li> 
-                <li class="menuListItem">
-                  
-                  <div class="status">
-                    <span>hp</span>
-                    <input type="number" value="10">
-                  </div>
+                    <button id="addStatus">+</button>
+                  </li>
+                  <li class="menuListItem">
+                    <div class="status">
+                      <span>hp</span>
+                      <input type="number" value="10" />
+                    </div>
 
-                  <button id="addStatus">+</button>
+                    <button id="addStatus">+</button>
+                  </li>
 
-                </li> 
-                <li class="menuListItem">
-                  
-                  <div class="status">
-                    <span>hp</span>
-                    <input type="number" value="10">
-                  </div>
-
-                  <button id="addStatus">+</button>
-
-                </li> 
-                <li class="menuListItem">
-                  
-                  <div class="status">
-                    <span>hp</span>
-                    <input type="number" value="10">
-                  </div>
-
-                  <button id="addStatus">+</button>
-
-                </li> 
-                <li class="menuListItem">
-                  
-                  <div class="status">
-                    <span>hp</span>
-                    <input type="number" value="10">
-                  </div>
-
-                  <button id="addStatus">+</button>
-
-                </li> 
-                
                   <!--
                   <div class="skills">
                     <img src="public/assets/img/mage_icon.png" alt="icone da skills">
                     <span>Fireball</span>
                   </div>
                   -->
-                  
-
-              </ul>
-            </div>
-            <div class="menuFooter">
-              <span>Sombras da Eternidade</span>
+                </ul>
+              </div>
+              <div class="menuFooter">
+                <span>Sombras da Eternidade</span>
+              </div>
             </div>
           </div>
-
         </div>
-        
-      </div>
-    </section>
-  </main>
-  
-  <!-- <script src="./public/js/world.js"></script> -->
-  <!-- <script src="./public/js/script.js"></script> -->
-</body>
+      </section>
+    </main>
+
+    <script src="./public/js/world.js"></script>
+    <!-- <script src="./public/js/script.js"></script> -->
+  </body>
 </html>

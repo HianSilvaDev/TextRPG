@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const get = require("./controller/regionController");
+const { get } = require("../controllers/regionController");
 
-router.get("/", getByName);
+router.get("/", get);
 module.exports = router;
