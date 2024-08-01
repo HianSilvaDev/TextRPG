@@ -1,4 +1,3 @@
-const txt = document.querySelector(".txt>p");
 const openMenu = document.getElementById("openMenu");
 const card = document.querySelector(".card");
 const containerContent = document.querySelector(".content");
@@ -19,7 +18,7 @@ img.onload = function () {
 };
 
 const colorToLocality = {
-  "rgb(51, 119, 85)": "Floresta do Esquecimento",
+  "rgb(0, 100, 0)": "Floresta do Esquecimento",
   "rgb(85, 153, 68)": "Clareira",
   "rgb(182, 45, 45)": "Cidade",
   "rgb(204, 255, 51)": "Vilarejo",
@@ -128,6 +127,7 @@ function newCordinates(newx, newy) {
     cordinatesY = limitValue(y, 1, canvas.height - 1);
     currentRegion = getLocalityNameByColor(cordinatesX, cordinatesY);
     console.log(currentRegion);
+    getNarrations(currentRegion);
   }
 }
 
@@ -275,12 +275,11 @@ function getPlayer(callback) {
   }
 }
 
-/***
+/**
  * Pegar região - buscar narrações dentro do banco - filtrar narrações
  *
- * Pegar narrações - escolher uma aleatoriamente - mostrar ao usuario
+ * @param {string} region
  */
-
 async function getNarrations(region) {
   await fetch(`/region?name=${region}`, {
     method: "GET",
@@ -290,14 +289,34 @@ async function getNarrations(region) {
   })
     .then((res) => res.json())
     .then((data) => {
-      console.log(data);
+      const setNarration = async () => {
+        const randomIdle = await data.EventPhrase.filter(
+          (events) => events.eventType === "no_item_found"
+        );
+
+        // Seleciona aleatoriamente um item dos resultados filtrados
+        const randomIndex = Math.floor(Math.random() * randomIdle.length);
+        const itemAleatorio = randomIdle[randomIndex];
+
+        setNarrations(itemAleatorio.text);
+      };
+
+      setNarration();
     })
     .catch((error) => {
       console.error("Error: ", error);
     });
 }
 
-getNarrations("Floresta do Esquecimento");
+/**
+ * Printar narração para o usúario
+ *
+ * @param {string} narration
+ */
+function setNarrations(narration = "Qual será a aventura de hoje?") {
+  const txt = document.getElementById("narrations");
+  txt.textContent = narration;
+}
 /*
         <div class="menu">
           <div class="menuHeader">
