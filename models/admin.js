@@ -4,16 +4,17 @@ async function cadSkill() {
   try {
     await prisma.skill.create({
       data: {
-        region_name: "Escudo de Água",
-        desc: "Cria um escudo de água que absorve parte do dano recebido por um curto período.",
-        class: "mage",
-        power: 0.0,
-        cooldown: 8.0,
-        cost: 5.0,
-        effect: "Absorção de dano",
-        type: "Defensivo",
-        duration: 5.0,
-        interval: null,
+        name: "Defesa Básica",
+        desc: "Adota uma postura defensiva, reduzindo temporariamente o dano recebido.",
+        cooldown: 5.0,
+        cost: 3.0,
+        effect: null,
+        type: "PhysicalDefense",
+        data: JSON.stringify({
+          valueType: "percent",
+          amount: 20,
+          duration: 3,
+        }),
       },
     });
   } catch (error) {
