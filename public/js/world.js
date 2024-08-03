@@ -126,7 +126,7 @@ function newCordinates(newx, newy) {
     cordinatesX = limitValue(x, 1, canvas.width - 1);
     cordinatesY = limitValue(y, 1, canvas.height - 1);
     currentRegion = getLocalityNameByColor(cordinatesX, cordinatesY);
-    console.log(currentRegion);
+
     getNarrations(currentRegion);
   }
 }
@@ -275,6 +275,9 @@ function getPlayer(callback) {
   }
 }
 
+let playersCurrentRegion;
+let narrationsFromTheCurrentRegion = [];
+
 /**
  * Pegar região - buscar narrações dentro do banco - filtrar narrações
  *
@@ -317,6 +320,7 @@ function setNarrations(narration = "Qual será a aventura de hoje?") {
   const txt = document.getElementById("narrations");
   txt.textContent = narration;
 }
+
 /*
         <div class="menu">
           <div class="menuHeader">
