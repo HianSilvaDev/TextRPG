@@ -1,10 +1,12 @@
 const express = require("express");
-// const { cadSkill, seedEventPhrases } = require("./models/admin.js");
+const { cadSkill, seedEventPhrases } = require("./models/admin.js");
+const { getByName } = require("./models/regionModel.js");
 
-// seedEventPhrases();
+async function a() {
+  console.log(await getByName("Floresta do Esquecimento"));
+}
 
-// const { getByName } = require("./models/regionModel");
-
+a();
 const app = express();
 
 app.use(express.json());
@@ -22,7 +24,10 @@ const player = require("./router/playerRoutes.js");
 app.use("/player", player);
 
 const region = require("./router/regionRoutes.js");
-app.use("/region", region)
+app.use("/region", region);
+
+const enemy = require("./router/enemyRoutes.js");
+app.use("/enemy", enemy);
 
 app.listen(3000, () => {
   console.log("server started");

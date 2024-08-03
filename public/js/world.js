@@ -354,3 +354,16 @@ function setNarrations(narration = "Qual será a aventura de hoje?") {
           </div>
         </div>
 */
+
+function sortearMob(mobs) {
+  const totalChance = mobs.reduce((total, mob) => total + mob.raridade, 0);
+  const escolha = Math.random() * totalChance;
+  let acumulado = 0;
+
+  for (const mob of mobs) {
+    acumulado += mob.raridade;
+    if (escolha <= acumulado) {
+      return mob;
+    }
+  }
+}

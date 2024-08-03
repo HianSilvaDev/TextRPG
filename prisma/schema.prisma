@@ -22,13 +22,11 @@ model Skill {
   name        String        @unique
   desc        String
   class       String?
-  power       Float
   cooldown    Float
   cost        Float
   effect      String?
   type        String
-  duration    Float?
-  interval    Float?
+  data        String
   players     PlayerSkill[]
   EnemySkills EnemySkills[]
 
