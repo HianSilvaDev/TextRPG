@@ -26,9 +26,6 @@ app.use("/player", player);
 const region = require("./router/regionRoutes.js");
 app.use("/region", region);
 
-const enemy = require("./router/enemyRoutes.js");
-app.use("/enemy", enemy);
-
 app.listen(3000, () => {
   console.log("server started");
 });
