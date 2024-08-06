@@ -1,7 +1,8 @@
-const {getbyId} = require("../models/playerModel");
+const { getbyId } = require("../models/playerModel");
 
 const get = async (req, res) => {
-  const { id } = req.query;
+  let { id } = req.query;
+  id = parseInt(id);
   try {
     const player = await getbyId(id);
     if (player) {
