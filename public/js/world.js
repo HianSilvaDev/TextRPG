@@ -283,8 +283,8 @@ let narrationsFromTheCurrentRegion = [];
  *
  * @param {string} region
  */
-async function getNarrations(region) {
-  await fetch(`/region?name=${region}`, {
+function getNarrations(region) {
+  fetch(`/region?name=${region}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -292,16 +292,19 @@ async function getNarrations(region) {
   })
     .then((res) => res.json())
     .then((data) => {
-      const setNarration = async () => {
-        const randomIdle = await data.EventPhrase.filter(
+      console.log(data);
+      return;
+      const setNarration = () => {
+        const randomIdle = data.EventPhrase.filter(
           (events) => events.eventType === "no_item_found"
         );
 
         // Seleciona aleatoriamente um item dos resultados filtrados
         const randomIndex = Math.floor(Math.random() * randomIdle.length);
-        const itemAleatorio = randomIdle[randomIndex];
+        const itemRandom = randomIdle[randomIndex];
 
-        setNarrations(itemAleatorio.text);
+        const txt = document.getElementById("narrations");
+        txt.textContent = itemRandom.txt;
       };
 
       setNarration();
@@ -316,23 +319,21 @@ async function getNarrations(region) {
  *
  * @param {string} narration
  */
-function setNarrations(narration = "Qual será a aventura de hoje?") {
-  const txt = document.getElementById("narrations");
-  txt.textContent = narration;
-}
+function setNarrations(narration = "Qual será a aventura de hoje?") {}
 
 /**
+ * Sortear um mob com base na sorte do player e a raridade
  *
  * @param {Array} mobs
  * @returns Object
  */
 function raffleMob(mobs) {
-  const totalChance = mobs.reduce((total, mob) => total + mob.rarity, 0);
+  const totalChance = mobs.reduce((total, mob) => total + mob.spawnrate, 0);
   const choice = Math.round(random()) * totalChance;
   let accumulated = 0;
 
   for (const mob of mobs) {
-    accumulated += mob.raridade;
+    accumulated += mob.spawnrate;
     if (choice <= accumulated) {
       return mob;
     }
@@ -372,16 +373,3 @@ function raffleMob(mobs) {
           </div>
         </div>
 */
-
-function sortearMob(mobs) {
-  const totalChance = mobs.reduce((total, mob) => total + mob.raridade, 0);
-  const escolha = Math.random() * totalChance;
-  let acumulado = 0;
-
-  for (const mob of mobs) {
-    acumulado += mob.raridade;
-    if (escolha <= acumulado) {
-      return mob;
-    }
-  }
-}
