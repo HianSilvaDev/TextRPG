@@ -53,6 +53,7 @@ model Player {
   userId       Int           @id
   name         String        @unique
   class        String
+  level        Int?
   hp           Int
   mp           Int
   strength     Int
@@ -93,7 +94,7 @@ model Enemy {
   enemy_id     Int           @id @default(autoincrement())
   name         String        @unique
   desc         String?
-  url_img String?
+  url_img      String?
   level        Int
   spawnrate    Float
   hp           Int

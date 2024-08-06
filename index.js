@@ -1,14 +1,11 @@
 const express = require("express");
-const { cadSkill, seedEventPhrases } = require("./models/admin.js");
-const { getByName } = require("./models/regionModel.js");
-
-async function a() {
-  console.log(await getByName("Floresta do Esquecimento"));
-}
-
-a();
+const { getbyId } = require("./models/playerModel.js");
 const app = express();
 
+async function a() {
+  console.log(await getbyId(1));
+}
+a();
 app.use(express.json());
 
 app.use("/public", express.static(__dirname + "/public"));

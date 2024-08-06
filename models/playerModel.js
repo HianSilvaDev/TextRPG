@@ -6,6 +6,18 @@ async function getbyId(id) {
       where: {
         userId: id,
       },
+      include: {
+        inventory: {
+          include: {
+            item: true,
+          },
+        },
+        skills: {
+          include: {
+            skill: true,
+          },
+        },
+      },
     });
     return player;
   } catch (err) {
