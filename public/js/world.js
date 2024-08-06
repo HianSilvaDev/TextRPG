@@ -321,6 +321,24 @@ function setNarrations(narration = "Qual será a aventura de hoje?") {
   txt.textContent = narration;
 }
 
+/**
+ *
+ * @param {Array} mobs
+ * @returns Object
+ */
+function raffleMob(mobs) {
+  const totalChance = mobs.reduce((total, mob) => total + mob.rarity, 0);
+  const choice = Math.round(random()) * totalChance;
+  let accumulated = 0;
+
+  for (const mob of mobs) {
+    accumulated += mob.raridade;
+    if (choice <= accumulated) {
+      return mob;
+    }
+  }
+}
+
 /*
         <div class="menu">
           <div class="menuHeader">
