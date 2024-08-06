@@ -6,6 +6,7 @@ const className = document.getElementById("class");
 const level = document.getElementById("lvl");
 const gold = document.getElementById("gold");
 const list = document.querySelectorAll(".listing");
+const btnInventory = document.getElementById("btnInventory");
 
 function listing(component, data, isListingSkills) {
   Object.entries(data).forEach((item) => {
@@ -20,8 +21,6 @@ function listing(component, data, isListingSkills) {
     }
   });
 }
-
-const btnInventory = document.getElementById("btnInventory");
 
 btnInventory.addEventListener("click", () => {
   const inventory = document.getElementById("inventory");
@@ -41,36 +40,39 @@ function getPlayer() {
         console.log(data);
         if (data.error) throw new Error(data.error);
         player = data;
-        return;
+
         addElementValue(gold, `# ${player.wallet}`);
         addElementValue(username, player.name);
         addElementValue(className, player.class);
-        addElementValue(level, `lvl: ${player.level}`);
+        addElementValue(level, `lvl: ${player.level ?? 0}`);
 
-        listing(list[1], player.skills, true);
         listing(
           list[0],
           {
             hp: player.hp,
             mp: player.mp,
-            strenght: player.strenght,
+            strenght: player.strength,
             defense: player.defense,
             dexterity: player.dexterity,
-            resistence: player.resistence,
+            resistence: player.resistance,
             intelligence: player.intelligence,
             luck: player.luck,
           },
           false
         );
+        return;
+        listing(list[1], player.skills, true);
       });
   } catch (error) {
     console.log(error.message);
   }
 }
 
-/*
-  adicionar ao elemento um valor de acordo com a classe do player
-*/
+/**
+ * adicionar ao elemento um valor de acordo com a classe do player
+ * @param {*} element
+ * @param {String|Number} text
+ */
 function addElementValue(element, text) {
   element.textContent = text;
 }
