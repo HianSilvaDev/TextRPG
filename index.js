@@ -1,11 +1,9 @@
 const express = require("express");
-const { getbyId } = require("./models/playerModel.js");
+const { createItens, cadSkill } = require("./models/admin.js");
+
+cadSkill();
 const app = express();
 
-async function a() {
-  console.log(await getbyId(1));
-}
-a();
 app.use(express.json());
 
 app.use("/public", express.static(__dirname + "/public"));

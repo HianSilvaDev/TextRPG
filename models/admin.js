@@ -2,20 +2,37 @@ const prisma = require("./prismaClient");
 
 async function cadSkill() {
   try {
-    await prisma.skill.create({
-      data: {
-        name: "Defesa Básica",
-        desc: "Adota uma postura defensiva, reduzindo temporariamente o dano recebido.",
-        cooldown: 5.0,
-        cost: 3.0,
-        effect: null,
-        type: "PhysicalDefense",
-        data: JSON.stringify({
-          valueType: "percent",
-          amount: 20,
-          duration: 3,
-        }),
-      },
+    await prisma.skill.createMany({
+      data: [
+        {
+          name: "Investida",
+          desc: "Uma carga rápida que causa dano e pode atordoar inimigos.",
+          class: "Bárbaro",
+          effect: JSON.stringify({ type: "stun", duration: 2 }),
+          cooldown: 10.0,
+          cost: 20.0,
+          type: "ATAQUE_FISICO",
+          data: JSON.stringify({ damage: 12, accuracy: 40 }),
+        },
+        {
+          name: "Golpe Poderoso",
+          desc: "Um ataque forte que causa grande dano ao alvo.",
+          class: "Bárbaro",
+          cooldown: 8.0,
+          cost: 10.0,
+          type: "ATAQUE_FISICO",
+          data: JSON.stringify({ damage: 20, accuracy: 30 }),
+        },
+        {
+          name: "Golpe Simples",
+          desc: "Ataca com o machado causando dano ao alvo.",
+          class: "Bárbaro",
+          cooldown: 2.0,
+          cost: 5.0,
+          type: "ATAQUE_FISICO",
+          data: JSON.stringify({ damage: 10, accuracy: 80 }),
+        },
+      ],
     });
   } catch (error) {
     console.log(error);
@@ -23,38 +40,19 @@ async function cadSkill() {
 }
 
 async function seedEventPhrases() {
-  await prisma.eventPhrase.createMany({
-    data: [
-      {
-        region_name: "Floresta do Esquecimento",
-        eventType: "find_item",
-        text: "Um [nome do item] meio enterrado no solo desperta sua curiosidade.",
-      },
-      {
-        region_name: "Floresta do Esquecimento",
-        eventType: "find_item",
-        text: "Você quase tropeça em um [nome do item], escondido sob a vegetação.",
-      },
-      {
-        region_name: "Floresta do Esquecimento",
-        eventType: "find_item",
-        text: "Um [nome do item] reluz sob a luz do sol, chamando você para pegá-lo.",
-      },
-      {
-        region_name: "Floresta do Esquecimento",
-        eventType: "find_item",
-        text: "Parece que a sorte sorriu para você hoje: um [nome do item] está bem à sua frente.",
-      },
-      {
-        region_name: "Floresta do Esquecimento",
-        eventType: "find_item",
-        text: "Você se depara com um [nome do item] cuidadosamente colocado sobre uma pedra.",
-      },
-    ],
-  });
+  await prisma.eventPhrase.createMany({});
 }
 
+async function createEnemy() {
+  return await prisma.enemy.createMany({});
+}
+
+async function createItens() {
+  return prisma.item.createMany({});
+}
 module.exports = {
   cadSkill,
   seedEventPhrases,
+  createEnemy,
+  createItens,
 };
