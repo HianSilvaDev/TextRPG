@@ -9,7 +9,9 @@ async function update(player) {
       },
       data: formatPlayerToBack(player),
     });
-  } catch (err) {}
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 async function getbyId(id) {
@@ -136,7 +138,7 @@ async function skillsHandler(arrays) {
 }
 
 // Tratamento de Itens:
-
+// Recebe um array com todas as ações realizadas no front e retorna um objeto contendo um array para cada uma das tres operações: (CREATE, DELETE E UPDATE)
 function selectTypesForItens(array) {
   let dell = [];
   let createA = [];
@@ -164,6 +166,9 @@ function selectTypesForItens(array) {
   });
 }
 
+// Recebe o objeto retornado pela função "selectTypesForItens" e execulta cada uma das respectivas ações
+// Usa Promise.allSettled para que cada ação seja execultada mesmo que alguma falhe
+// Verica os resultados e em caso de erro, exibe-o no console
 async function itensHandler(arrays) {
   const deletePromise = arrays.dell.map((s) => {
     prisma.playerItens
@@ -218,6 +223,7 @@ function formatPlayerToFront(player) {
       ...i.item,
       isEquiped: i.equiped,
       qtd: i.qtd,
+      itemId: i.itemId,
     };
   });
 
@@ -225,6 +231,7 @@ function formatPlayerToFront(player) {
     return {
       ...s.skill,
       isEquiped: s.equiped,
+      skillId: s.skillId,
     };
   });
   return {
