@@ -292,6 +292,7 @@ async function getNarrations(region) {
   })
     .then((res) => res.json())
     .then((data) => {
+      return
       const setNarration = async () => {
         const randomIdle = await data.EventPhrase.filter(
           (events) => events.eventType === "no_item_found"
@@ -303,8 +304,6 @@ async function getNarrations(region) {
 
         setNarrations(itemAleatorio.text);
       };
-
-      setNarration();
     })
     .catch((error) => {
       console.error("Error: ", error);
