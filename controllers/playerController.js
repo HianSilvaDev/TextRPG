@@ -1,10 +1,10 @@
-const PlayerModel = require("../models/playerModel");
+const { getbyId } = require("../models/playerModel");
 
 const get = async (req, res) => {
-  const { id } = req.body;
-  console.log(id);
+  let { id } = req.query;
+  id = parseInt(id);
   try {
-    const player = await PlayerModel.getById(id);
+    const player = await getbyId(id);
     if (player) {
       res.status(200).json(player);
     } else {
@@ -16,18 +16,6 @@ const get = async (req, res) => {
   }
 };
 
-const update = async (req, res) => {
-  const player = req.body;
-  try {
-    await PlayerModel.update(player);
-    res.status(200).json({ message: "Personagem atualizado com sucesso!" });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ error: "Erro ao atualizar o Personagem!" });
-  }
-};
-
 module.exports = {
-  update,
   get,
 };

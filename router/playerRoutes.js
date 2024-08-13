@@ -1,12 +1,9 @@
 const express = require('express');
 const router = express.Router(); 
 
-const {update, get} = require('../controllers/playerController');
-
-// Atualizar um jogador
-router.post('/update', update);
+const {get} = require('../controllers/playerController');
 
 // Obter um jogador
-router.get('/get', get);
+router.get('/', get);
 
 module.exports = router;

@@ -1,12 +1,7 @@
 const express = require("express");
-const { cadSkill, seedEventPhrases } = require("./models/admin.js");
-const { getByName } = require("./models/regionModel.js");
+// const { createItens, cadSkill } = require("./models/admin.js");
 
-async function a() {
-  console.log(await getByName("Floresta do Esquecimento"));
-}
-
-a();
+// cadSkill();
 const app = express();
 
 app.use(express.json());
@@ -26,9 +21,6 @@ app.use("/player", player);
 const region = require("./router/regionRoutes.js");
 app.use("/region", region);
 
-const enemy = require("./router/enemyRoutes.js");
-app.use("/enemy", enemy);
-
-app.listen(3000, () => {
+app.listen(8080, () => {
   console.log("server started");
 });
