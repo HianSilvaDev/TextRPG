@@ -2,6 +2,9 @@ const openMenu = document.getElementById("openMenu");
 const card = document.querySelector(".card");
 const containerContent = document.querySelector(".content");
 
+let playersCurrentRegion;
+let dataFromTheCurrentRegion = []
+
 let cordinatesX = 1;
 let cordinatesY = 1;
 let currentRegion;
@@ -17,6 +20,7 @@ img.onload = function () {
   ctx.drawImage(img, 0, 0);
 };
 
+// Modificar os valores subsequente a clareira
 const colorToLocality = {
   "rgb(0, 100, 0)": "Floresta do Esquecimento",
   "rgb(85, 153, 68)": "Clareira",
@@ -102,7 +106,7 @@ function getPixelColor(x, y) {
 
 function getLocalityNameByColor(x, y) {
   const color = getPixelColor(x, y);
-  console.log(color);
+  // console.log(color);
   return colorToLocality[color] || currentRegion;
 }
 
@@ -117,17 +121,25 @@ function limitValue(value, min, max) {
 }
 
 function newCordinates(newx, newy) {
-  x = cordinatesX + newx;
-  y = cordinatesY + newy;
-
+  let x = cordinatesX + newx;
+  let y = cordinatesY + newy
+  
   if (x < 1 || x >= canvas.width || y < 0 || y >= canvas.height) {
-    console.log("Out of Bonds!");
+    setNarrations("Out of Bonds!");
   } else {
     cordinatesX = limitValue(x, 1, canvas.width - 1);
     cordinatesY = limitValue(y, 1, canvas.height - 1);
     currentRegion = getLocalityNameByColor(cordinatesX, cordinatesY);
 
-    getNarrations(currentRegion);
+    if(playersCurrentRegion !== currentRegion)
+    {
+      playersCurrentRegion = String(currentRegion)
+      getDataRegion(playersCurrentRegion)
+    }
+
+    console.log(dataFromTheCurrentRegion.EventPhrase)
+
+    
   }
 }
 
@@ -259,7 +271,7 @@ function contentMenu(insert, insertIn) {
   });
 }
 
-// Pegando dados da classe player
+// buncando dados da classe player
 function getPlayer(callback) {
   try {
     fetch("/player/get")
@@ -275,15 +287,14 @@ function getPlayer(callback) {
   }
 }
 
-let playersCurrentRegion;
-let narrationsFromTheCurrentRegion = [];
-
 /**
- * Pegar região - buscar narrações dentro do banco - filtrar narrações
- *
- * @param {string} region
+ * buscando dados da região
+ * 
+ * @param {string} region 
+ * @returns {Object|Array}
  */
-function getNarrations(region) {
+function getDataRegion(region) {
+
   fetch(`/region?name=${region}`, {
     method: "GET",
     headers: {
@@ -292,24 +303,23 @@ function getNarrations(region) {
   })
     .then((res) => res.json())
     .then((data) => {
-      console.log(data);
-      return;
-      const setNarration = () => {
-        const randomIdle = data.EventPhrase.filter(
-          (events) => events.eventType === "no_item_found"
-        );
-
-        // Seleciona aleatoriamente um item dos resultados filtrados
-        const randomIndex = Math.floor(Math.random() * randomIdle.length);
-        const itemRandom = randomIdle[randomIndex];
-
-        const txt = document.getElementById("narrations");
-        txt.textContent = itemRandom.txt;
-      };
+      
+      saveDataRegion(data)
+      
     })
     .catch((error) => {
       console.error("Error: ", error);
     });
+
+}
+
+/**
+ * Salvar dados da região atual
+ * 
+ * @param {Object|Array} data 
+ */
+function saveDataRegion(data) {
+  dataFromTheCurrentRegion = data
 }
 
 /**
@@ -317,10 +327,22 @@ function getNarrations(region) {
  *
  * @param {string} narration
  */
-function setNarrations(narration = "Qual será a aventura de hoje?") {}
+function setNarrations(narration) {
+  const txt = document.getElementById("narrations");
+  txt.textContent = narration;
+}
 
 /**
- * Sortear um mob com base na sorte do player e a raridade
+ * Verificar qual o tipo de narração necessaria
+ * 
+ * @param {Array} narrations
+ */
+function verificarTipoDeNarração(narrations){
+
+}
+
+/**
+ * Sortear um mob com base na sorte do player e a raridade do mob
  *
  * @param {Array} mobs
  * @returns Object
