@@ -1,12 +1,5 @@
 const express = require("express");
-// const { createItens, cadSkill } = require("./models/admin.js");
-const { getByName } = require("./models/regionModel");
 
-async function a() {
-  console.log(await getByName("Floresta do Esquecimento"));
-}
-a();
-// cadSkill();
 const app = express();
 
 app.use(express.json());

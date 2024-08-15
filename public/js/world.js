@@ -7,11 +7,12 @@ let cordinatesY = 1;
 let currentRegion;
 
 const canvas = document.getElementById("mapCanvas");
-const ctx = canvas.getContext("2d", { willReadFrequently: true });
+const ctx = canvas.getContext("2d", { willReadFrequently: true }); //retorna um objeto com metodos para desenhar no canvas
 const img = new Image();
 img.src = "./public/assets/2DMap.png";
 
 img.onload = function () {
+  //Quando a imagem for carregada, ajusta o tamanho do canvas ao tamanho da imagem e a desenha
   canvas.width = img.width;
   canvas.height = img.height;
   ctx.drawImage(img, 0, 0);
@@ -27,11 +28,39 @@ const colorToLocality = {
   "rgb(51, 102, 153)": "Lago ou rio",
 };
 
-img.onload = function () {
-  canvas.width = img.width;
-  canvas.height = img.height;
-  ctx.drawImage(img, 0, 0);
-};
+function getLocalityNameByColor(x, y) {
+  //Recebe a posição x e y do pixel e atribui a variavel color a cor do mesmo em formato rgb
+  const imageData = ctx.getImageData(x, y, 1, 1).data;
+  let color = `rgb(${imageData[0]}, ${imageData[1]}, ${imageData[2]})`;
+  // Retorna o valor do objeto colorToLocality que possui a key igual a color
+  return colorToLocality[color];
+}
+// atribui um valor minimo e maximo e se value infringir-los retorna value corrigido ao valor mais proximo dentro do intervalo definido.
+function limitValue(value, min, max) {
+  return Math.min(Math.max(value, min), max);
+}
+
+function newCordinates(newx, newy) {
+  // Soma as cordenadas atuais do player com a adição do movimento
+  let x = cordinatesX + newx;
+  let y = cordinatesY + newy;
+  // Confere se a nova posição esta dentro do permitido, sendo esse os limites do mapa.
+  if (x < 1 || x >= canvas.width || y < 0 || y >= canvas.height) {
+    // Se fora dos limites, Escreve "fora dos limites" no console e não muda a posição do player
+    console.log("Out of Bonds!");
+  } else {
+    // Estando dentro dos limites, se necessario corrige as novas cordenadas aos limites do mapa e as atribui ao player
+    cordinatesX = limitValue(x, 1, canvas.width - 1);
+    cordinatesY = limitValue(y, 1, canvas.height - 1);
+    // Recebe o nome da região com base nas novas cordenadas e verifica se é igual a atual. Se assim for, chama a função setNarrations, caso contrario busca a nova região no banco de dados
+    let region = getLocalityNameByColor(cordinatesX, cordinatesY);
+    if (!currentRegion || region != currentRegion.name) {
+      getRegion(region);
+    } else {
+      setNarrations();
+    }
+  }
+}
 
 openMenu.addEventListener("click", () => {
   card.classList.add("hiddenComponet");
@@ -94,42 +123,6 @@ openMenu.addEventListener("click", () => {
     containerContent.removeChild(menu);
   });
 });
-
-function getPixelColor(x, y) {
-  const imageData = ctx.getImageData(x, y, 1, 1).data;
-  return `rgb(${imageData[0]}, ${imageData[1]}, ${imageData[2]})`;
-}
-
-function getLocalityNameByColor(x, y) {
-  const color = getPixelColor(x, y);
-  console.log(color);
-  return colorToLocality[color] || currentRegion;
-}
-
-img.onload = function () {
-  canvas.width = img.width;
-  canvas.height = img.height;
-  ctx.drawImage(img, 0, 0);
-};
-
-function limitValue(value, min, max) {
-  return Math.min(Math.max(value, min), max);
-}
-
-function newCordinates(newx, newy) {
-  x = cordinatesX + newx;
-  y = cordinatesY + newy;
-
-  if (x < 1 || x >= canvas.width || y < 0 || y >= canvas.height) {
-    console.log("Out of Bonds!");
-  } else {
-    cordinatesX = limitValue(x, 1, canvas.width - 1);
-    cordinatesY = limitValue(y, 1, canvas.height - 1);
-    currentRegion = getLocalityNameByColor(cordinatesX, cordinatesY);
-
-    getNarrations(currentRegion);
-  }
-}
 
 function createMenu(menuContent) {
   if (document.querySelector(".menu")) {
@@ -283,7 +276,7 @@ let narrationsFromTheCurrentRegion = [];
  *
  * @param {string} region
  */
-function getNarrations(region) {
+function getRegion(region) {
   fetch(`/region?name=${region}`, {
     method: "GET",
     headers: {
@@ -292,20 +285,9 @@ function getNarrations(region) {
   })
     .then((res) => res.json())
     .then((data) => {
-      console.log(data);
-      return;
-      const setNarration = () => {
-        const randomIdle = data.EventPhrase.filter(
-          (events) => events.eventType === "no_item_found"
-        );
-
-        // Seleciona aleatoriamente um item dos resultados filtrados
-        const randomIndex = Math.floor(Math.random() * randomIdle.length);
-        const itemRandom = randomIdle[randomIndex];
-
-        const txt = document.getElementById("narrations");
-        txt.textContent = itemRandom.txt;
-      };
+      if (data) currentRegion = data;
+      if (data.error) throw data.error;
+      if (!data) throw "Erro ao buscar região";
     })
     .catch((error) => {
       console.error("Error: ", error);
@@ -317,7 +299,24 @@ function getNarrations(region) {
  *
  * @param {string} narration
  */
-function setNarrations(narration = "Qual será a aventura de hoje?") {}
+function setNarrations() {
+  let choice = Math.round(Math.random() * currentRegion.EventPhrase.length);
+  choice = currentRegion.EventPhrase[choice];
+  switch (choice.type) {
+    case "no_item_found":
+      console.log(choice.text);
+      break;
+    case "encounter_enemy":
+      combat(choice);
+      break;
+    case "find_item":
+      findItem(choice);
+      break;
+  }
+}
+function combat() {}
+
+function findItem() {}
 
 /**
  * Sortear um mob com base na sorte do player e a raridade
