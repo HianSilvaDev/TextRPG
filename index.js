@@ -1,8 +1,9 @@
 const express = require("express");
-// const { createItens, cadSkill } = require("./models/admin.js");
-const { getByName } = require("./models/regionModel");
 
+<<<<<<< HEAD
 // cadSkill();
+=======
+>>>>>>> 7ad51efae8e9cc8cbba5e719f494cc2da5e61b88
 const app = express();
 
 app.use(express.json());
