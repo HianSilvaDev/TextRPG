@@ -1,9 +1,5 @@
 const express = require("express");
 
-<<<<<<< HEAD
-// cadSkill();
-=======
->>>>>>> 7ad51efae8e9cc8cbba5e719f494cc2da5e61b88
 const app = express();
 
 app.use(express.json());

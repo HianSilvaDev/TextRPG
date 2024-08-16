@@ -1,27 +1,24 @@
 const openMenu = document.getElementById("openMenu");
-const card = document.querySelector(".card");
-const containerContent = document.querySelector(".content");
 
-let playersCurrentRegion;
-let dataFromTheCurrentRegion = []
+const containerContent = document.querySelector(".content");
 
 let cordinatesX = 1;
 let cordinatesY = 1;
-let currentRegion;
+let dataCurrentRegion;
 
 const canvas = document.getElementById("mapCanvas");
 const ctx = canvas.getContext("2d", { willReadFrequently: true }); //retorna um objeto com metodos para desenhar no canvas
 const img = new Image();
 img.src = "./public/assets/2DMap.png";
 
+//Quando a imagem for carregada, ajusta o tamanho do canvas ao tamanho da imagem e a desenha
 img.onload = function () {
-  //Quando a imagem for carregada, ajusta o tamanho do canvas ao tamanho da imagem e a desenha
   canvas.width = img.width;
   canvas.height = img.height;
   ctx.drawImage(img, 0, 0);
 };
 
-// Modificar os valores subsequente a clareira
+// Lembrar de modificar os valores subsequente a clareira mais tarde
 const colorToLocality = {
   "rgb(0, 100, 0)": "Floresta do Esquecimento",
   "rgb(85, 153, 68)": "Clareira",
@@ -32,6 +29,12 @@ const colorToLocality = {
   "rgb(51, 102, 153)": "Lago ou rio",
 };
 
+/**
+ * 
+ * @param {Number} x 
+ * @param {Number} y 
+ * @returns Number|String
+ */
 function getLocalityNameByColor(x, y) {
   //Recebe a posição x e y do pixel e atribui a variavel color a cor do mesmo em formato rgb
   const imageData = ctx.getImageData(x, y, 1, 1).data;
@@ -39,31 +42,175 @@ function getLocalityNameByColor(x, y) {
   // Retorna o valor do objeto colorToLocality que possui a key igual a color
   return colorToLocality[color];
 }
-// atribui um valor minimo e maximo e se value infringir-los retorna value corrigido ao valor mais proximo dentro do intervalo definido.
+
+/**
+ * atribui um valor minimo e maximo, e se o valor infringir-los retorna o valor corrigido ao valor mais proximo dentro do intervalo definido.
+ * 
+ * @param {Number} value 
+ * @param {Number} min 
+ * @param {Number} max 
+ * @returns Number
+ */
 function limitValue(value, min, max) {
   return Math.min(Math.max(value, min), max);
 }
 
+/**
+ * 
+ * @param {Number} x 
+ * @param {Number} y 
+ * @returns 
+ */
+function getPixelColor(x, y) {
+  const imageData = ctx.getImageData(x, y, 1, 1).data;
+  return `rgb(${imageData[0]}, ${imageData[1]}, ${imageData[2]})`;
+}
+
+/**
+ * Define as cordenadas do player
+ * 
+ * @param {Number} newx 
+ * @param {Number} newy 
+ */
 function newCordinates(newx, newy) {
   // Soma as cordenadas atuais do player com a adição do movimento
   let x = cordinatesX + newx;
   let y = cordinatesY + newy;
+
   // Confere se a nova posição esta dentro do permitido, sendo esse os limites do mapa.
   if (x < 1 || x >= canvas.width || y < 0 || y >= canvas.height) {
-    // Se fora dos limites, Escreve "fora dos limites" no console e não muda a posição do player
-    console.log("Out of Bonds!");
-  } else {
-    // Estando dentro dos limites, se necessario corrige as novas cordenadas aos limites do mapa e as atribui ao player
-    cordinatesX = limitValue(x, 1, canvas.width - 1);
-    cordinatesY = limitValue(y, 1, canvas.height - 1);
-    // Recebe o nome da região com base nas novas cordenadas e verifica se é igual a atual. Se assim for, chama a função setNarrations, caso contrario busca a nova região no banco de dados
-    let region = getLocalityNameByColor(cordinatesX, cordinatesY);
-    if (!currentRegion || region != currentRegion.name) {
-      getRegion(region);
-    } else {
-      setNarrations();
+
+    // Se fora dos limites, Escreve "fora dos limites" para player e não muda a posição do player
+    printNarration("Fora dos limites!");
+    return
+
+  }
+  
+  // Estando dentro dos limites, se necessario corrige as novas cordenadas aos limites do mapa e as atribui ao player
+  cordinatesX = limitValue(x, 1, canvas.width - 1);
+  cordinatesY = limitValue(y, 1, canvas.height - 1);
+
+  // Recebe o nome da região com base nas novas cordenadas
+  let region = getLocalityNameByColor(cordinatesX, cordinatesY);
+
+  // Verifica se é igual a atual. Se assim for, chama a função printNarration, caso contrario busca a nova região no banco de dados
+  if (!dataCurrentRegion || region != dataCurrentRegion.name) {
+    
+    getDataRegion(region);
+    return
+
+  }
+
+  checkTypeOfNarrationToBePrinted(dataCurrentRegion)
+    
+}
+
+/**
+ * Verificar se o player irá se encontrar com algo ou não e determinar qual narração irá aparecer
+ * 
+ * @param {Array|Object} data
+ */
+function checkTypeOfNarrationToBePrinted(data) {
+  let narration = ''
+  const narrations = data.EventPhrase
+  const spawnMob = raffleMob(data.enemies)
+
+  Math.random()
+
+  printNarration(narrations)
+  printNarration(narration)
+}
+
+/**
+ * Printar narração para o usúario
+ *
+ * @param {string} narration
+ */
+function printNarration(narration) {
+  const txt = document.getElementById("narrations");
+  txt.textContent = narration;
+}
+
+// buncando dados da classe player
+function getPlayer(callback) {
+  try {
+    fetch(`/player?id=${parseInt(sessionStorage.getItem("data"))}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+  }catch (error) {
+    console.log(error.message);
+  }
+}
+
+/**
+ * Sortear um mob com base na sorte do player e a raridade do mob
+ *
+ * @param {Array} mobs
+ * @returns Object
+ */
+function raffleMob(mobs) {
+  let spawnMob = {}
+  const totalChance = mobs.reduce((total, mob) => total + mob.spawnrate, 0);
+  const choice = Math.round(Math.random() * totalChance);
+  let accumulated = 0;
+
+  for (const mob of mobs) {
+    accumulated += mob.spawnrate;
+    if (choice <= accumulated) {
+      spawnMob = mob
     }
   }
+
+  return spawnMob
+}
+
+/**
+ * buscando dados da região
+ * 
+ * @param {string} region 
+ * @returns {Object|Array}
+ */
+function getDataRegion(region) {
+
+  fetch(`/region?name=${region}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      
+      dataCurrentRegion = data
+
+      insertCardContent(`
+        <div class="cardText">
+          <p class="description">
+            ${dataCurrentRegion.desc}
+          </p>
+        </div>
+        `)
+      
+    })
+    .catch((error) => {
+      console.error("Error: ", error);
+    });
+
+}
+
+/**
+ * Injeta conteudo no card
+ * 
+ * @param {*} content 
+ */
+function insertCardContent(content) {
+  const card = document.querySelector(".card");
+
+  card.innerHTML = ''
+  card.innerHTML += content
 }
 
 openMenu.addEventListener("click", () => {
@@ -127,50 +274,6 @@ openMenu.addEventListener("click", () => {
     containerContent.removeChild(menu);
   });
 });
-
-function getPixelColor(x, y) {
-  const imageData = ctx.getImageData(x, y, 1, 1).data;
-  return `rgb(${imageData[0]}, ${imageData[1]}, ${imageData[2]})`;
-}
-
-function getLocalityNameByColor(x, y) {
-  const color = getPixelColor(x, y);
-  // console.log(color);
-  return colorToLocality[color] || currentRegion;
-}
-
-img.onload = function () {
-  canvas.width = img.width;
-  canvas.height = img.height;
-  ctx.drawImage(img, 0, 0);
-};
-
-function limitValue(value, min, max) {
-  return Math.min(Math.max(value, min), max);
-}
-
-function newCordinates(newx, newy) {
-  let x = cordinatesX + newx;
-  let y = cordinatesY + newy
-  
-  if (x < 1 || x >= canvas.width || y < 0 || y >= canvas.height) {
-    setNarrations("Out of Bonds!");
-  } else {
-    cordinatesX = limitValue(x, 1, canvas.width - 1);
-    cordinatesY = limitValue(y, 1, canvas.height - 1);
-    currentRegion = getLocalityNameByColor(cordinatesX, cordinatesY);
-
-    if(playersCurrentRegion !== currentRegion)
-    {
-      playersCurrentRegion = String(currentRegion)
-      getDataRegion(playersCurrentRegion)
-    }
-
-    console.log(dataFromTheCurrentRegion.EventPhrase)
-
-    
-  }
-}
 
 function createMenu(menuContent) {
   if (document.querySelector(".menu")) {
@@ -300,125 +403,36 @@ function contentMenu(insert, insertIn) {
   });
 }
 
-// buncando dados da classe player
-function getPlayer(callback) {
-  try {
-    fetch("/player/get")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.error) throw new Error(data.error);
-        player = data;
-
-        callback(player);
-      });
-  } catch (error) {
-    console.log(error.message);
-  }
-}
-
-/**
- * buscando dados da região
- * 
- * @param {string} region 
- * @returns {Object|Array}
- */
-function getDataRegion(region) {
-
-  fetch(`/region?name=${region}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      
-      saveDataRegion(data)
-      
-    })
-    .catch((error) => {
-      console.error("Error: ", error);
-    });
-
-}
-
-/**
- * Salvar dados da região atual
- * 
- * @param {Object|Array} data 
- */
-function saveDataRegion(data) {
-  dataFromTheCurrentRegion = data
-}
-
-/**
- * Printar narração para o usúario
- *
- * @param {string} narration
- */
-function setNarrations(narration) {
-  const txt = document.getElementById("narrations");
-  txt.textContent = narration;
-}
-
-/**
- * Verificar qual o tipo de narração necessaria
- * 
- * @param {Array} narrations
- */
-function verificarTipoDeNarração(narrations){
-
-}
-
-/**
- * Sortear um mob com base na sorte do player e a raridade do mob
- *
- * @param {Array} mobs
- * @returns Object
- */
-function raffleMob(mobs) {
-  const totalChance = mobs.reduce((total, mob) => total + mob.spawnrate, 0);
-  const choice = Math.round(random()) * totalChance;
-  let accumulated = 0;
-
-  for (const mob of mobs) {
-    accumulated += mob.spawnrate;
-    if (choice <= accumulated) {
-      return mob;
-    }
-  }
-}
-
 /*
-        <div class="menu">
-          <div class="menuHeader">
-            <button id="btnClose">X</button>
-            <span class="title">Menu</span>
-          </div>
-          <div class="menuContent">
-            <ul class="menuList">
-              <li class="menuListItem"><button>Status</button></li>
-              <li class="menuListItem"><button>Habilidades</button></li>
-              <li class="menuListItem"><button>Inventário</button></li>
+  <div class="menu">
+    <div class="menuHeader">
+      <button id="btnClose">X</button>
+      <span class="title">Menu</span>
+    </div>
+    <div class="menuContent">
+      <ul class="menuList">
+        <li class="menuListItem"><button>Status</button></li>
+        <li class="menuListItem"><button>Habilidades</button></li>
+        <li class="menuListItem"><button>Inventário</button></li>
 
-              <li class="menuListItem">
-                
-                <div class="status">
-                  <span>hp</span>
-                  <input type="number" value="10">
-                </div>
-                
+        <li class="menuListItem">
+          
+          <div class="status">
+            <span>hp</span>
+            <input type="number" value="10">
+          </div>
+          
 
-                <div class="skills">
-                  <img src="public/assets/img/mage_icon.png" alt="icone da skills">
-                  <span>Fireball</span>
-                </div>
-                <button id="addStatus">+</button>
-              </li>
-            </ul>
+          <div class="skills">
+            <img src="public/assets/img/mage_icon.png" alt="icone da skills">
+            <span>Fireball</span>
           </div>
-          <div class="menuFooter">
-            <span>Sombras da Eternidade</span>
-          </div>
-        </div>
+          <button id="addStatus">+</button>
+        </li>
+      </ul>
+    </div>
+    <div class="menuFooter">
+      <span>Sombras da Eternidade</span>
+    </div>
+  </div>
 */

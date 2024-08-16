@@ -142,10 +142,10 @@ main {
 }
 
 .card .cardText > .description {
-  font-size: 0.785rem;
-  font-family: var(--cinzel);
-  font-weight: 700;
-  line-height: 180%;
+  font-size: .795rem;
+  font-family: var(--cardo);
+  font-weight: 600;
+  line-height: 190%;
   letter-spacing: 0.08em;
   text-transform: capitalize;
   text-align: start;

@@ -22,11 +22,6 @@ function listing(component, data, isListingSkills) {
   });
 }
 
-btnInventory.addEventListener("click", () => {
-  const inventory = document.getElementById("inventory");
-  inventory.classList.toggle("hiddenComponet");
-});
-
 function getPlayer() {
   try {
     fetch(`/player?id=${parseInt(sessionStorage.getItem("data"))}`, {
@@ -37,7 +32,6 @@ function getPlayer() {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         if (data.error) throw new Error(data.error);
         player = data;
 
@@ -60,7 +54,7 @@ function getPlayer() {
           },
           false
         );
-        return;
+
         listing(list[1], player.skills, true);
       });
   } catch (error) {
@@ -71,8 +65,13 @@ function getPlayer() {
 /**
  * adicionar ao elemento um valor de acordo com a classe do player
  * @param {*} element
- * @param {String|Number} text
+ * @param {String} text
  */
 function addElementValue(element, text) {
   element.textContent = text;
 }
+
+btnInventory.addEventListener("click", () => {
+  const inventory = document.getElementById("inventory");
+  inventory.classList.toggle("hiddenComponet");
+});
