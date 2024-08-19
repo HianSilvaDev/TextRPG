@@ -17,8 +17,18 @@ async function getByName(regionName) {
                     Skill: true,
                   },
                 },
+                Loot: {
+                  include: {
+                    item: true,
+                  },
+                },
               },
             },
+          },
+        },
+        RegionItens: {
+          include: {
+            Item: true,
           },
         },
       },
@@ -32,7 +42,14 @@ async function getByName(regionName) {
 function organizeRegionData(region) {
   if (!region) return null;
 
-  const organizedData = { ...region };
+  const findableItems = region.RegionItens.map((i) => {
+    return i.Item;
+  });
+
+  const organizedData = {
+    ...region,
+    findableItems,
+  };
 
   organizedData.enemies = [];
 
@@ -40,26 +57,24 @@ function organizeRegionData(region) {
     const enemy = spawnpoint.Enemy;
 
     if (enemy) {
+      let loot = enemy.Loot.map((i) => {
+        return i.item;
+      });
       const organizedEnemy = {
         ...enemy,
-        skills: enemy.EnemySkills.map((enemySkill) => ({
-          id: enemySkill.Skill.id_skill,
-          name: enemySkill.Skill.name,
-          description: enemySkill.Skill.desc,
-          class: enemySkill.Skill.class,
-          cooldown: enemySkill.Skill.cooldown,
-          cost: enemySkill.Skill.cost,
-          effect: enemySkill.Skill.effect,
-          type: enemySkill.Skill.type,
-          data: JSON.parse(enemySkill.Skill.data),
-        })),
+        loot,
+        skills: enemy.EnemySkills.map((s) => {
+          return s.Skill;
+        }),
       };
+      delete organizedEnemy.Loot;
       delete organizedEnemy.EnemySkills;
       organizedData.enemies.push(organizedEnemy);
     }
   });
 
   delete organizedData.Spawnpoint;
+  delete organizedData.RegionItens;
 
   return organizedData;
 }

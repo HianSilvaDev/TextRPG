@@ -45,6 +45,7 @@ model Item {
   atb         String?
   PlayerItens PlayerItens[]
   Loot        Loot[]
+  RegionItens RegionItens[]
 
   @@map("item")
 }
@@ -137,6 +138,7 @@ model Region {
   image_urls  String
   Spawnpoint  Spawnpoint[]
   EventPhrase EventPhrase[]
+  RegionItens RegionItens[]
 }
 
 model Spawnpoint {
@@ -165,3 +167,22 @@ model EventPhrase {
   text        String @unique
   Region      Region @relation(fields: [region_name], references: [name])
 }
+
+model RegionItens {
+  region_name String
+  itemId      Int
+  Region      Region @relation(fields: [region_name], references: [name])
+  Item        Item   @relation(fields: [itemId], references: [item_id])
+
+  @@id([region_name, itemId])
+  @@map("regionItens")
+}
+
+// model Events {
+//   name String @id
+//   type String
+//   desc String
+// }
+
+// model Choices {
+// }

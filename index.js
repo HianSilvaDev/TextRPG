@@ -1,7 +1,12 @@
 const express = require("express");
+// const { getByName } = require("./models/regionModel.js");
 
 const app = express();
 
+// async function a() {
+//   console.log(await getByName("Floresta do Esquecimento"));
+// }
+// a();
 app.use(express.json());
 
 app.use("/public", express.static(__dirname + "/public"));
