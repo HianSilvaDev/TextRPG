@@ -111,14 +111,38 @@ function newCordinates(newx, newy) {
  * @param {Array|Object} data
  */
 function checkTypeOfNarrationToBePrinted(data) {
-  let narration = ''
-  const narrations = data.EventPhrase
-  const spawnMob = raffleMob(data.enemies)
+  let messages    = ''
+  let spawn
+  const d40 = Math.floor(Math.random() * 40);
 
-  Math.random()
+  messages = data.EventPhrase.filter(
+    (events) => events.eventType === "no_item_found"
+  );
 
-  printNarration(narrations)
-  printNarration(narration)
+  if(d40 <= 10){
+    spawn  = raffleMob(data.enemies)
+    messages = data.EventPhrase.filter(
+      (events) => events.eventType === "encounter_enemy"
+    );
+  }
+
+  if(d40 > 10 && d40 <= 20){
+    messages = data.EventPhrase.filter(
+      (events) => events.eventType === "find_item"
+    );
+  }
+
+  printNarration(messages,spawn)
+}
+
+function printedReplace(message,spawnName) {
+  let newMessage
+  
+  if(message.includes('[nome do inimigo]')) {
+    newMessage = message.replace('[nome do inimigo]',spawnName)
+  }
+
+  return newMessage
 }
 
 /**
@@ -126,9 +150,17 @@ function checkTypeOfNarrationToBePrinted(data) {
  *
  * @param {string} narration
  */
-function printNarration(narration) {
+function printNarration(messages,spawn = '') {
   const txt = document.getElementById("narrations");
-  txt.textContent = narration;
+  
+  const indexMessage = Math.floor(Math.random() * messages.length);
+  let message = messages[indexMessage].text
+
+  if(spawn != ''){
+    message = printedReplace(messages[indexMessage].text,spawn.name)
+  }
+
+  txt.textContent = message;
 }
 
 // buncando dados da classe player
@@ -149,10 +181,10 @@ function getPlayer(callback) {
  * Sortear um mob com base na sorte do player e a raridade do mob
  *
  * @param {Array} mobs
- * @returns Object
+ * @returns Object|Null
  */
 function raffleMob(mobs) {
-  let spawnMob = {}
+  let spawnMob
   const totalChance = mobs.reduce((total, mob) => total + mob.spawnrate, 0);
   const choice = Math.round(Math.random() * totalChance);
   let accumulated = 0;
