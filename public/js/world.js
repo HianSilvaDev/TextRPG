@@ -118,16 +118,28 @@ function checkTypeOfNarrationToBePrinted(data) {
 	}
 
 	if (d40 > 10 && d40 <= 20) {
+		spawn = raffleDrop(data.findableItens);
 		messages = data.EventPhrase.filter((events) => events.eventType === "find_item");
 	}
 
 	printNarration(messages, spawn);
 }
 
+/**
+ * Faz a troca do nome padrão para o do spawn
+ *
+ * @param {String} message
+ * @param {String} spawnName
+ * @returns String
+ */
 function printedReplace(message, spawnName) {
 	let newMessage;
 
 	if (message.includes("[nome do inimigo]")) {
+		newMessage = message.replace("[nome do inimigo]", spawnName);
+	}
+
+	if (message.includes("[nome do item]")) {
 		newMessage = message.replace("[nome do inimigo]", spawnName);
 	}
 
@@ -137,7 +149,8 @@ function printedReplace(message, spawnName) {
 /**
  * Printar narração para o usúario
  *
- * @param {string} narration
+ * @param {string} messages
+ * @param {Array|Object|string} spawn
  */
 function printNarration(messages, spawn = "") {
 	const txt = document.getElementById("narrations");
@@ -189,6 +202,28 @@ function raffleMob(mobs) {
 }
 
 /**
+ * Sortear um drops com base na sorte do player e a raridade do mob
+ *
+ * @param {Array} drops
+ * @returns Object|Null
+ */
+function raffleDrop(drops) {
+	let spawnDrop;
+	const totalChance = drops.reduce((total, drop) => total + drop.spawnrate, 0);
+	const choice = Math.round(Math.random() * totalChance);
+	let accumulated = 0;
+
+	for (const drop of drops) {
+		accumulated += drop.spawnrate;
+		if (choice <= accumulated) {
+			spawndrop = drop;
+		}
+	}
+
+	return spawnDrop;
+}
+
+/**
  * buscando dados da região
  *
  * @param {string} region
@@ -218,8 +253,17 @@ function getDataRegion(region) {
 		});
 }
 
+// Impede que o player se mova
+function directionsBlock() {
+	const btnDirections = document.querySelectorAll(".btnDirections");
+
+	btnDirections.forEach((element) => {
+		element.disabled = true;
+	});
+}
+
 /**
- * Injeta conteudo no card
+ * Injeta conteúdo no card
  *
  * @param {*} content
  */
@@ -231,6 +275,9 @@ function insertCardContent(content) {
 }
 
 openMenu.addEventListener("click", () => {
+	console.log("openMenu");
+	return;
+
 	card.classList.add("hiddenComponet");
 
 	const menu = createMenu(["Status", "Habilidades", "Inventário"]);
@@ -285,35 +332,17 @@ openMenu.addEventListener("click", () => {
 	});
 });
 
+/**
+ * Criar um menu para o usuário
+ *
+ * @param {Array} menuContent
+ */
 function createMenu(menuContent) {
-	if (document.querySelector(".menu")) {
-		return;
-	}
+	`
+	</span class="title">${menuContent.title}</span>
 
-	const containerContent = document.querySelector(".content");
-
-	const menu = createAndInsertElement("div", "menu", "", "", containerContent, "beforeend");
-
-	const header = createAndInsertElement("div", "menuHeader", "", "", menu, "beforeend");
-	const close = createAndInsertElement("button", "", "btnClose", "X", header, "beforeend");
-	const title = createAndInsertElement("span", "title", "", "Menu", header, "beforeend");
-
-	const content = createAndInsertElement("div", "menuContent", "", "", menu, "beforeend");
-	const list = createAndInsertElement("ul", "menuList", "", "", content, "beforeend");
-
-	contentMenu(menuContent, list);
-
-	const footer = createAndInsertElement("div", "menuFooter", "", "", menu, "beforeend");
-	const textFooter = createAndInsertElement(
-		"span",
-		"",
-		"",
-		"Sombras da Eternidade",
-		footer,
-		"beforeend"
-	);
-
-	return menu;
+	<div class="menuContent"></div>
+	`;
 }
 
 function createAndInsertElement(
