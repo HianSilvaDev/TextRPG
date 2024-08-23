@@ -125,14 +125,14 @@ function checkTypeOfNarrationToBePrinted(data) {
   );
 
   if (d40 <= 10) {
-    spawn = raffleMob(data.enemies);
+    spawn = raffleMobOurItens(data.enemies);
     messages = data.EventPhrase.filter(
       (events) => events.eventType === "encounter_enemy"
     );
   }
 
   if (d40 > 10 && d40 <= 20) {
-    spawn = raffleDrop(data.findableItems);
+    spawn = raffleMobOurItens(data.findableItems);
     messages = data.EventPhrase.filter(
       (events) => events.eventType === "find_item"
     );
@@ -202,42 +202,20 @@ function getPlayer(callback) {
  * @param {Array} mobs
  * @returns Object|Null
  */
-function raffleMob(mobs) {
-  let spawnMob;
-  const totalChance = mobs.reduce((total, mob) => total + mob.spawnrate, 0);
+function raffleMobOurItens(array) {
+  let spawn;
+  const totalChance = array.reduce((total, mob) => total + mob.spawnrate, 0);
   const choice = Math.round(Math.random() * totalChance);
   let accumulated = 0;
 
-  for (const mob of mobs) {
-    accumulated += mob.spawnrate;
+  for (const obj of array) {
+    accumulated += obj.spawnrate;
     if (choice <= accumulated) {
-      return (spawnMob = mob);
+      return (spawn = obj);
     }
   }
 
-  return spawnMob;
-}
-
-/**
- * Sortear um drops com base na sorte do player e a raridade do mob
- *
- * @param {Array} drops
- * @returns Object
- */
-function raffleDrop(drops) {
-  let spawnDrop;
-  const totalChance = drops.reduce((total, drop) => total + drop.spawnrate, 0);
-  const choice = Math.round(Math.random() * totalChance);
-  let accumulated = 0;
-
-  for (const drop of drops) {
-    accumulated += drop.spawnrate;
-    if (choice <= accumulated) {
-      spawndrop = drop;
-    }
-  }
-
-  return spawnDrop;
+  return spawn;
 }
 
 /**
