@@ -1,3 +1,12 @@
+const directionButtons = document.querySelectorAll(".btnDirections");
+
+directionButtons.forEach((b) => {
+	b.addEventListener("click", () => {
+		let vector2 = JSON.parse(b.value);
+		newCordinates(vector2.x, vector2.y);
+	});
+});
+
 const openMenu = document.getElementById("openMenu");
 
 const containerContent = document.querySelector(".content");
@@ -106,6 +115,7 @@ function newCordinates(newx, newy) {
  * @param {Array|Object} data
  */
 function checkTypeOfNarrationToBePrinted(data) {
+	console.log(data.enemies);
 	let messages = "";
 	let spawn;
 	const d40 = Math.floor(Math.random() * 40);
@@ -118,10 +128,11 @@ function checkTypeOfNarrationToBePrinted(data) {
 	}
 
 	if (d40 > 10 && d40 <= 20) {
-		spawn = raffleDrop(data.findableItens);
+		spawn = raffleDrop(data.findableItems);
 		messages = data.EventPhrase.filter((events) => events.eventType === "find_item");
 	}
 
+	console.log(spawn);
 	printNarration(messages, spawn);
 }
 
@@ -140,7 +151,7 @@ function printedReplace(message, spawnName) {
 	}
 
 	if (message.includes("[nome do item]")) {
-		newMessage = message.replace("[nome do inimigo]", spawnName);
+		newMessage = message.replace("[nome do item]", spawnName);
 	}
 
 	return newMessage;
@@ -205,7 +216,7 @@ function raffleMob(mobs) {
  * Sortear um drops com base na sorte do player e a raridade do mob
  *
  * @param {Array} drops
- * @returns Object|Null
+ * @returns Object
  */
 function raffleDrop(drops) {
 	let spawnDrop;
