@@ -1,10 +1,10 @@
 const directionButtons = document.querySelectorAll(".btnDirections");
 
 directionButtons.forEach((b) => {
-	b.addEventListener("click", () => {
-		let vector2 = JSON.parse(b.value);
-		newCordinates(vector2.x, vector2.y);
-	});
+  b.addEventListener("click", () => {
+    let vector2 = JSON.parse(b.value);
+    newCordinates(vector2.x, vector2.y);
+  });
 });
 
 const openMenu = document.getElementById("openMenu");
@@ -22,20 +22,20 @@ img.src = "./public/assets/2DMap.png";
 
 //Quando a imagem for carregada, ajusta o tamanho do canvas ao tamanho da imagem e a desenha
 img.onload = function () {
-	canvas.width = img.width;
-	canvas.height = img.height;
-	ctx.drawImage(img, 0, 0);
+  canvas.width = img.width;
+  canvas.height = img.height;
+  ctx.drawImage(img, 0, 0);
 };
 
 // Lembrar de modificar os valores subsequente a clareira mais tarde
 const colorToLocality = {
-	"rgb(0, 100, 0)": "Floresta do Esquecimento",
-	"rgb(85, 153, 68)": "Clareira",
-	"rgb(182, 45, 45)": "Cidade",
-	"rgb(204, 255, 51)": "Vilarejo",
-	"rgb(255, 255, 255)": "Topo da Montanha",
-	"rgb(153, 170, 119)": "Pé da Montanha",
-	"rgb(51, 102, 153)": "Lago ou rio",
+  "rgb(0, 100, 0)": "Floresta do Esquecimento",
+  "rgb(85, 153, 68)": "Clareira",
+  "rgb(182, 45, 45)": "Cidade",
+  "rgb(204, 255, 51)": "Vilarejo",
+  "rgb(255, 255, 255)": "Topo da Montanha",
+  "rgb(153, 170, 119)": "Pé da Montanha",
+  "rgb(51, 102, 153)": "Lago ou rio",
 };
 
 /**
@@ -45,11 +45,11 @@ const colorToLocality = {
  * @returns Number|String
  */
 function getLocalityNameByColor(x, y) {
-	//Recebe a posição x e y do pixel e atribui a variavel color a cor do mesmo em formato rgb
-	const imageData = ctx.getImageData(x, y, 1, 1).data;
-	let color = `rgb(${imageData[0]}, ${imageData[1]}, ${imageData[2]})`;
-	// Retorna o valor do objeto colorToLocality que possui a key igual a color
-	return colorToLocality[color];
+  //Recebe a posição x e y do pixel e atribui a variavel color a cor do mesmo em formato rgb
+  const imageData = ctx.getImageData(x, y, 1, 1).data;
+  let color = `rgb(${imageData[0]}, ${imageData[1]}, ${imageData[2]})`;
+  // Retorna o valor do objeto colorToLocality que possui a key igual a color
+  return colorToLocality[color];
 }
 
 /**
@@ -61,7 +61,7 @@ function getLocalityNameByColor(x, y) {
  * @returns Number
  */
 function limitValue(value, min, max) {
-	return Math.min(Math.max(value, min), max);
+  return Math.min(Math.max(value, min), max);
 }
 
 /**
@@ -71,8 +71,8 @@ function limitValue(value, min, max) {
  * @returns
  */
 function getPixelColor(x, y) {
-	const imageData = ctx.getImageData(x, y, 1, 1).data;
-	return `rgb(${imageData[0]}, ${imageData[1]}, ${imageData[2]})`;
+  const imageData = ctx.getImageData(x, y, 1, 1).data;
+  return `rgb(${imageData[0]}, ${imageData[1]}, ${imageData[2]})`;
 }
 
 /**
@@ -82,31 +82,31 @@ function getPixelColor(x, y) {
  * @param {Number} newy
  */
 function newCordinates(newx, newy) {
-	// Soma as cordenadas atuais do player com a adição do movimento
-	let x = cordinatesX + newx;
-	let y = cordinatesY + newy;
+  // Soma as cordenadas atuais do player com a adição do movimento
+  let x = cordinatesX + newx;
+  let y = cordinatesY + newy;
 
-	// Confere se a nova posição esta dentro do permitido, sendo esse os limites do mapa.
-	if (x < 1 || x >= canvas.width || y < 0 || y >= canvas.height) {
-		// Se fora dos limites, Escreve "fora dos limites" para player e não muda a posição do player
-		printNarration("Fora dos limites!");
-		return;
-	}
+  // Confere se a nova posição esta dentro do permitido, sendo esse os limites do mapa.
+  if (x < 1 || x >= canvas.width || y < 0 || y >= canvas.height) {
+    // Se fora dos limites, Escreve "fora dos limites" para player e não muda a posição do player
+    printNarration("Fora dos limites!");
+    return;
+  }
 
-	// Estando dentro dos limites, se necessario corrige as novas cordenadas aos limites do mapa e as atribui ao player
-	cordinatesX = limitValue(x, 1, canvas.width - 1);
-	cordinatesY = limitValue(y, 1, canvas.height - 1);
+  // Estando dentro dos limites, se necessario corrige as novas cordenadas aos limites do mapa e as atribui ao player
+  cordinatesX = limitValue(x, 1, canvas.width - 1);
+  cordinatesY = limitValue(y, 1, canvas.height - 1);
 
-	// Recebe o nome da região com base nas novas cordenadas
-	let region = getLocalityNameByColor(cordinatesX, cordinatesY);
+  // Recebe o nome da região com base nas novas cordenadas
+  let region = getLocalityNameByColor(cordinatesX, cordinatesY);
 
-	// Verifica se é igual a atual. Se assim for, chama a função printNarration, caso contrario busca a nova região no banco de dados
-	if (!dataCurrentRegion || region != dataCurrentRegion.name) {
-		getDataRegion(region);
-		return;
-	}
+  // Verifica se é igual a atual. Se assim for, chama a função printNarration, caso contrario busca a nova região no banco de dados
+  if (!dataCurrentRegion || region != dataCurrentRegion.name) {
+    getDataRegion(region);
+    return;
+  }
 
-	checkTypeOfNarrationToBePrinted(dataCurrentRegion);
+  checkTypeOfNarrationToBePrinted(dataCurrentRegion);
 }
 
 /**
@@ -115,25 +115,31 @@ function newCordinates(newx, newy) {
  * @param {Array|Object} data
  */
 function checkTypeOfNarrationToBePrinted(data) {
-	console.log(data.enemies);
-	let messages = "";
-	let spawn;
-	const d40 = Math.floor(Math.random() * 40);
+  console.log(data.enemies);
+  let messages = "";
+  let spawn;
+  const d40 = Math.floor(Math.random() * 40);
 
-	messages = data.EventPhrase.filter((events) => events.eventType === "no_item_found");
+  messages = data.EventPhrase.filter(
+    (events) => events.eventType === "no_item_found"
+  );
 
-	if (d40 <= 10) {
-		spawn = raffleMob(data.enemies);
-		messages = data.EventPhrase.filter((events) => events.eventType === "encounter_enemy");
-	}
+  if (d40 <= 10) {
+    spawn = raffleMob(data.enemies);
+    messages = data.EventPhrase.filter(
+      (events) => events.eventType === "encounter_enemy"
+    );
+  }
 
-	if (d40 > 10 && d40 <= 20) {
-		spawn = raffleDrop(data.findableItems);
-		messages = data.EventPhrase.filter((events) => events.eventType === "find_item");
-	}
+  if (d40 > 10 && d40 <= 20) {
+    spawn = raffleDrop(data.findableItems);
+    messages = data.EventPhrase.filter(
+      (events) => events.eventType === "find_item"
+    );
+  }
 
-	console.log(spawn);
-	printNarration(messages, spawn);
+  console.log(spawn);
+  printNarration(messages, spawn);
 }
 
 /**
@@ -144,17 +150,17 @@ function checkTypeOfNarrationToBePrinted(data) {
  * @returns String
  */
 function printedReplace(message, spawnName) {
-	let newMessage;
+  let newMessage;
 
-	if (message.includes("[nome do inimigo]")) {
-		newMessage = message.replace("[nome do inimigo]", spawnName);
-	}
+  if (message.includes("[nome do inimigo]")) {
+    newMessage = message.replace("[nome do inimigo]", spawnName);
+  }
 
-	if (message.includes("[nome do item]")) {
-		newMessage = message.replace("[nome do item]", spawnName);
-	}
+  if (message.includes("[nome do item]")) {
+    newMessage = message.replace("[nome do item]", spawnName);
+  }
 
-	return newMessage;
+  return newMessage;
 }
 
 /**
@@ -164,30 +170,30 @@ function printedReplace(message, spawnName) {
  * @param {Array|Object|string} spawn
  */
 function printNarration(messages, spawn = "") {
-	const txt = document.getElementById("narrations");
+  const txt = document.getElementById("narrations");
 
-	const indexMessage = Math.floor(Math.random() * messages.length);
-	let message = messages[indexMessage].text;
+  const indexMessage = Math.floor(Math.random() * messages.length);
+  let message = messages[indexMessage].text;
 
-	if (spawn != "") {
-		message = printedReplace(messages[indexMessage].text, spawn.name);
-	}
+  if (spawn != "") {
+    message = printedReplace(messages[indexMessage].text, spawn.name);
+  }
 
-	txt.textContent = message;
+  txt.textContent = message;
 }
 
 // buncando dados da classe player
 function getPlayer(callback) {
-	try {
-		fetch(`/player?id=${parseInt(sessionStorage.getItem("data"))}`, {
-			method: "GET",
-			headers: {
-				"Content-Type": "application/json",
-			},
-		});
-	} catch (error) {
-		console.log(error.message);
-	}
+  try {
+    fetch(`/player?id=${parseInt(sessionStorage.getItem("data"))}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  } catch (error) {
+    console.log(error.message);
+  }
 }
 
 /**
@@ -197,19 +203,19 @@ function getPlayer(callback) {
  * @returns Object|Null
  */
 function raffleMob(mobs) {
-	let spawnMob;
-	const totalChance = mobs.reduce((total, mob) => total + mob.spawnrate, 0);
-	const choice = Math.round(Math.random() * totalChance);
-	let accumulated = 0;
+  let spawnMob;
+  const totalChance = mobs.reduce((total, mob) => total + mob.spawnrate, 0);
+  const choice = Math.round(Math.random() * totalChance);
+  let accumulated = 0;
 
-	for (const mob of mobs) {
-		accumulated += mob.spawnrate;
-		if (choice <= accumulated) {
-			spawnMob = mob;
-		}
-	}
+  for (const mob of mobs) {
+    accumulated += mob.spawnrate;
+    if (choice <= accumulated) {
+      return (spawnMob = mob);
+    }
+  }
 
-	return spawnMob;
+  return spawnMob;
 }
 
 /**
@@ -219,19 +225,19 @@ function raffleMob(mobs) {
  * @returns Object
  */
 function raffleDrop(drops) {
-	let spawnDrop;
-	const totalChance = drops.reduce((total, drop) => total + drop.spawnrate, 0);
-	const choice = Math.round(Math.random() * totalChance);
-	let accumulated = 0;
+  let spawnDrop;
+  const totalChance = drops.reduce((total, drop) => total + drop.spawnrate, 0);
+  const choice = Math.round(Math.random() * totalChance);
+  let accumulated = 0;
 
-	for (const drop of drops) {
-		accumulated += drop.spawnrate;
-		if (choice <= accumulated) {
-			spawndrop = drop;
-		}
-	}
+  for (const drop of drops) {
+    accumulated += drop.spawnrate;
+    if (choice <= accumulated) {
+      spawndrop = drop;
+    }
+  }
 
-	return spawnDrop;
+  return spawnDrop;
 }
 
 /**
@@ -241,36 +247,36 @@ function raffleDrop(drops) {
  * @returns {Object|Array}
  */
 function getDataRegion(region) {
-	fetch(`/region?name=${region}`, {
-		method: "GET",
-		headers: {
-			"Content-Type": "application/json",
-		},
-	})
-		.then((res) => res.json())
-		.then((data) => {
-			dataCurrentRegion = data;
+  fetch(`/region?name=${region}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      dataCurrentRegion = data;
 
-			insertCardContent(`
+      insertCardContent(`
         <div class="cardText">
           <p class="description">
             ${dataCurrentRegion.desc}
           </p>
         </div>
         `);
-		})
-		.catch((error) => {
-			console.error("Error: ", error);
-		});
+    })
+    .catch((error) => {
+      console.error("Error: ", error);
+    });
 }
 
 // Impede que o player se mova
 function directionsBlock() {
-	const btnDirections = document.querySelectorAll(".btnDirections");
+  const btnDirections = document.querySelectorAll(".btnDirections");
 
-	btnDirections.forEach((element) => {
-		element.disabled = true;
-	});
+  btnDirections.forEach((element) => {
+    element.disabled = true;
+  });
 }
 
 /**
@@ -279,68 +285,75 @@ function directionsBlock() {
  * @param {*} content
  */
 function insertCardContent(content) {
-	const card = document.querySelector(".card");
+  const card = document.querySelector(".card");
 
-	card.innerHTML = "";
-	card.innerHTML += content;
+  card.innerHTML = "";
+  card.innerHTML += content;
 }
 
 openMenu.addEventListener("click", () => {
-	console.log("openMenu");
-	return;
+  console.log("openMenu");
+  return;
 
-	card.classList.add("hiddenComponet");
+  card.classList.add("hiddenComponet");
 
-	const menu = createMenu(["Status", "Habilidades", "Inventário"]);
-	const menuListItem = document.querySelectorAll(".menuListItem>button") ?? "";
-	const closeMenu = document.getElementById("btnClose");
+  const menu = createMenu(["Status", "Habilidades", "Inventário"]);
+  const menuListItem = document.querySelectorAll(".menuListItem>button") ?? "";
+  const closeMenu = document.getElementById("btnClose");
 
-	menuListItem[0].addEventListener("click", () => {
-		const list = menu.childNodes[1].childNodes[0];
+  menuListItem[0].addEventListener("click", () => {
+    const list = menu.childNodes[1].childNodes[0];
 
-		list.innerHTML = "";
+    list.innerHTML = "";
 
-		getPlayer((player) => {
-			listItem = {
-				hp: player.hp,
-				mp: player.mp,
-				strenght: player.strenght,
-				defense: player.defense,
-				dexterity: player.dexterity,
-				resistence: player.resistence,
-				intelligence: player.intelligence,
-				luck: player.luck,
-			};
+    getPlayer((player) => {
+      listItem = {
+        hp: player.hp,
+        mp: player.mp,
+        strenght: player.strenght,
+        defense: player.defense,
+        dexterity: player.dexterity,
+        resistence: player.resistence,
+        intelligence: player.intelligence,
+        luck: player.luck,
+      };
 
-			Object.entries(listItem).forEach((item) => {
-				[key, value] = item;
+      Object.entries(listItem).forEach((item) => {
+        [key, value] = item;
 
-				createAndInsertElement("li", "", "", `${key}: ${value}`, list, "beforeend");
-			});
-		});
-	}) ?? "";
+        createAndInsertElement(
+          "li",
+          "",
+          "",
+          `${key}: ${value}`,
+          list,
+          "beforeend"
+        );
+      });
+    });
+  }) ?? "";
 
-	menuListItem[1].addEventListener("click", () => {
-		const list = menu.childNodes[1].childNodes[0];
+  menuListItem[1].addEventListener("click", () => {
+    const list = menu.childNodes[1].childNodes[0];
 
-		list.innerHTML = "";
+    list.innerHTML = "";
 
-		getPlayer((player) => {
-			Object.entries(player.skills).forEach((item) => {
-				[key, value] = item;
+    getPlayer((player) => {
+      Object.entries(player.skills).forEach((item) => {
+        [key, value] = item;
 
-				createAndInsertElement("li", "", "", value.name, list, "beforeend");
-			});
-		});
-	}) ?? "";
+        createAndInsertElement("li", "", "", value.name, list, "beforeend");
+      });
+    });
+  }) ?? "";
 
-	console.log(menuListItem[0]);
+  console.log(menuListItem[0]);
 
-	closeMenu.addEventListener("click", () => {
-		card.classList.remove("hiddenComponet");
+  closeMenu.addEventListener("click", () => {
+    card.classList.remove("hiddenComponet");
 
-		containerContent.removeChild(menu);
-	});
+    containerContent.removeChild(menu);
+  });
 });
 
 /**
@@ -349,7 +362,7 @@ openMenu.addEventListener("click", () => {
  * @param {Array} menuContent
  */
 function createMenu(menuContent) {
-	`
+  `
 	</span class="title">${menuContent.title}</span>
 
 	<div class="menuContent"></div>
@@ -357,37 +370,51 @@ function createMenu(menuContent) {
 }
 
 function createAndInsertElement(
-	element,
-	className,
-	idName = "",
-	elementText = "",
-	insert,
-	position
+  element,
+  className,
+  idName = "",
+  elementText = "",
+  insert,
+  position
 ) {
-	const newElement = document.createElement(element);
+  const newElement = document.createElement(element);
 
-	if (className !== "") {
-		newElement.classList.add(className);
-	}
+  if (className !== "") {
+    newElement.classList.add(className);
+  }
 
-	if (idName !== "") {
-		newElement.setAttribute("id", idName);
-	}
+  if (idName !== "") {
+    newElement.setAttribute("id", idName);
+  }
 
-	if (elementText !== "") {
-		newElement.textContent = elementText;
-	}
+  if (elementText !== "") {
+    newElement.textContent = elementText;
+  }
 
-	insert.insertAdjacentElement(position, newElement);
+  insert.insertAdjacentElement(position, newElement);
 
-	return newElement;
+  return newElement;
 }
 
 function contentMenu(insert, insertIn) {
-	insert.forEach((item) => {
-		const listItem = createAndInsertElement("li", "menuListItem", "", "", insertIn, "beforeend");
-		const listItemBtn = createAndInsertElement("button", "", "", item, listItem, "beforeend");
-	});
+  insert.forEach((item) => {
+    const listItem = createAndInsertElement(
+      "li",
+      "menuListItem",
+      "",
+      "",
+      insertIn,
+      "beforeend"
+    );
+    const listItemBtn = createAndInsertElement(
+      "button",
+      "",
+      "",
+      item,
+      listItem,
+      "beforeend"
+    );
+  });
 }
 
 /*

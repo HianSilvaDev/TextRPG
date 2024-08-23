@@ -171,6 +171,7 @@ model EventPhrase {
 model RegionItens {
   region_name String
   itemId      Int
+  spawnrate   Float  @default(10)
   Region      Region @relation(fields: [region_name], references: [name])
   Item        Item   @relation(fields: [itemId], references: [item_id])
 
