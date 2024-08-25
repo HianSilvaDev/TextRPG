@@ -1,87 +1,89 @@
 const prisma = require("./prismaClient");
 
 async function getByName(regionName) {
-  try {
-    const region = await prisma.region.findUnique({
-      where: {
-        name: regionName,
-      },
-      include: {
-        EventPhrase: true,
-        Spawnpoint: {
-          include: {
-            Enemy: {
-              include: {
-                EnemySkills: {
-                  include: {
-                    Skill: true,
-                  },
-                },
-                Loot: {
-                  include: {
-                    item: true,
-                  },
-                },
-              },
-            },
-          },
-        },
-        RegionItens: {
-          include: {
-            Item: true,
-          },
-        },
-      },
-    });
-    return organizeRegionData(region);
-  } catch (err) {
-    console.log(err);
-  }
+	try {
+		const region = await prisma.region.findUnique({
+			where: {
+				name: regionName,
+			},
+			include: {
+				EventPhrase: true,
+				Spawnpoint: {
+					include: {
+						Enemy: {
+							include: {
+								EnemySkills: {
+									include: {
+										Skill: true,
+									},
+								},
+								Loot: {
+									include: {
+										item: true,
+									},
+								},
+							},
+						},
+					},
+				},
+				RegionItens: {
+					include: {
+						Item: true,
+					},
+				},
+			},
+		});
+		return organizeRegionData(region);
+	} catch (err) {
+		console.log(err);
+	}
 }
 
 function organizeRegionData(region) {
-  if (!region) return null;
+	if (!region) return null;
 
-  const findableItems = region.RegionItens.map((i) => {
-    return {
-      ...i.Item,
-      spawnrate: i.spawnrate,
-    };
-  });
+	const findableItems = region.RegionItens.map((i) => {
+		return {
+			...i.Item,
+			spawnrate: i.spawnrate,
+		};
+	});
 
-  const organizedData = {
-    ...region,
-    findableItems,
-  };
+	console.log(region);
 
-  organizedData.enemies = [];
+	const organizedData = {
+		...region,
+		findableItems,
+	};
 
-  region.Spawnpoint.forEach((spawnpoint) => {
-    const enemy = spawnpoint.Enemy;
+	organizedData.enemies = [];
 
-    if (enemy) {
-      let loot = enemy.Loot.map((i) => {
-        return i.item;
-      });
-      const organizedEnemy = {
-        ...enemy,
-        loot,
-        skills: enemy.EnemySkills.map((s) => {
-          return s.Skill;
-        }),
-      };
-      delete organizedEnemy.Loot;
-      delete organizedEnemy.EnemySkills;
-      organizedData.enemies.push(organizedEnemy);
-    }
-  });
+	region.Spawnpoint.forEach((spawnpoint) => {
+		const enemy = spawnpoint.Enemy;
 
-  delete organizedData.Spawnpoint;
-  delete organizedData.RegionItens;
+		if (enemy) {
+			let loot = enemy.Loot.map((i) => {
+				return i.item;
+			});
+			const organizedEnemy = {
+				...enemy,
+				loot,
+				skills: enemy.EnemySkills.map((s) => {
+					return s.Skill;
+				}),
+			};
+			delete organizedEnemy.Loot;
+			delete organizedEnemy.EnemySkills;
+			organizedData.enemies.push(organizedEnemy);
+		}
+	});
 
-  return organizedData;
+	delete organizedData.Spawnpoint;
+	delete organizedData.RegionItens;
+
+	return organizedData;
 }
 
 module.exports = {
-  getByName,
+	getByName,
 };
