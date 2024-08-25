@@ -2,3 +2,11 @@
 
 1. `npx prisma status`
 2. `npx prisma generate`
+
+**Plataforma:** Web.
+
+**Tecnologias:** 
+
+**FrontEnd:** HTML | CSS | JavaScript. - Carlos Jr.
+
+**BackEnd:** Node.js | Express | Prisma | Sqlite. - Hian Silva.
