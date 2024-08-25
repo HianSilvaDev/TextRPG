@@ -43,7 +43,10 @@ function organizeRegionData(region) {
   if (!region) return null;
 
   const findableItems = region.RegionItens.map((i) => {
-    return i.Item;
+    return {
+      ...i.Item,
+      spawnrate: i.spawnrate,
+    };
   });
 
   const organizedData = {
