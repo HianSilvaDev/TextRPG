@@ -10,3 +10,5 @@
 **FrontEnd:** HTML | CSS | JavaScript. - Carlos Jr.
 
 **BackEnd:** Node.js | Express | Prisma | Sqlite. - Hian Silva.
+
+**Como faço para testar?**
