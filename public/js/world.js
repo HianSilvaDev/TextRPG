@@ -1,6 +1,6 @@
-const directionButtons = document.querySelectorAll(".btnDirections");
+const btnDirections = document.querySelectorAll(".btnDirections");
 
-directionButtons.forEach((b) => {
+btnDirections.forEach((b) => {
 	b.addEventListener("click", () => {
 		let vector2 = JSON.parse(b.value);
 		newCordinates(vector2.x, vector2.y);
@@ -264,12 +264,10 @@ function getDataRegion(region) {
 		});
 }
 
-// Impede que o player se mova
+// Impede que o player se movemente
 function directionsBlock() {
-	const btnDirections = document.querySelectorAll(".btnDirections");
-
-	btnDirections.forEach((element) => {
-		element.disabled = true;
+	btnDirections.forEach((btn) => {
+		btn.disabled = true;
 	});
 }
 
@@ -346,13 +344,15 @@ openMenu.addEventListener("click", () => {
 /**
  * Criar um menu para o usuário
  *
- * @param {Array} menuContent
+ * @param {Object} menuContent
  */
 function createMenu(menuContent) {
-	`
+	const menu = `
 	</span class="title">${menuContent.title}</span>
 
-	<div class="menuContent"></div>
+	<div class="menuContent">
+		${menuContent.content}
+	</div>
 	`;
 }
 
