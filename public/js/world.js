@@ -199,13 +199,30 @@ function openArena() {
 	const painelDefault = document.querySelector(".painel");
 	const btnActions = document.querySelector(".actions");
 
-	insertCardContent("");
+	let statusPlayer = [dataPlayer.hp, dataPlayer.mp];
+	let statusOpponnet = opponentData.hp;
+
+	insertCardContent(`
+		<div class="batleInfo">
+			<div class="enemy">
+				<span class="title">${opponentData.name}</span>
+				<span class="hp">${opponentData.hp}/${statusOpponnet}</span>
+			</div>
+			<div class="player">
+				<span class="title">${dataPlayer.name}</span>
+				<span class="hp">${dataPlayer.hp}/${statusPlayer[0]}</span>
+				<span class="mp">${dataPlayer.mp}/${statusPlayer[1]}</span>
+			</div>
+		</div>
+		`);
 
 	painelBatle.classList.remove("hiddenComponet");
 	painelDefault.classList.add("hiddenComponet");
 
 	dataPlayer.skills.forEach((skill) => {
-		btnActions.innerHTML += `<button>${skill.name}</button>`;
+		if (skill.isEquiped) {
+			btnActions.innerHTML += `<button>${skill.name}</button>`;
+		}
 	});
 }
 
@@ -303,9 +320,10 @@ function getDataRegion(region) {
 /**
  *  Puxa os dados do player
  *
+ * @param {String} id
  * @returns {Object}
  */
-function getDataPlayer() {
+function getDataPlayer(id) {
 	fetch(`/player?id=${parseInt(sessionStorage.getItem("data"))}`, {
 		method: "GET",
 		headers: {
@@ -314,6 +332,7 @@ function getDataPlayer() {
 	})
 		.then((res) => res.json())
 		.then((data) => {
+			console.log(data);
 			dataPlayer = data;
 		})
 
