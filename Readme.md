@@ -4,17 +4,19 @@
 
 **FrontEnd:** HTML | CSS | JavaScript. - Carlos Jr.
 
-**BackEnd:** Node.js | Express | Prisma | Sqlite. - Hian Silva.
+**BackEnd:** NodeJS | Express | Prisma | Sqlite. - Hian Silva.
 
 **Como faço para testar?**
 
-1. Crie um clone do repositório em sua máquina com o comando
+1. Certifique-se de ter nodeJS em sua maquina!
+
+2. Crie um clone do repositório em sua máquina com o comando.
 
 ```console
     git clone https://github.com/HianSilvaDev/TextRPG.git
 ```
 
-2. Execute o comando para gerar o banco de dados
+3. Execute o comando para gerar o banco de dados.
 
 ```console
     npx prisma generate

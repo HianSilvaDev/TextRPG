@@ -16,7 +16,9 @@ let cordinatesX = 1;
 let cordinatesY = 1;
 let dataCurrentRegion;
 let dataPlayer;
+let statusPlayer;
 let opponentData;
+let statusOpponnet;
 
 const canvas = document.getElementById("mapCanvas");
 const ctx = canvas.getContext("2d", { willReadFrequently: true }); //retorna um objeto com metodos para desenhar no canvas
@@ -165,9 +167,20 @@ function createTheSpawnCard(spawn, options) {
 	insertCardContent(card);
 }
 
+/**
+ * Ativa uma função diferente de acordo com a decisão do player
+ *
+ * @param {String} action
+ */
 function actionForBtn(action) {
 	switch (action) {
 		case "fugir":
+			// criar verificação de que o player só pode fugir caso tenha mais agilidade que mob
+			if (dataPlayer.dexterity * dataPlayer.luck > opponentData.dexterity * opponentData.luck) {
+				setInterval(printNarration("Você não conseguiu fugir!"), 400);
+				openArena();
+				return;
+			}
 			escapeAction();
 			break;
 
@@ -177,30 +190,34 @@ function actionForBtn(action) {
 
 		case "pegar":
 			escapeAction();
+			// criar função de pegar o item e adicionar ao inventario
 			break;
 
 		case "ignorar":
 			escapeAction();
 			break;
+
 		default:
 			console.log("algo deu errado!!");
 			break;
 	}
 }
 
+// Ignorar aparição de algo
 function escapeAction() {
 	directionsBlock(false);
 	insertCardContent("");
 	opponentData = "";
 }
 
+// Cria o campo de batalha
 function openArena() {
 	const painelBatle = document.querySelector(".painelBatle");
 	const painelDefault = document.querySelector(".painel");
 	const btnActions = document.querySelector(".actions");
 
-	let statusPlayer = [dataPlayer.hp, dataPlayer.mp];
-	let statusOpponnet = opponentData.hp;
+	statusPlayer = [dataPlayer.hp, dataPlayer.mp];
+	statusOpponnet = opponentData.hp;
 
 	insertCardContent(`
 		<div class="batleInfo">
@@ -221,10 +238,13 @@ function openArena() {
 
 	dataPlayer.skills.forEach((skill) => {
 		if (skill.isEquiped) {
-			btnActions.innerHTML += `<button>${skill.name}</button>`;
+			btnActions.innerHTML += `<button onClick="skillToUse(${skill.name})">${skill.name}</button>`;
 		}
 	});
 }
+
+// pega os dados da skill que irá ser usada
+function skillToUse() {}
 
 /**
  * Faz a troca do nome padrão para o do spawn
