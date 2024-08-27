@@ -1,94 +1,112 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-	<head>
-		<meta charset="UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="stylesheet" href="./public/css/world.css" />
-		<title>Mundo</title>
-	</head>
-	<body>
-		<canvas id="mapCanvas" class="hiddenComponet"></canvas>
-		<main>
-			<section>
-				<div class="container">
-					<div class="containerContent">
-						<div class="painel">
-							<div class="map">
-								<img src="public/assets/2DMap.png" alt="" />
-							</div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./public/css/world.css" />
+    <title>Mundo</title>
+  </head>
+  <body>
+    <canvas id="mapCanvas" class="hiddenComponet"></canvas>
+    <main>
+      <section>
+        <div class="container">
+          <div class="containerContent">
+            <div class="painel">
+              <div class="map">
+                <img src="public/assets/2DMap.png" alt="" />
+              </div>
 
-							<div class="blockOpt">
-								<div class="text">
-									<p id="narrations"></p>
-								</div>
+              <div class="blockOpt">
+                <div class="text">
+                  <p id="narrations"></p>
+                </div>
 
-								<div class="directions">
-									<button class="btnDirections" value='{"y": 3, "x": -3}'>
-										<img src="public/assets/img/imgDirections/leftAndTop.png" alt="" />
-									</button>
+                <div class="directions">
+                  <button class="btnDirections" value='{"y": 3, "x": -3}'>
+                    <img
+                      src="public/assets/img/imgDirections/leftAndTop.png"
+                      alt=""
+                    />
+                  </button>
 
-									<button class="btnDirections" value='{"y": 3, "x": 0}'>
-										<img src="public/assets/img/imgDirections/top.png" alt="" />
-									</button>
+                  <button class="btnDirections" value='{"y": 3, "x": 0}'>
+                    <img src="public/assets/img/imgDirections/top.png" alt="" />
+                  </button>
 
-									<button class="btnDirections" value='{"y": 3, "x": 3}'>
-										<img src="public/assets/img/imgDirections/rigthAndTop.png" alt="" />
-									</button>
+                  <button class="btnDirections" value='{"y": 3, "x": 3}'>
+                    <img
+                      src="public/assets/img/imgDirections/rigthAndTop.png"
+                      alt=""
+                    />
+                  </button>
 
-									<button class="btnDirections" value='{"y": 0, "x": -3}'>
-										<img src="public/assets/img/imgDirections/left.png" alt="" />
-									</button>
+                  <button class="btnDirections" value='{"y": 0, "x": -3}'>
+                    <img
+                      src="public/assets/img/imgDirections/left.png"
+                      alt=""
+                    />
+                  </button>
 
-									<button class="btnDirections" id="openMenu">
-										<img src="public/assets/img/Ellipse.png" alt="" />
-									</button>
+                  <button class="btnDirections" id="openMenu">
+                    <img src="public/assets/img/Ellipse.png" alt="" />
+                  </button>
 
-									<button class="btnDirections" value='{"y": 0, "x": 3}'>
-										<img src="public/assets/img/imgDirections/rigth.png" alt="" />
-									</button>
+                  <button class="btnDirections" value='{"y": 0, "x": 3}'>
+                    <img
+                      src="public/assets/img/imgDirections/rigth.png"
+                      alt=""
+                    />
+                  </button>
 
-									<button class="btnDirections" value='{"y": -3, "x": -3}'>
-										<img src="public/assets/img/imgDirections/leftAndDown.png" alt="" />
-									</button>
+                  <button class="btnDirections" value='{"y": -3, "x": -3}'>
+                    <img
+                      src="public/assets/img/imgDirections/leftAndDown.png"
+                      alt=""
+                    />
+                  </button>
 
-									<button class="btnDirections" value='{"y": -3, "x": 0}'>
-										<img src="public/assets/img/imgDirections/down.png" alt="" />
-									</button>
+                  <button class="btnDirections" value='{"y": -3, "x": 0}'>
+                    <img
+                      src="public/assets/img/imgDirections/down.png"
+                      alt=""
+                    />
+                  </button>
 
-									<button class="btnDirections" value='{"y": -3, "x": 3}'>
-										<img src="public/assets/img/imgDirections/righAndDown.png" alt="" />
-									</button>
-								</div>
-							</div>
-						</div>
+                  <button class="btnDirections" value='{"y": -3, "x": 3}'>
+                    <img
+                      src="public/assets/img/imgDirections/righAndDown.png"
+                      alt=""
+                    />
+                  </button>
+                </div>
+              </div>
+            </div>
 
-						<div class="painelBatle hiddenComponet">
-							<div class="map">
-								<img src="public/assets/2DMap.png" alt="" />
-							</div>
+            <div class="painelBatle hiddenComponet">
+              <div class="map">
+                <img src="public/assets/2DMap.png" alt="" />
+              </div>
 
-							<div class="options">
-								<div class="actions">
-									<button>Atacar</button>
-									<button>Defender</button>
-								</div>
+              <div class="options">
+                <div class="actions"></div>
 
-								<div class="pocions">
-									<button>Poção de recuperação</button>
-									<button>Poção de recuperação</button>
-									<button>Poção Antidoto</button>
-									<button>Poção de fortalecimento</button>
-								</div>
+                <div class="pocions">
+                  <button>Poção de recuperação</button>
+                  <button>Poção de recuperação</button>
+                  <button>Poção Antidoto</button>
+                  <button>Poção de fortalecimento</button>
+                </div>
 
-								<div class="effects">
-									<ul></ul>
-								</div>
-							</div>
-						</div>
+                <div class="effects">
+                  <ul></ul>
+                </div>
+              </div>
+            </div>
 
-						<div class="card">
-							<!-- 
+            <div class="card">
+              <!-- 
               <div class="cardImg">
                 <img
                   src="https://i.pinimg.com/736x/31/4f/2a/314f2a1f891f259d70d75b603616827a.jpg"
@@ -103,99 +121,99 @@
               </div>
             --></div>
 
-						<div class="menu">
-							<div class="menuHeader">
-								<h2 class="title">Menu</h2>
-							</div>
-							<div class="menuContent">
-								<ul class="menuList">
-									<!-- <li class="menuListItem"><button>Status</button></li>
+            <div class="menu">
+              <div class="menuHeader">
+                <h2 class="title">Menu</h2>
+              </div>
+              <div class="menuContent">
+                <ul class="menuList">
+                  <!-- <li class="menuListItem"><button>Status</button></li>
                 <li class="menuListItem"><button>Habilidades</button></li>
                 <li class="menuListItem"><button>Inventário</button></li> -->
 
-									<li class="menuListItem">
-										<div class="status">
-											<span>hp</span>
-											<input type="number" value="10" />
-										</div>
+                  <li class="menuListItem">
+                    <div class="status">
+                      <span>hp</span>
+                      <input type="number" value="10" />
+                    </div>
 
-										<button id="addStatus">+</button>
-									</li>
-									<li class="menuListItem">
-										<div class="status">
-											<span>hp</span>
-											<input type="number" value="10" />
-										</div>
+                    <button id="addStatus">+</button>
+                  </li>
+                  <li class="menuListItem">
+                    <div class="status">
+                      <span>hp</span>
+                      <input type="number" value="10" />
+                    </div>
 
-										<button id="addStatus">+</button>
-									</li>
-									<li class="menuListItem">
-										<div class="status">
-											<span>hp</span>
-											<input type="number" value="10" />
-										</div>
+                    <button id="addStatus">+</button>
+                  </li>
+                  <li class="menuListItem">
+                    <div class="status">
+                      <span>hp</span>
+                      <input type="number" value="10" />
+                    </div>
 
-										<button id="addStatus">+</button>
-									</li>
-									<li class="menuListItem">
-										<div class="status">
-											<span>hp</span>
-											<input type="number" value="10" />
-										</div>
+                    <button id="addStatus">+</button>
+                  </li>
+                  <li class="menuListItem">
+                    <div class="status">
+                      <span>hp</span>
+                      <input type="number" value="10" />
+                    </div>
 
-										<button id="addStatus">+</button>
-									</li>
-									<li class="menuListItem">
-										<div class="status">
-											<span>hp</span>
-											<input type="number" value="10" />
-										</div>
+                    <button id="addStatus">+</button>
+                  </li>
+                  <li class="menuListItem">
+                    <div class="status">
+                      <span>hp</span>
+                      <input type="number" value="10" />
+                    </div>
 
-										<button id="addStatus">+</button>
-									</li>
-									<li class="menuListItem">
-										<div class="status">
-											<span>hp</span>
-											<input type="number" value="10" />
-										</div>
+                    <button id="addStatus">+</button>
+                  </li>
+                  <li class="menuListItem">
+                    <div class="status">
+                      <span>hp</span>
+                      <input type="number" value="10" />
+                    </div>
 
-										<button id="addStatus">+</button>
-									</li>
-									<li class="menuListItem">
-										<div class="status">
-											<span>hp</span>
-											<input type="number" value="10" />
-										</div>
+                    <button id="addStatus">+</button>
+                  </li>
+                  <li class="menuListItem">
+                    <div class="status">
+                      <span>hp</span>
+                      <input type="number" value="10" />
+                    </div>
 
-										<button id="addStatus">+</button>
-									</li>
-									<li class="menuListItem">
-										<div class="status">
-											<span>hp</span>
-											<input type="number" value="10" />
-										</div>
+                    <button id="addStatus">+</button>
+                  </li>
+                  <li class="menuListItem">
+                    <div class="status">
+                      <span>hp</span>
+                      <input type="number" value="10" />
+                    </div>
 
-										<button id="addStatus">+</button>
-									</li>
+                    <button id="addStatus">+</button>
+                  </li>
 
-									<!--
+                  <!--
                   <div class="skills">
                     <img src="public/assets/img/mage_icon.png" alt="icone da skills">
                     <span>Fireball</span>
                   </div>
                   -->
-								</ul>
-							</div>
-							<div class="menuFooter">
-								<span>Sombras da Eternidade</span>
-							</div>
-						</div>
-					</div>
-				</div>
-			</section>
-		</main>
+                </ul>
+              </div>
+              <div class="menuFooter">
+                <span>Sombras da Eternidade</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
 
-		<script src="./public/js/world.js"></script>
-		<!-- <script src="./public/js/script.js"></script> -->
-	</body>
+    <script src="./public/js/world.js"></script>
+    <!-- <script src="./public/js/script.js"></script> -->
+  </body>
 </html>
