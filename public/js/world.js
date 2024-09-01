@@ -176,19 +176,21 @@ function createTheSpawnCard(spawn, options) {
 function actionForBtn(action) {
 	switch (action) {
 		case "fugir":
-			if (dataPlayer.dexterity * dataPlayer.luck < opponentData.dexterity * opponentData.luck) {
-				printNarration("Você não conseguiu fugir!");
-				setTimeout(() => {
-					openArena();
-				}, 3000);
+			// if (dataPlayer.dexterity * dataPlayer.luck < opponentData.dexterity * opponentData.luck) {
+			// 	printNarration("Você não conseguiu fugir!");
+			// 	setTimeout(() => {
+			// 		openArena();
+			// 	}, 2000);
 
-				return;
-			}
+			// 	return;
+			// }
 			escapeAction();
 			break;
 
 		case "lutar":
-			openArena();
+			setTimeout(() => {
+				openArena();
+			}, 2000);
 			break;
 
 		case "pegar":
@@ -245,7 +247,7 @@ function openArena() {
 		}
 	});
 
-	mobAtack(opponentData);
+	setInterval(mobAtack(opponentData), 1000);
 }
 
 // pega os dados da skill que irá ser usada
@@ -255,38 +257,30 @@ function skillToUse(skill) {
 
 function mobAtack(mob) {
 	while (statusPlayer[0] > 0) {
-		// console.log(statusPlayer[0]);
-
 		// Randomiza a habilidade que o mob irá ultilizar para atacar
-		const skill = randomize(mob.skills.filter((skill) => !skill.isCooldown));
-		// console.log(skill);
+		let damage = 0;
+		const skillsThatAreNotOnCooldown = mob.skills.filter((skill) => !skill.isCooldown);
 
-		damage = opponentData.strength * skill.cost;
-		// console.log(damage);
-		// applyDamage(opponentData, damage, statusPlayer[0]);
+		if (skillsThatAreNotOnCooldown.length > 0) {
+			const skill = randomize(skillsThatAreNotOnCooldown);
 
-		const cooldown = (id, skills) => {
-			const index = skills.findIndex((s) => {
-				s.id_skill == id;
-			});
-			console.log(index);
+			const skillDamage = JSON.parse(skill.data);
+			damage = mob.strength + skillDamage.damage;
 
-			// skills[index] = "isCooldown";
-			// skills[index].isCooldown = mob.skills;
-		};
-		cooldown(skill.id_skill, mob.skills);
-		// console.log(skill);
+			const index = mob.skills.findIndex((m) => m.id_skill == skill.id_skill);
+			mob.skills[index].isCooldown = true;
+			const time = mob.skills[index].cooldown * 1000;
+		}
 
-		/**
-		 * o player cuja mesma irá retorna a habilidade
-		 * Verificar se a skill está em colldown
-		 * Caso esteja chamar a função novamente!
-		 *
-		 * Chamar função de aplicar dano
-		 *
-		 * Caso o ataque tenha algum efeito aplicavel, chamar a função de aplicação de efeito
-		 */
+		setTimeout(() => {
+			console.log(time);
+			mob.skills[index].isCooldown = false;
+		}, time);
+
+		console.log(damage);
+
 		statusPlayer[0] -= damage;
+		console.log(statusPlayer[0]);
 	}
 }
 
@@ -414,6 +408,7 @@ function getDataRegion(region) {
 		})
 		.catch((error) => {
 			console.log("Error: ", error);
+			printNarration("Área Bloqueiada!");
 		});
 }
 
@@ -570,6 +565,15 @@ function contentMenu(insert, insertIn) {
 		const listItemBtn = createAndInsertElement("button", "", "", item, listItem, "beforeend");
 	});
 }
+
+/**
+ * Verificar se a skill está em colldown
+ * Caso esteja chamar a função novamente!
+ *
+ * Chamar função de aplicar dano
+ *
+ * Caso o ataque tenha algum efeito aplicavel, chamar a função de aplicação de efeito
+ */
 
 /*
   <div class="menu">
