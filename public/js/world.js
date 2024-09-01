@@ -19,6 +19,7 @@ let dataPlayer;
 let statusPlayer;
 let opponentData;
 let statusOpponnet;
+let itemData;
 
 const canvas = document.getElementById("mapCanvas");
 const ctx = canvas.getContext("2d", { willReadFrequently: true }); //retorna um objeto com metodos para desenhar no canvas
@@ -136,6 +137,7 @@ function checkTypeOfNarrationToBePrinted(data) {
 	if (d40 > 10 && d40 <= 20) {
 		spawn = raffleMobOurItens(data.findableItems);
 		createTheSpawnCard(spawn, ["pegar", "ignorar"]);
+		itemData = spawn;
 		messages = data.EventPhrase.filter((events) => events.eventType === "find_item");
 	}
 
@@ -194,8 +196,11 @@ function actionForBtn(action) {
 			break;
 
 		case "pegar":
+			dataPlayer.inventory.push(itemData);
+			let player = JSON.parse(sessionStorage.getItem("player"));
+			player.inventory.push(itemData);
+			sessionStorage.setItem("player", JSON.stringify(player));
 			escapeAction();
-			// criar função de pegar o item e adicionar ao inventario
 			break;
 
 		case "ignorar":
@@ -243,18 +248,26 @@ function openArena() {
 
 	dataPlayer.skills.forEach((skill) => {
 		if (skill.isEquiped) {
-			btnActions.innerHTML += `<button onClick="skillToUse(${skill})">${skill.name}</button>`;
+			btnActions.innerHTML += `<button onClick="skillToUse(${skill.id_skill})">${skill.name}</button>`;
 		}
 	});
 
-	setInterval(mobAtack(opponentData), 1000);
+	// setInterval(mobAtack(opponentData), 1000);
 }
 
 // pega os dados da skill que irá ser usada
-function skillToUse(skill) {
+function skillToUse(skillId) {
+	const index = dataPlayer.skills.findIndex((p) => p.id_skill == skillId);
+	const skill = dataPlayer.skills[index];
 	console.log(skill);
+	console.log(JSON.parse(skill.data));
 }
 
+/**
+ * gerencia os ataques dos mobs
+ *
+ * @param {object} mob
+ */
 function mobAtack(mob) {
 	while (statusPlayer[0] > 0) {
 		// Randomiza a habilidade que o mob irá ultilizar para atacar
@@ -427,8 +440,11 @@ function getDataPlayer(id) {
 	})
 		.then((res) => res.json())
 		.then((data) => {
-			console.log(data);
-			dataPlayer = data;
+			dataPlayer = JSON.parse(sessionStorage.getItem("player"))
+				? JSON.parse(sessionStorage.getItem("player"))
+				: data;
+
+			sessionStorage.getItem("player") ?? sessionStorage.setItem("player", JSON.stringify(data));
 		})
 
 		.catch((err) => {
