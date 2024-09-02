@@ -233,12 +233,12 @@ function openArena() {
 		<div class="batleInfo">
 			<div class="enemy">
 				<span class="title">${opponentData.name}</span>
-				<span class="hp">${opponentData.hp}/${statusOpponnet}</span>
+				<span class="hp">HP: ${opponentData.hp}/${statusOpponnet}</span>
 			</div>
 			<div class="player">
 				<span class="title">${dataPlayer.name}</span>
-				<span class="hp">${dataPlayer.hp}/${statusPlayer[0]}</span>
-				<span class="mp">${dataPlayer.mp}/${statusPlayer[1]}</span>
+				<span class="hp">HP: ${dataPlayer.hp}</span>
+				<span class="mp">MP: ${dataPlayer.mp}</span>
 			</div>
 		</div>
 		`);
@@ -248,19 +248,61 @@ function openArena() {
 
 	dataPlayer.skills.forEach((skill) => {
 		if (skill.isEquiped) {
-			btnActions.innerHTML += `<button onClick="skillToUse(${skill.id_skill})">${skill.name}</button>`;
+			btnActions.innerHTML += `<button onClick="skillToUse(${skill.id_skill},event)">${skill.name}</button>`;
 		}
 	});
 
 	// setInterval(mobAtack(opponentData), 1000);
 }
 
+function exitArena() {
+	const painelBatle = document.querySelector(".painelBatle");
+	const painelDefault = document.querySelector(".painel");
+
+	painelDefault.classList.remove("hiddenComponet");
+	painelBatle.classList.add("hiddenComponet");
+
+	insertCardContent("");
+	printNarration(`Você derrotou um(a) ${opponentData.name}!`);
+}
+
 // pega os dados da skill que irá ser usada
-function skillToUse(skillId) {
+function skillToUse(skillId, e) {
+	let damage;
 	const index = dataPlayer.skills.findIndex((p) => p.id_skill == skillId);
 	const skill = dataPlayer.skills[index];
-	console.log(skill);
-	console.log(JSON.parse(skill.data));
+
+	e.target.style = "background: var(--btn-bg-2);";
+
+	if (skill.isCooldown) {
+		console.log("Skill em tempo de recarga");
+		return;
+	}
+
+	damage = calculateDamage(
+		typeof (JSON.parse(skill.data).damage + dataPlayer.strength) === Number ||
+			JSON.parse(skill.data).damage + dataPlayer.strength > 0
+			? JSON.parse(skill.data).damage + dataPlayer.strength
+			: 0,
+		opponentData
+	);
+
+	skill.isCooldown = true;
+	// console.log(JSON.parse(skill.data));
+
+	console.log(opponentData.name, ":", opponentData.hp - damage);
+	opponentData.hp -= damage;
+	setTimeout(() => {
+		skill.isCooldown = false;
+		e.target.style = "background: #1d282c;";
+	}, skill.cooldown * 1000);
+
+	if (opponentData.hp <= 0) {
+		console.log("Inimigo derrotado!");
+		setTimeout(() => {
+			exitArena();
+		}, 1500);
+	}
 }
 
 /**
@@ -304,12 +346,13 @@ function mobAtack(mob) {
  * @param {Number} damage
  * @param {object} addressee
  */
-function applyDamage(pitcher, damage, addressee) {
+function calculateDamage(damage, addressee) {
 	console.log(`
-      pitcher: ${pitcher}
       damage: ${damage}
-      addressee: ${addressee}
+      addressee: ${addressee.name}
     `);
+
+	return damage > 0 ? damage - addressee.defense : 0;
 }
 
 /**
