@@ -1,10 +1,9 @@
 const express = require("express");
-// const { getByName } = require("./models/regionModel.js");
-
+// const { cadSkill } = require("./models/admin.js");
 const app = express();
 
 // async function a() {
-//   console.log(await getByName("Floresta do Esquecimento"));
+//   console.log(await cadSkill());
 // }
 // a();
 app.use(express.json());
@@ -24,6 +23,6 @@ app.use("/player", player);
 const region = require("./router/regionRoutes.js");
 app.use("/region", region);
 
-app.listen(8080, () => {
+app.listen(3000, () => {
   console.log("server started");
 });
