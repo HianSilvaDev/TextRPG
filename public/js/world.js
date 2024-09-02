@@ -252,7 +252,7 @@ function openArena() {
 		}
 	});
 
-	// setInterval(mobAtack(opponentData), 1000);
+	mobAtack(opponentData);
 }
 
 function exitArena() {
@@ -310,8 +310,14 @@ function skillToUse(skillId, e) {
  *
  * @param {object} mob
  */
-function mobAtack(mob) {
-	while (statusPlayer[0] > 0) {
+async function mobAtack(mob) {
+	while (dataPlayer.hp > 0) {
+		if (opponentData.hp <= 0) {
+			exitArena();
+			printNarration(`Você foi derrotado por um ${opponentData.name}`);
+			directionsBlock(false);
+			return;
+		}
 		// Randomiza a habilidade que o mob irá ultilizar para atacar
 		let damage = 0;
 		const skillsThatAreNotOnCooldown = mob.skills.filter((skill) => !skill.isCooldown);
@@ -325,17 +331,27 @@ function mobAtack(mob) {
 			const index = mob.skills.findIndex((m) => m.id_skill == skill.id_skill);
 			mob.skills[index].isCooldown = true;
 			const time = mob.skills[index].cooldown * 1000;
+
+			await new Promise((resolve) =>
+				setTimeout(() => {
+					mob.skills[index].isCooldown = false;
+					resolve();
+				}, time)
+			);
+		} else {
+			console.log("Todas as habilidades estão em cooldown. Aguardando...");
+			await new Promise((resolve) => setTimeout(resolve, 1000));
 		}
 
-		setTimeout(() => {
-			console.log(time);
-			mob.skills[index].isCooldown = false;
-		}, time);
+		dataPlayer.hp -= damage;
 
-		console.log(damage);
+		console.log(`HP player ${dataPlayer.hp}`);
 
-		statusPlayer[0] -= damage;
-		console.log(statusPlayer[0]);
+		if (dataPlayer.hp <= 0) {
+			exitArena();
+			printNarration(`Você foi derrotado por um ${opponentData.name}`);
+			directionsBlock(false);
+		}
 	}
 }
 
