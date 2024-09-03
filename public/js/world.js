@@ -279,10 +279,11 @@ function skillToUse(skillId, e) {
 		return;
 	}
 
+	const skillDamage = JSON.parse(skill.data).damage;
+
 	damage = calculateDamage(
-		typeof (JSON.parse(skill.data).damage + dataPlayer.strength) === Number ||
-			JSON.parse(skill.data).damage + dataPlayer.strength > 0
-			? JSON.parse(skill.data).damage + dataPlayer.strength
+		typeof (skillDamage + dataPlayer.strength) === Number && skillDamage + dataPlayer.strength >= 0
+			? skillDamage + dataPlayer.strength
 			: 0,
 		opponentData
 	);
@@ -326,7 +327,11 @@ async function mobAtack(mob) {
 			const skill = randomize(skillsThatAreNotOnCooldown);
 
 			const skillDamage = JSON.parse(skill.data);
-			damage = mob.strength + skillDamage.damage;
+			damage =
+				mob.strength + skillDamage.damage >= 0 &&
+				typeof (mob.strength + skillDamage.damage) === Number
+					? mob.strength + skillDamage.damage
+					: 0;
 
 			const index = mob.skills.findIndex((m) => m.id_skill == skill.id_skill);
 			mob.skills[index].isCooldown = true;
