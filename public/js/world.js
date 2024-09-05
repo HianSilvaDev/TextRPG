@@ -8,6 +8,9 @@ btnDirections.forEach((btn) => {
 	});
 });
 
+const verifyMp = setInterval(() => regenMp(), 3000);
+const verifyHp = setInterval(() => regenHp(), 3000);
+
 const openMenu = document.getElementById("openMenu");
 
 const containerContent = document.querySelector(".content");
@@ -16,9 +19,8 @@ let cordinatesX = 1;
 let cordinatesY = 1;
 let dataCurrentRegion;
 let dataPlayer;
-let statusPlayer;
 let opponentData;
-let statusOpponnet;
+let isBatle = false;
 let itemData;
 
 const canvas = document.getElementById("mapCanvas");
@@ -182,7 +184,7 @@ function actionForBtn(action) {
 			// 	printNarration("Você não conseguiu fugir!");
 			// 	setTimeout(() => {
 			// 		openArena();
-			// 	}, 2000);
+			// 	}, 1500);
 
 			// 	return;
 			// }
@@ -222,26 +224,12 @@ function escapeAction() {
 
 // Cria o campo de batalha
 function openArena() {
+	isBatle = true;
 	const painelBatle = document.querySelector(".painelBatle");
 	const painelDefault = document.querySelector(".painel");
 	const btnActions = document.querySelector(".actions");
 
-	statusPlayer = [dataPlayer.hp, dataPlayer.mp];
-	statusOpponnet = opponentData.hp;
-
-	insertCardContent(`
-		<div class="batleInfo">
-			<div class="enemy">
-				<span class="title">${opponentData.name}</span>
-				<span class="hp">HP: ${opponentData.hp}/${statusOpponnet}</span>
-			</div>
-			<div class="player">
-				<span class="title">${dataPlayer.name}</span>
-				<span class="hp">HP: ${dataPlayer.hp}</span>
-				<span class="mp">MP: ${dataPlayer.mp}</span>
-			</div>
-		</div>
-		`);
+	updateBattleLog(dataPlayer, opponentData, "Inicio da batalha!");
 
 	painelBatle.classList.remove("hiddenComponet");
 	painelDefault.classList.add("hiddenComponet");
@@ -252,18 +240,27 @@ function openArena() {
 		}
 	});
 
+	if (dataPlayer.hp <= 0) {
+		exitArena(`Você foi derratado por ${opponentData.name}`);
+		return;
+	}
+
 	mobAtack(opponentData);
 }
 
-function exitArena() {
+function exitArena(message) {
 	const painelBatle = document.querySelector(".painelBatle");
 	const painelDefault = document.querySelector(".painel");
+	const btnActions = document.querySelector(".actions");
 
 	painelDefault.classList.remove("hiddenComponet");
 	painelBatle.classList.add("hiddenComponet");
+	btnActions.innerHTML = "";
 
-	insertCardContent("");
-	printNarration(`Você derrotou um(a) ${opponentData.name}!`);
+	printNarration(message);
+
+	escapeAction();
+	isBatle = false;
 }
 
 // pega os dados da skill que irá ser usada
@@ -272,18 +269,23 @@ function skillToUse(skillId, e) {
 	const index = dataPlayer.skills.findIndex((p) => p.id_skill == skillId);
 	const skill = dataPlayer.skills[index];
 
-	e.target.style = "background: var(--btn-bg-2);";
-
-	if (skill.isCooldown) {
-		console.log("Skill em tempo de recarga");
+	if (dataPlayer.mp < skill.cost) {
+		updateBattleLog(dataPlayer, opponentData, "Você não tem mp o sufiente");
 		return;
 	}
 
-	const skillDamage = JSON.parse(skill.data).damage;
+	e.target.style = "background: var(--btn-bg-2);";
+
+	if (skill.isCooldown) {
+		updateBattleLog(dataPlayer, opponentData, `${skill.name} está em tempo de recarga!`);
+		return;
+	}
+
+	const skillData = JSON.parse(skill.data).damage;
 
 	damage = calculateDamage(
-		typeof (skillDamage + dataPlayer.strength) === Number && skillDamage + dataPlayer.strength >= 0
-			? skillDamage + dataPlayer.strength
+		typeof (skillData + dataPlayer.strength) === Number || skillData + dataPlayer.strength >= 0
+			? skillData + dataPlayer.strength
 			: 0,
 		opponentData
 	);
@@ -292,7 +294,7 @@ function skillToUse(skillId, e) {
 	// console.log(JSON.parse(skill.data));
 
 	console.log(opponentData.name, ":", opponentData.hp - damage);
-	opponentData.hp -= damage;
+
 	setTimeout(() => {
 		skill.isCooldown = false;
 		e.target.style = "background: #1d282c;";
@@ -304,6 +306,10 @@ function skillToUse(skillId, e) {
 			exitArena();
 		}, 1500);
 	}
+
+	opponentData.hp -= damage;
+
+	updateBattleLog(dataPlayer, opponentData, `Você causou ${damage} de dano`);
 }
 
 /**
@@ -311,14 +317,20 @@ function skillToUse(skillId, e) {
  *
  * @param {object} mob
  */
-async function mobAtack(mob) {
-	while (dataPlayer.hp > 0) {
+function mobAtack(mob) {
+	const mobIntervalAtacking = setInterval(async () => {
 		if (opponentData.hp <= 0) {
-			exitArena();
-			printNarration(`Você foi derrotado por um ${opponentData.name}`);
-			directionsBlock(false);
+			clearInterval(mobIntervalAtacking);
+			exitArena(`Você derrotou um ${opponentData.name}`);
 			return;
 		}
+		if (dataPlayer.hp <= 0) {
+			dataPlayer.hp = 0;
+			clearInterval(mobIntervalAtacking);
+			exitArena(`Você foi derrotado por um ${opponentData.name}`);
+			return;
+		}
+
 		// Randomiza a habilidade que o mob irá ultilizar para atacar
 		let damage = 0;
 		const skillsThatAreNotOnCooldown = mob.skills.filter((skill) => !skill.isCooldown);
@@ -326,13 +338,14 @@ async function mobAtack(mob) {
 		if (skillsThatAreNotOnCooldown.length > 0) {
 			const skill = randomize(skillsThatAreNotOnCooldown);
 
-			const skillDamage = JSON.parse(skill.data);
+			const skillData = JSON.parse(skill.data);
+			const skillEffect = JSON.parse(skill.effect);
 			damage =
-				mob.strength + skillDamage.damage >= 0 &&
-				typeof (mob.strength + skillDamage.damage) === Number
-					? mob.strength + skillDamage.damage
+				mob.strength + skillData.damage >= 0 || typeof (mob.strength + skillData.damage) === Number
+					? mob.strength + skillData.damage
 					: 0;
 
+			// applyEffect(skillEffect);
 			const index = mob.skills.findIndex((m) => m.id_skill == skill.id_skill);
 			mob.skills[index].isCooldown = true;
 			const time = mob.skills[index].cooldown * 1000;
@@ -348,16 +361,10 @@ async function mobAtack(mob) {
 			await new Promise((resolve) => setTimeout(resolve, 1000));
 		}
 
+		updateBattleLog(dataPlayer, opponentData, `Você sofreu ${damage} de dano`);
+
 		dataPlayer.hp -= damage;
-
-		console.log(`HP player ${dataPlayer.hp}`);
-
-		if (dataPlayer.hp <= 0) {
-			exitArena();
-			printNarration(`Você foi derrotado por um ${opponentData.name}`);
-			directionsBlock(false);
-		}
-	}
+	}, 1000);
 }
 
 /**
@@ -379,11 +386,47 @@ function calculateDamage(damage, addressee) {
 /**
  * Função que verifica qual tipo de efeito aplicar, a quem aplicar e se o efeito terá exito em ser aplicado.
  *
- * @param {*} pitcher
  * @param {*} effect
  * @param {*} addressee
  */
-function applyEffect(pitcher, effect, addressee) {}
+function applyEffect(effect, addressee) {}
+
+function apllyDamage(damage, addressee) {}
+
+function checkTheMobsSkillTypeBbeforeApplyingItToThePlayer(user, skill, addressee) {
+	switch (skill.type) {
+		case "ATAQUE_FISICO":
+			updateBattleLog(dataPlayer, opponentData, `${user} causou ${damage} de dano`);
+			return;
+			break;
+
+		case "MAGIC_ATACK":
+			updateBattleLog(dataPlayer, opponentData, `${user} causou ${damage} de dano`);
+			return;
+			break;
+
+		case "BUFF":
+			return;
+			break;
+
+		case "DEBUFF":
+			return;
+			break;
+
+		case "ESCAPE":
+			printNarration(`${user} conseguiu fugir!`);
+			return;
+			break;
+
+		case "SHIELD":
+			return;
+			break;
+
+		default:
+			console.log("Type not found!!");
+			break;
+	}
+}
 
 /**
  * Faz a troca do nome padrão para o do spawn
@@ -485,7 +528,6 @@ function getDataRegion(region) {
 		})
 		.catch((error) => {
 			console.log("Error: ", error);
-			printNarration("Área Bloqueiada!");
 		});
 }
 
@@ -646,12 +688,48 @@ function contentMenu(insert, insertIn) {
 	});
 }
 
+function regenHp() {
+	if (dataPlayer.hp == JSON.parse(sessionStorage.getItem("player")).hp || isBatle) {
+		return;
+	}
+
+	setTimeout(() => {
+		dataPlayer.hp += 0.5;
+	}, 1000);
+}
+
+function regenMp() {
+	if (
+		(dataPlayer.mp == JSON.parse(sessionStorage.getItem("player")).mp && isBatle) ||
+		dataPlayer.mp == JSON.parse(sessionStorage.getItem("player")).mp
+	) {
+		return;
+	}
+
+	setTimeout(() => {
+		dataPlayer.mp += 0.5;
+	}, 1000);
+}
+
+function updateBattleLog(player, enemie, message) {
+	insertCardContent(`
+		<div class="batleInfo">
+			<div class="enemy">
+				<span class="title">${enemie.name}</span>
+				<span class="hp">HP: ${enemie.hp}</span>
+			</div>
+			<div class="player">
+				<span class="title">${player.name}</span>
+				<span class="hp">HP: ${player.hp}</span>
+				<span class="mp">MP: ${player.mp}</span>
+			</div>
+
+			<p class = "info">${message}</p>
+		</div>
+		`);
+}
+
 /**
- * Verificar se a skill está em colldown
- * Caso esteja chamar a função novamente!
- *
- * Chamar função de aplicar dano
- *
  * Caso o ataque tenha algum efeito aplicavel, chamar a função de aplicação de efeito
  */
 
