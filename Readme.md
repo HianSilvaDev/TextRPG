@@ -8,7 +8,7 @@
 
 **Como faço para testar?**
 
-1. Certifique-se de ter nodeJS em sua maquina!
+1. Certifique-se de ter NodeJS em sua maquina!
 
 2. Crie um clone do repositório em sua máquina com o comando.
 
