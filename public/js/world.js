@@ -283,17 +283,10 @@ function skillToUse(skillId, e) {
 
 	const skillData = JSON.parse(skill.data).damage;
 
-	damage = calculateDamage(
-		typeof (skillData + dataPlayer.strength) === Number || skillData + dataPlayer.strength >= 0
-			? skillData + dataPlayer.strength
-			: 0,
-		opponentData
-	);
+	damage = calculateDamage(dataPlayer, JSON.parse(skill.data), opponentData);
+	damage ? updateBattleLog(dataPlayer, opponentData, `Você causou ${damage} de dano`) : "";
 
 	skill.isCooldown = true;
-	// console.log(JSON.parse(skill.data));
-
-	console.log(opponentData.name, ":", opponentData.hp - damage);
 
 	setTimeout(() => {
 		skill.isCooldown = false;
@@ -308,8 +301,6 @@ function skillToUse(skillId, e) {
 	}
 
 	opponentData.hp -= damage;
-
-	updateBattleLog(dataPlayer, opponentData, `Você causou ${damage} de dano`);
 }
 
 /**
@@ -337,13 +328,11 @@ function mobAtack(mob) {
 
 		if (skillsThatAreNotOnCooldown.length > 0) {
 			const skill = randomize(skillsThatAreNotOnCooldown);
-
-			const skillData = JSON.parse(skill.data);
 			const skillEffect = JSON.parse(skill.effect);
-			damage =
-				mob.strength + skillData.damage >= 0 || typeof (mob.strength + skillData.damage) === Number
-					? mob.strength + skillData.damage
-					: 0;
+
+			damage = calculateDamage(mob, JSON.parse(skill.data), dataPlayer);
+
+			damage ? updateBattleLog(dataPlayer, opponentData, `Você sofreu ${damage} de dano`) : "";
 
 			// applyEffect(skillEffect);
 			const index = mob.skills.findIndex((m) => m.id_skill == skill.id_skill);
@@ -361,8 +350,6 @@ function mobAtack(mob) {
 			await new Promise((resolve) => setTimeout(resolve, 1000));
 		}
 
-		updateBattleLog(dataPlayer, opponentData, `Você sofreu ${damage} de dano`);
-
 		dataPlayer.hp -= damage;
 	}, 1000);
 }
@@ -370,46 +357,57 @@ function mobAtack(mob) {
 /**
  * Função verifica quanto de dano será mitigado, após o calculo aplica o dano ao destinatário
  *
- * @param {Object} pitcher
- * @param {Number} damage
- * @param {object} addressee
+ * @param {Object} user
+ * @param {Object} skillData
+ * @param {Object} addressee
  */
-function calculateDamage(damage, addressee) {
-	console.log(`
-      damage: ${damage}
-      addressee: ${addressee.name}
-    `);
+function calculateDamage(user, skillData, addressee) {
+	if (!skillData.damage) {
+		return;
+	}
 
-	return damage > 0 ? damage - addressee.defense : 0;
+	damage =
+		user.strength + skillData.damage >= 0 || typeof (user.strength + skillData.damage) === Number
+			? user.strength + skillData.damage
+			: 0;
+
+	damage = user.shield ? (damage * JSON.parse(user.shiel).porcent) / 100 : damage;
+
+	const totalDamage = damage - addressee.defense > 0 ? damage - addressee.defense : 0;
+
+	console.log(`
+    damage: ${totalDamage}
+    addressee: ${addressee.name}
+  `);
+
+	return totalDamage;
 }
 
-/**
- * Função que verifica qual tipo de efeito aplicar, a quem aplicar e se o efeito terá exito em ser aplicado.
- *
- * @param {*} effect
- * @param {*} addressee
- */
-function applyEffect(effect, addressee) {}
-
-function apllyDamage(damage, addressee) {}
-
-function checkTheMobsSkillTypeBbeforeApplyingItToThePlayer(user, skill, addressee) {
+function checkSkillType(user, skill, addressee) {
 	switch (skill.type) {
-		case "ATAQUE_FISICO":
-			updateBattleLog(dataPlayer, opponentData, `${user} causou ${damage} de dano`);
-			return;
-			break;
-
-		case "MAGIC_ATACK":
-			updateBattleLog(dataPlayer, opponentData, `${user} causou ${damage} de dano`);
+		case "ATAQUE_FISICO" || "MAGIC_ATACK":
 			return;
 			break;
 
 		case "BUFF":
+			if (JSON.parse(skill.data).buffTarget == "defense") {
+				user.defense = user.defense + JSON.parse(skill.data).value;
+
+				setTimeout(() => {
+					user.defense = user.defense - JSON.parse(skill.data).value;
+				}, JSON.parse(skill.data).duration * 1000);
+			}
 			return;
 			break;
 
 		case "DEBUFF":
+			if (JSON.parse(skill.data).debuffType == "defense") {
+				user.defense = user.defense - JSON.parse(skill.data).debuffValue;
+
+				setTimeout(() => {
+					user.defense = user.defense + JSON.parse(skill.data).debuffValue;
+				}, JSON.parse(skill.data).duration * 1000);
+			}
 			return;
 			break;
 
@@ -419,6 +417,11 @@ function checkTheMobsSkillTypeBbeforeApplyingItToThePlayer(user, skill, addresse
 			break;
 
 		case "SHIELD":
+			user.shield = "{porcent: 25,duration: 10}";
+
+			setTimeout(() => {
+				user.shield = "";
+			}, JSON.parse(user.shield).duration * 1000);
 			return;
 			break;
 
