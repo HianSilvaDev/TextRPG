@@ -154,6 +154,7 @@ model Save {
   playerId    Int
   playerCords String
   currentXp   Int    @default(0)
+  necessaryXP Int    @default(100)
   player      Player @relation(fields: [playerId], references: [userId])
 
   @@id([playerId])
@@ -178,12 +179,3 @@ model RegionItens {
   @@id([region_name, itemId])
   @@map("regionItens")
 }
-
-// model Events {
-//   name String @id
-//   type String
-//   desc String
-// }
-
-// model Choices {
-// }

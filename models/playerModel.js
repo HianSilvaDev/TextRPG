@@ -31,9 +31,23 @@ async function getbyId(id) {
             skill: true,
           },
         },
+        Save: true,
       },
     });
     return formatPlayerToFront(player);
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+async function updateSave(save) {
+  try {
+    await prisma.save.update({
+      where: {
+        playerId: save.playerId,
+      },
+      data: save,
+    });
   } catch (err) {
     console.log(err);
   }
@@ -256,4 +270,5 @@ module.exports = {
   update,
   skillsActions,
   itensActions,
+  updateSave,
 };
