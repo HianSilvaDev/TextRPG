@@ -283,6 +283,8 @@ function skillToUse(skillId, e) {
 
 	const skillData = JSON.parse(skill.data).damage;
 
+	checkSkillTypeAndAplly("player", skill);
+
 	damage = calculateDamage(dataPlayer, JSON.parse(skill.data), opponentData);
 	damage ? updateBattleLog(dataPlayer, opponentData, `Você causou ${damage} de dano`) : "";
 
@@ -328,10 +330,9 @@ function mobAtack(mob) {
 
 		if (skillsThatAreNotOnCooldown.length > 0) {
 			const skill = randomize(skillsThatAreNotOnCooldown);
-			const skillEffect = JSON.parse(skill.effect);
 
+			checkSkillTypeAndAplly("opponent", skill);
 			damage = calculateDamage(mob, JSON.parse(skill.data), dataPlayer);
-
 			damage ? updateBattleLog(dataPlayer, opponentData, `Você sofreu ${damage} de dano`) : "";
 
 			// applyEffect(skillEffect);
@@ -383,12 +384,23 @@ function calculateDamage(user, skillData, addressee) {
 	return totalDamage;
 }
 
-function checkSkillType(user, skill, addressee) {
-	switch (skill.type) {
-		case "ATAQUE_FISICO" || "MAGIC_ATACK":
-			return;
-			break;
+/**
+ *
+ * @param {String} user
+ * @param {Object} skill
+ * @param {String} addressee
+ * @returns
+ */
+function checkSkillTypeAndAplly(user, skill, addressee = "") {
+	if (user == "player") {
+		user = dataPlayer;
+		addressee = opponentData;
+	} else {
+		user = opponentData;
+		addressee = dataPlayer;
+	}
 
+	switch (skill.type) {
 		case "BUFF":
 			if (JSON.parse(skill.data).buffTarget == "defense") {
 				user.defense = user.defense + JSON.parse(skill.data).value;
@@ -397,32 +409,28 @@ function checkSkillType(user, skill, addressee) {
 					user.defense = user.defense - JSON.parse(skill.data).value;
 				}, JSON.parse(skill.data).duration * 1000);
 			}
-			return;
 			break;
 
 		case "DEBUFF":
 			if (JSON.parse(skill.data).debuffType == "defense") {
-				user.defense = user.defense - JSON.parse(skill.data).debuffValue;
+				addressee.defense = addressee.defense - JSON.parse(skill.data).debuffValue;
 
 				setTimeout(() => {
-					user.defense = user.defense + JSON.parse(skill.data).debuffValue;
+					addressee.defense = addressee.defense + JSON.parse(skill.data).debuffValue;
 				}, JSON.parse(skill.data).duration * 1000);
 			}
-			return;
 			break;
 
 		case "ESCAPE":
 			printNarration(`${user} conseguiu fugir!`);
-			return;
 			break;
 
 		case "SHIELD":
 			user.shield = "{porcent: 25,duration: 10}";
 
 			setTimeout(() => {
-				user.shield = "";
+				delete user.shield;
 			}, JSON.parse(user.shield).duration * 1000);
-			return;
 			break;
 
 		default:
@@ -522,9 +530,9 @@ function getDataRegion(region) {
 
 			insertCardContent(`
         <div class="cardText">
-          <span class = "title">${data.name}</span>
+          <span class = "title">${data.name ?? "Região Bloqueada"}</span>
           <p class="description">
-            ${data.desc}
+            ${data.desc ?? "Essa região ainda não está disponivel para esploração"}
           </p>
         </div>
         `);
@@ -657,33 +665,6 @@ function createMenu(menuContent) {
 	`;
 }
 
-function createAndInsertElement(
-	element,
-	className,
-	idName = "",
-	elementText = "",
-	insert,
-	position
-) {
-	const newElement = document.createElement(element);
-
-	if (className !== "") {
-		newElement.classList.add(className);
-	}
-
-	if (idName !== "") {
-		newElement.setAttribute("id", idName);
-	}
-
-	if (elementText !== "") {
-		newElement.textContent = elementText;
-	}
-
-	insert.insertAdjacentElement(position, newElement);
-
-	return newElement;
-}
-
 function contentMenu(insert, insertIn) {
 	insert.forEach((item) => {
 		const listItem = createAndInsertElement("li", "menuListItem", "", "", insertIn, "beforeend");
@@ -731,6 +712,10 @@ function updateBattleLog(player, enemie, message) {
 		</div>
 		`);
 }
+
+const data = "dataPlayer";
+
+console.log(data.name);
 
 /**
  * Caso o ataque tenha algum efeito aplicavel, chamar a função de aplicação de efeito
