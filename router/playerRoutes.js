@@ -6,6 +6,6 @@ const { get, save } = require("../controllers/playerController");
 // Obter um jogador
 router.get("/", get);
 // Salvar o jogador e os dados de game
-router.get("/save", save);
+// router.get("/save", save);
 
 module.exports = router;

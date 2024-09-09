@@ -281,12 +281,14 @@ function skillToUse(skillId, e) {
 		return;
 	}
 
-	const skillData = JSON.parse(skill.data).damage;
-
-	checkSkillTypeAndAplly("player", skill);
+	// skill.effect ? checkSkillTypeAndAplly("player", skill) : null;
 
 	damage = calculateDamage(dataPlayer, JSON.parse(skill.data), opponentData);
-	damage ? updateBattleLog(dataPlayer, opponentData, `Você causou ${damage} de dano`) : "";
+
+	if (JSON.parse(skill.effect)) {
+		const effect = JSON.parse(skill.effect);
+		console.log(effect);
+	}
 
 	skill.isCooldown = true;
 
@@ -303,6 +305,9 @@ function skillToUse(skillId, e) {
 	}
 
 	opponentData.hp -= damage;
+	if (damage >= 0) {
+		updateBattleLog(dataPlayer, opponentData, `Você causou ${damage} de dano`);
+	}
 }
 
 /**
@@ -314,7 +319,7 @@ function mobAtack(mob) {
 	const mobIntervalAtacking = setInterval(async () => {
 		if (opponentData.hp <= 0) {
 			clearInterval(mobIntervalAtacking);
-			exitArena(`Você derrotou um ${opponentData.name}`);
+			exitArena(`Você derrrotOU um ${opponentData.name}`);
 			return;
 		}
 		if (dataPlayer.hp <= 0) {
@@ -331,11 +336,8 @@ function mobAtack(mob) {
 		if (skillsThatAreNotOnCooldown.length > 0) {
 			const skill = randomize(skillsThatAreNotOnCooldown);
 
-			checkSkillTypeAndAplly("opponent", skill);
 			damage = calculateDamage(mob, JSON.parse(skill.data), dataPlayer);
-			damage ? updateBattleLog(dataPlayer, opponentData, `Você sofreu ${damage} de dano`) : "";
 
-			// applyEffect(skillEffect);
 			const index = mob.skills.findIndex((m) => m.id_skill == skill.id_skill);
 			mob.skills[index].isCooldown = true;
 			const time = mob.skills[index].cooldown * 1000;
@@ -350,9 +352,11 @@ function mobAtack(mob) {
 			console.log("Todas as habilidades estão em cooldown. Aguardando...");
 			await new Promise((resolve) => setTimeout(resolve, 1000));
 		}
-
 		dataPlayer.hp -= damage;
-	}, 1000);
+		if (damage >= 0) {
+			updateBattleLog(dataPlayer, opponentData, `Você sofreu ${damage} de dano`);
+		}
+	}, 1500);
 }
 
 /**
@@ -368,20 +372,22 @@ function calculateDamage(user, skillData, addressee) {
 	}
 
 	damage =
-		user.strength + skillData.damage >= 0 || typeof (user.strength + skillData.damage) === Number
+		user.strength + skillData.damage >= 0 && typeof (user.strength + skillData.damage) === "number"
 			? user.strength + skillData.damage
 			: 0;
-
-	damage = user.shield ? (damage * JSON.parse(user.shiel).porcent) / 100 : damage;
-
-	const totalDamage = damage - addressee.defense > 0 ? damage - addressee.defense : 0;
+	/*
+	user.shield
+		? console.log((user.shield.porcentage * damage) / 100)
+		: console.log(user, ": not shield");
+	shield = user.shield ? damage - (user.shield.porcentage * damage) / 100 : damage;
+*/
 
 	console.log(`
-    damage: ${totalDamage}
+    damage: ${damage - addressee.defense > 0 ? damage - addressee.defense : 0}
     addressee: ${addressee.name}
   `);
 
-	return totalDamage;
+	return damage - addressee.defense > 0 ? damage - addressee.defense : 0;
 }
 
 /**
@@ -426,15 +432,17 @@ function checkSkillTypeAndAplly(user, skill, addressee = "") {
 			break;
 
 		case "SHIELD":
-			user.shield = "{porcent: 25,duration: 10}";
+			user.shield = { porcentage: 25, duration: 10 };
+			s;
 
+			console.log(dataPlayer);
 			setTimeout(() => {
 				delete user.shield;
-			}, JSON.parse(user.shield).duration * 1000);
+			}, user.shield.duration * 1000);
 			break;
 
 		default:
-			console.log("Type not found!!");
+			return;
 			break;
 	}
 }
@@ -712,10 +720,6 @@ function updateBattleLog(player, enemie, message) {
 		</div>
 		`);
 }
-
-const data = "dataPlayer";
-
-console.log(data.name);
 
 /**
  * Caso o ataque tenha algum efeito aplicavel, chamar a função de aplicação de efeito
