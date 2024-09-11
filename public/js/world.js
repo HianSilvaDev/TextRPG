@@ -336,7 +336,14 @@ function mobAtack(mob) {
 		if (skillsThatAreNotOnCooldown.length > 0) {
 			const skill = randomize(skillsThatAreNotOnCooldown);
 
-			damage = calculateDamage(mob, JSON.parse(skill.data), dataPlayer);
+			if (skill.damage >= 0) {
+				damage = calculateDamage(mob, JSON.parse(skill.data), dataPlayer);
+				dataPlayer.hp -= damage;
+				updateBattleLog(dataPlayer, opponentData, `Você sofreu ${damage} de dano`);
+			}
+
+			if (skill.effect == "" || skill.effect == null) {
+			}
 
 			const index = mob.skills.findIndex((m) => m.id_skill == skill.id_skill);
 			mob.skills[index].isCooldown = true;
@@ -352,11 +359,7 @@ function mobAtack(mob) {
 			console.log("Todas as habilidades estão em cooldown. Aguardando...");
 			await new Promise((resolve) => setTimeout(resolve, 1000));
 		}
-		dataPlayer.hp -= damage;
-		if (damage >= 0) {
-			updateBattleLog(dataPlayer, opponentData, `Você sofreu ${damage} de dano`);
-		}
-	}, 1500);
+	}, 1000);
 }
 
 /**
