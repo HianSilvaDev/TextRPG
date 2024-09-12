@@ -102,17 +102,20 @@ main {
 	grid-template-columns: repeat(3, 1fr);
 }
 
-.painel .blockOpt .directions .btnDirections {
+.painel .blockOpt .directions .btnDirections,
+.painel .blockOpt .directions #openMenu {
 	background: var(--color-4);
 	/* opacity: 0.5; */
 	border: 1px solid #000000;
 }
 
-.painel .blockOpt .directions .btnDirections:hover {
+.painel .blockOpt .directions .btnDirections:hover,
+.painel .blockOpt .directions #openMenu:hover {
 	background: var(--color-2);
 }
 
-.painel .blockOpt .directions .btnDirections img {
+.painel .blockOpt .directions .btnDirections img,
+.painel .blockOpt .directions #openMenu img {
 	width: 25px;
 }
 
@@ -131,13 +134,28 @@ main {
 	align-items: center;
 	justify-content: center;
 	gap: 30px;
-	padding: 20px 35px;
+	padding: 20px;
+}
+
+.card .cardText {
+	width: 100%;
+
+	text-align: center;
+
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
 }
 
 .card .cardImg img {
 	width: 200px;
 
 	border-radius: 12px;
+}
+
+.card .cardText .title {
+	color: var(--color-2);
+	font-size: 1.2rem;
 }
 
 .card .cardText > .description {
@@ -147,7 +165,6 @@ main {
 	line-height: 190%;
 	letter-spacing: 0.08em;
 	text-transform: capitalize;
-	text-align: start;
 	color: #fff;
 }
 
@@ -200,23 +217,48 @@ main {
 	opacity: 1;
 }
 
-.painelBatle .info {
+.batleInfo .enemy,
+.batleInfo .player {
 	width: 100%;
+
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
 }
 
-.painelBatle .info .hp {
-	width: 100%;
+.enemy .title,
+.player .title {
+	font-size: 1.5rem;
+	font-family: var(--cardo);
+	text-transform: capitalize;
+	text-align: center;
 
-	background: #1b9fb4;
-	border-top: 1px solid var(--color-5);
+	color: var(--color-4);
 }
 
-.painelBatle .info .mp {
-	width: 100%;
+.hp,
+.mp {
+	font-size: 1.2rem;
+	font-family: var(--cinzel);
+	text-transform: uppercase;
+}
 
-	background: var(--color-2);
-	border-top: 1px solid var(--color-5);
-	border-bottom: 1px solid var(--color-5);
+.hp {
+	color: #1b9fb4;
+}
+
+.mp {
+	color: var(--btn-bg-2);
+}
+
+.batleLog .log {
+	font-size: 1rem;
+	font-weight: 400;
+	font-family: var(--cardo);
+	text-transform: lowercase;
+	letter-spacing: 0.1rem;
+
+	color: var(--color-4);
 }
 
 .painelBatle .options {

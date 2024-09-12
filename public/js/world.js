@@ -185,16 +185,15 @@ function actionForBtn(action) {
 			// 	setTimeout(() => {
 			// 		openArena();
 			// 	}, 1500);
-
-			// 	return;
 			// }
 			escapeAction();
 			break;
 
 		case "lutar":
+			printNarration("Entrando em combate!");
 			setTimeout(() => {
 				openArena();
-			}, 2000);
+			}, 1500);
 			break;
 
 		case "pegar":
@@ -336,13 +335,15 @@ function mobAtack(mob) {
 		if (skillsThatAreNotOnCooldown.length > 0) {
 			const skill = randomize(skillsThatAreNotOnCooldown);
 
-			if (skill.damage >= 0) {
+			if (checkObjectAttribute(JSON.parse(skill.data).damage)) {
 				damage = calculateDamage(mob, JSON.parse(skill.data), dataPlayer);
 				dataPlayer.hp -= damage;
 				updateBattleLog(dataPlayer, opponentData, `Você sofreu ${damage} de dano`);
 			}
 
-			if (skill.effect == "" || skill.effect == null) {
+			if (checkObjectAttribute(skill.effect)) {
+				console.log(skill.effect);
+				return;
 			}
 
 			const index = mob.skills.findIndex((m) => m.id_skill == skill.id_skill);
@@ -391,6 +392,13 @@ function calculateDamage(user, skillData, addressee) {
   `);
 
 	return damage - addressee.defense > 0 ? damage - addressee.defense : 0;
+}
+
+function checkObjectAttribute(param) {
+	if (!param || param == null) {
+		return false;
+	}
+	return true;
 }
 
 /**
@@ -607,8 +615,6 @@ openMenu.addEventListener("click", () => {
 	console.log("openMenu");
 	return;
 
-	card.classList.add("hiddenComponet");
-
 	const menu = createMenu(["Status", "Habilidades", "Inventário"]);
 	const menuListItem = document.querySelectorAll(".menuListItem>button") ?? "";
 	const closeMenu = document.getElementById("btnClose");
@@ -710,16 +716,17 @@ function updateBattleLog(player, enemie, message) {
 	insertCardContent(`
 		<div class="batleInfo">
 			<div class="enemy">
-				<span class="title">${enemie.name}</span>
-				<span class="hp">HP: ${enemie.hp}</span>
+				<span class="title">Name: ${enemie.name}</span>
+				<span class="hp">HP: ${enemie.hp < 0 ? 0 : enemie.hp}</span>
 			</div>
 			<div class="player">
-				<span class="title">${player.name}</span>
-				<span class="hp">HP: ${player.hp}</span>
-				<span class="mp">MP: ${player.mp}</span>
+				<span class="title">Name: ${player.name}</span>
+				<span class="hp">HP: ${player.hp < 0 ? 0 : player.hp}</span>
+				<span class="mp">MP: ${player.mp < 0 ? 0 : player.mp}</span>
 			</div>
-
-			<p class = "info">${message}</p>
+		</div>
+		<div class="batleLog">
+			<p class = "log">${message}</p>
 		</div>
 		`);
 }
