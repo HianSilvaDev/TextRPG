@@ -127,20 +127,20 @@ function checkTypeOfNarrationToBePrinted(data) {
 	let spawn;
 	const d40 = Math.floor(Math.random() * 40);
 
-	messages = data.EventPhrase.filter((events) => events.eventType === "no_item_found");
+	messages = data.EventPhrase.filter((events) => events.eventType === "no_item_found") ?? "";
 
 	if (d40 <= 10) {
 		spawn = raffleMobOurItens(data.enemies);
 		opponentData = spawn;
 		createTheSpawnCard(spawn, ["lutar", "fugir"]);
-		messages = data.EventPhrase.filter((events) => events.eventType === "encounter_enemy");
+		messages = data.EventPhrase.filter((events) => events.eventType === "encounter_enemy") ?? "";
 	}
 
 	if (d40 > 10 && d40 <= 20) {
 		spawn = raffleMobOurItens(data.findableItems);
 		createTheSpawnCard(spawn, ["pegar", "ignorar"]);
 		itemData = spawn;
-		messages = data.EventPhrase.filter((events) => events.eventType === "find_item");
+		messages = data.EventPhrase.filter((events) => events.eventType === "find_item") ?? "";
 	}
 
 	const message = randomize(messages).text;
@@ -180,7 +180,7 @@ function createTheSpawnCard(spawn, options) {
 function actionForBtn(action) {
 	switch (action) {
 		case "fugir":
-			// if (dataPlayer.dexterity * dataPlayer.luck < opponentData.dexterity * opponentData.luck) {
+			// if (dataPlayer.dexterity * 2 + dataPlayer.luck * 1.5 < opponentData.dexterity * 2 + opponentData.luck * 1.5) {
 			// 	printNarration("Você não conseguiu fugir!");
 			// 	setTimeout(() => {
 			// 		openArena();
@@ -244,6 +244,8 @@ function openArena() {
 		return;
 	}
 
+	sessionStorage.setItem("opponent", JSON.stringify(opponentData));
+
 	mobAtack(opponentData);
 }
 
@@ -264,9 +266,19 @@ function exitArena(message) {
 
 // pega os dados da skill que irá ser usada
 function skillToUse(skillId, e) {
-	let damage;
+	let damage = 0;
 	const index = dataPlayer.skills.findIndex((p) => p.id_skill == skillId);
 	const skill = dataPlayer.skills[index];
+
+	if (checkObjectAttribute(dataPlayer.stun)) {
+		updateBattleLog(dataPlayer, opponentData, `${dataPlayer.name} está estunado`);
+		return;
+	}
+
+	if (checkObjectAttribute(skill.isCooldown)) {
+		updateBattleLog(dataPlayer, opponentData, `${skill.name} está em tempo de recarga!`);
+		return;
+	}
 
 	if (dataPlayer.mp < skill.cost) {
 		updateBattleLog(dataPlayer, opponentData, "Você não tem mp o sufiente");
@@ -275,18 +287,16 @@ function skillToUse(skillId, e) {
 
 	e.target.style = "background: var(--btn-bg-2);";
 
-	if (skill.isCooldown) {
-		updateBattleLog(dataPlayer, opponentData, `${skill.name} está em tempo de recarga!`);
-		return;
-	}
+	dataPlayer.mp -= skill.cost;
 
-	// skill.effect ? checkSkillTypeAndAplly("player", skill) : null;
+	if (checkObjectAttribute(JSON.parse(skill.data))) {
+		if (checkObjectAttribute(JSON.parse(skill.data).damage)) {
+			damage = calculateDamage(dataPlayer, JSON.parse(skill.data), opponentData);
+			opponentData.hp -= damage;
+			updateBattleLog(dataPlayer, opponentData, `Você causou ${damage} de dano`);
+		}
 
-	damage = calculateDamage(dataPlayer, JSON.parse(skill.data), opponentData);
-
-	if (JSON.parse(skill.effect)) {
-		const effect = JSON.parse(skill.effect);
-		console.log(effect);
+		checkSkillTypeAndAplly("player", skill);
 	}
 
 	skill.isCooldown = true;
@@ -302,11 +312,6 @@ function skillToUse(skillId, e) {
 			exitArena();
 		}, 1500);
 	}
-
-	opponentData.hp -= damage;
-	if (damage >= 0) {
-		updateBattleLog(dataPlayer, opponentData, `Você causou ${damage} de dano`);
-	}
 }
 
 /**
@@ -316,6 +321,11 @@ function skillToUse(skillId, e) {
  */
 function mobAtack(mob) {
 	const mobIntervalAtacking = setInterval(async () => {
+		if (checkObjectAttribute(opponentData.escape)) {
+			clearInterval(mobIntervalAtacking);
+			return;
+		}
+
 		if (opponentData.hp <= 0) {
 			clearInterval(mobIntervalAtacking);
 			exitArena(`Você derrrotOU um ${opponentData.name}`);
@@ -328,6 +338,17 @@ function mobAtack(mob) {
 			return;
 		}
 
+		const opponent = JSON.parse(sessionStorage.getItem("opponent"));
+
+		if (opponentData.mp < opponent.mp) {
+			opponentData.mp += 1.5;
+		}
+
+		if (checkObjectAttribute(opponentData.stun)) {
+			updateBattleLog(dataPlayer, opponentData, `${mob.name} está estunado`);
+			return;
+		}
+
 		// Randomiza a habilidade que o mob irá ultilizar para atacar
 		let damage = 0;
 		const skillsThatAreNotOnCooldown = mob.skills.filter((skill) => !skill.isCooldown);
@@ -335,15 +356,20 @@ function mobAtack(mob) {
 		if (skillsThatAreNotOnCooldown.length > 0) {
 			const skill = randomize(skillsThatAreNotOnCooldown);
 
-			if (checkObjectAttribute(JSON.parse(skill.data).damage)) {
-				damage = calculateDamage(mob, JSON.parse(skill.data), dataPlayer);
-				dataPlayer.hp -= damage;
-				updateBattleLog(dataPlayer, opponentData, `Você sofreu ${damage} de dano`);
+			if (opponentData.mp < skill.cost) {
+				console.log(`O mp atual de ${mob.name} é ${mob.mp}`);
+				return;
 			}
 
-			if (checkObjectAttribute(skill.effect)) {
-				console.log(skill.effect);
-				return;
+			opponentData.mp -= skill.cost;
+
+			if (checkObjectAttribute(skill.data)) {
+				if (checkObjectAttribute(JSON.parse(skill.data).damage)) {
+					damage = calculateDamage(mob, JSON.parse(skill.data), dataPlayer);
+					dataPlayer.hp -= damage;
+					updateBattleLog(dataPlayer, opponentData, `Você sofreu ${damage} de dano`);
+				}
+				checkSkillTypeAndAplly("enemy", skill);
 			}
 
 			const index = mob.skills.findIndex((m) => m.id_skill == skill.id_skill);
@@ -371,21 +397,16 @@ function mobAtack(mob) {
  * @param {Object} addressee
  */
 function calculateDamage(user, skillData, addressee) {
-	if (!skillData.damage) {
-		return;
-	}
-
-	damage =
+	let damage =
 		user.strength + skillData.damage >= 0 && typeof (user.strength + skillData.damage) === "number"
 			? user.strength + skillData.damage
 			: 0;
-	/*
-	user.shield
-		? console.log((user.shield.porcentage * damage) / 100)
-		: console.log(user, ": not shield");
-	shield = user.shield ? damage - (user.shield.porcentage * damage) / 100 : damage;
-*/
 
+	if (checkObjectAttribute(addressee.shielding)) {
+		// console.log(user.shielding);
+
+		damage = shieldAplly(damage, addressee.shielding);
+	}
 	console.log(`
     damage: ${damage - addressee.defense > 0 ? damage - addressee.defense : 0}
     addressee: ${addressee.name}
@@ -417,45 +438,201 @@ function checkSkillTypeAndAplly(user, skill, addressee = "") {
 		addressee = dataPlayer;
 	}
 
+	console.log(skill.type);
+
+	const skillData = JSON.parse(skill.data);
+	const effectSkill = JSON.parse(skill.effect);
+
 	switch (skill.type) {
-		case "BUFF":
-			if (JSON.parse(skill.data).buffTarget == "defense") {
-				user.defense = user.defense + JSON.parse(skill.data).value;
+		case "ATAQUE_FISICO" || "MAGIC_ATACK":
+			if (!checkObjectAttribute(effectSkill)) return;
+			let effect;
+			const chance = user.dexterity * 2 + user.luck * 1.5 - skillData.accuracy * 0.5;
+
+			if (chance < addressee.dexterity * 2 + user.luck * 1.5) {
+				return;
+			}
+
+			if (effectSkill.type == "BURN") {
+				updateBattleLog(dataPlayer, opponentData, `${addressee.name} está queimando`);
+
+				effect = setInterval(() => {
+					addressee.hp -= effectSkill.damage;
+				}, 1000);
+			}
+
+			if (effectSkill.type == "bleed") {
+				updateBattleLog(dataPlayer, opponentData, `${addressee.name} está sangrando`);
+
+				effect = setInterval(() => {
+					addressee.hp -= effectSkill.damage;
+				}, 1000);
+			}
+
+			if (effectSkill.type == "STUN") {
+				updateBattleLog(dataPlayer, opponentData, `${addressee.name} está estunado`);
+
+				effect = setInterval(() => {
+					addressee.stun = true;
+				}, 1000);
+			}
+
+			if (checkObjectAttribute(effectSkill.duration)) {
+				const effectDuration = effectSkill.duration * 1000;
 
 				setTimeout(() => {
-					user.defense = user.defense - JSON.parse(skill.data).value;
-				}, JSON.parse(skill.data).duration * 1000);
+					clearInterval(effect);
+				}, effectDuration);
 			}
+			break;
+
+		case "BUFF":
+			const timeBuffing = skillData.duration * 1000;
+			if (JSON.parse(skill.data).buffTarget == "defense") {
+				user.buff = {
+					value: skillData.value,
+				};
+				user.defense = buffingTheDefense(user.defense, JSON.parse(skill.data));
+
+				reset = () => {
+					user.defense = JSON.parse(sessionStorage.getItem("player")).defense;
+				};
+			}
+			if (JSON.parse(skill.data).buffTarget == "strength") {
+				user.buff = {
+					value: skillData.value,
+				};
+				user.strenght = buffingThestrength(user.strenght, JSON.parse(skill.data));
+
+				reset = () => {
+					user.strenght = JSON.parse(sessionStorage.getItem("player")).strenght;
+				};
+			}
+
+			setTimeout(() => {
+				delete user.buff;
+				reset();
+			}, timeBuffing);
 			break;
 
 		case "DEBUFF":
-			if (JSON.parse(skill.data).debuffType == "defense") {
-				addressee.defense = addressee.defense - JSON.parse(skill.data).debuffValue;
+			const timeDebuffing = skillData.duration * 1000;
 
-				setTimeout(() => {
-					addressee.defense = addressee.defense + JSON.parse(skill.data).debuffValue;
-				}, JSON.parse(skill.data).duration * 1000);
+			if (JSON.parse(skill.data).debuffType == "defense") {
+				addressee.debuff = {
+					value: skillData.debuffValue,
+				};
+				addressee.defense = debuffingTheDefense(addressee.defense, JSON.parse(skill.data));
+
+				reset = () => {
+					addressee.defense -= addressee.defense.value;
+				};
 			}
+			if (JSON.parse(skill.data).debuffType == "strength") {
+				addressee.debuff = {
+					value: skillData.debuffValue,
+				};
+				addressee.strenght = debuffingThestrength(addressee.strenght, JSON.parse(skill.data));
+
+				reset = () => {
+					addressee.strenght -= addressee.debuff.value;
+				};
+			}
+
+			setTimeout(() => {
+				reset();
+				delete user.debuff;
+			}, timeDebuffing);
 			break;
 
 		case "ESCAPE":
-			printNarration(`${user} conseguiu fugir!`);
+			const escapeChance = user.dexterity * 2 + user.luck * 1.5 - skillData.accuracy * 0.5;
+			if (escapeChance < addressee.dexterity * 2 + addressee.luck * 1.5) {
+				updateBattleLog(dataPlayer, opponentData, `${user.name} tentou mas não conseguiu fugir`);
+				return;
+			}
+			user.escape = true;
+			exitArena(`${user.name} conseguiu fugir!`);
 			break;
 
 		case "SHIELD":
-			user.shield = { porcentage: 25, duration: 10 };
-			s;
+			const timeShielding = skillData.duration * 1000;
+			user.shielding = {
+				amount: skillData.amount,
+				type: skillData.valueType,
+			};
 
-			console.log(dataPlayer);
+			console.log(user);
+
+			if (skillData.valueType == "porcent") {
+			} else {
+				console.log("This type of value is invalid");
+			}
+
 			setTimeout(() => {
-				delete user.shield;
-			}, user.shield.duration * 1000);
+				delete user.shielding;
+			}, timeShielding);
 			break;
 
 		default:
 			return;
 			break;
 	}
+}
+
+function shieldAplly(damage, skillShield) {
+	if (skillShield.type == "percent") {
+		damage -= (skillShield.amount * damage) / 100;
+	}
+	if (skillShield.type == "quantity") {
+		damage -= skillShield.amount;
+	}
+
+	return damage;
+}
+
+function buffingTheDefense(baseDefense, skillBuff) {
+	if (skillBuff.type == "percent") {
+		baseDefense += (skillBuff.amount * baseDefense) / 100;
+	}
+	if (skillBuff.type == "quantify") {
+		baseDefense += skillBuff.amount;
+	}
+
+	return baseDefense;
+}
+
+function debuffingTheDefense(baseDefense, skillDebuff) {
+	if (skillDebuff.type == "percent") {
+		baseDefense -= (skillDebuff.amount * baseDefense) / 100;
+	}
+	if (skillDebuff.type == "quantify") {
+		baseDefense -= skillDebuff.amount;
+	}
+
+	return baseDefense;
+}
+
+function buffingThestrength(baseStrength, skillBuff) {
+	if (skillBuff.type == "percent") {
+		baseStrength += (skillBuff.amount * baseStrength) / 100;
+	}
+	if (skillBuff.type == "quantify") {
+		baseStrength += skillBuff.amount;
+	}
+
+	return baseStrength;
+}
+
+function debuffingThestrength(baseStrength, skillDebuff) {
+	if (skillDebuff.type == "percent") {
+		baseStrength -= (skillDebuff.amount * baseStrength) / 100;
+	}
+	if (skillDebuff.type == "quantify") {
+		baseStrength -= skillDebuff.amount;
+	}
+
+	return baseStrength;
 }
 
 /**
@@ -544,7 +721,7 @@ function getDataRegion(region) {
 	})
 		.then((res) => res.json())
 		.then((data) => {
-			console.log(data);
+			// console.log(data);
 			dataCurrentRegion = data;
 
 			insertCardContent(`
@@ -555,9 +732,10 @@ function getDataRegion(region) {
           </p>
         </div>
         `);
+			directionsBlock(false);
 		})
 		.catch((error) => {
-			console.log("Error: ", error);
+			// console.log(error.message);
 		});
 }
 
@@ -576,9 +754,7 @@ function getDataPlayer(id) {
 	})
 		.then((res) => res.json())
 		.then((data) => {
-			dataPlayer = JSON.parse(sessionStorage.getItem("player"))
-				? JSON.parse(sessionStorage.getItem("player"))
-				: data;
+			dataPlayer = data;
 
 			sessionStorage.getItem("player") ?? sessionStorage.setItem("player", JSON.stringify(data));
 		})
@@ -612,7 +788,22 @@ function insertCardContent(content) {
 }
 
 openMenu.addEventListener("click", () => {
-	console.log("openMenu");
+	createMenu({
+		title: "Menu",
+		content: `
+			<ul>
+				<li><button><img src="public\\assets\\img\\menuIcons\\status.png"></button></li>
+				<li><button><img src="public\\assets\\img\\menuIcons\\skills.png"></button></li>
+				<li><button><img src="public\\assets\\img\\menuIcons\\inventory.png"></button></li>
+				<li><a href="/home"><button><img src="public\\assets\\img\\menuIcons\\home.png"></button></a></li>
+				<li><a href="#"><button><img src="public\\assets\\img\\menuIcons\\logout.png"></button></a></li>
+				<li><a href="#"><button><img src="public\\assets\\img\\menuIcons\\settings.png"></button></a></li>
+			</ul>
+		`,
+		footer: `
+			<p class="title">Sombras da eternidade</p>
+		`,
+	});
 	return;
 
 	const menu = createMenu(["Status", "Habilidades", "Inventário"]);
@@ -673,11 +864,21 @@ openMenu.addEventListener("click", () => {
  * @param {Object} menuContent
  */
 function createMenu(menuContent) {
-	const menu = `
+	const menu = document.querySelector(".menu");
+	const card = document.querySelector(".card");
+
+	menu.classList.remove("hiddenComponet");
+	card.classList.add("hiddenComponet");
+
+	menu.innerHTML = `
 	</span class="title">${menuContent.title}</span>
 
 	<div class="menuContent">
 		${menuContent.content}
+	</div>
+
+	<div class="menuFooter">
+		${menuContent.footer}
 	</div>
 	`;
 }
@@ -696,19 +897,17 @@ function regenHp() {
 
 	setTimeout(() => {
 		dataPlayer.hp += 0.5;
+		// dataPlayer.hp += vitality;
 	}, 1000);
 }
 
 function regenMp() {
-	if (
-		(dataPlayer.mp == JSON.parse(sessionStorage.getItem("player")).mp && isBatle) ||
-		dataPlayer.mp == JSON.parse(sessionStorage.getItem("player")).mp
-	) {
+	if (dataPlayer.mp == JSON.parse(sessionStorage.getItem("player")).mp) {
 		return;
 	}
 
 	setTimeout(() => {
-		dataPlayer.mp += 0.5;
+		dataPlayer.mp += (dataPlayer.mp * dataPlayer.intelligence) / 100;
 	}, 1000);
 }
 
@@ -717,12 +916,12 @@ function updateBattleLog(player, enemie, message) {
 		<div class="batleInfo">
 			<div class="enemy">
 				<span class="title">Name: ${enemie.name}</span>
-				<span class="hp">HP: ${enemie.hp < 0 ? 0 : enemie.hp}</span>
+				<span class="hp">HP: ${enemie.hp < 0 ? 0 : enemie.hp.toString().slice(0, 4)}</span>
 			</div>
 			<div class="player">
 				<span class="title">Name: ${player.name}</span>
-				<span class="hp">HP: ${player.hp < 0 ? 0 : player.hp}</span>
-				<span class="mp">MP: ${player.mp < 0 ? 0 : player.mp}</span>
+				<span class="hp">HP: ${player.hp < 0 ? 0 : player.hp.toString().slice(0, 4)}</span>
+				<span class="mp">MP: ${player.mp < 0 ? 0 : player.mp.toString().slice(0, 4)}</span>
 			</div>
 		</div>
 		<div class="batleLog">
