@@ -45,7 +45,25 @@ async function getUserByEmail(emailOrName) {
   }
 }
 
+async function deleteById(userId) {
+  try {
+    await prisma.user.delete({
+      where: {
+        id: userId,
+      },
+    });
+    await prisma.user.delete({
+      where: {
+        id: userId,
+      },
+    });
+  } catch (err) {
+    throw err;
+  }
+}
+
 module.exports = {
   createUser,
   getUserByEmail,
+  deleteById,
 };

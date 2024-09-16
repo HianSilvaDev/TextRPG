@@ -1,12 +1,15 @@
-'use strict';
-const express = require('express');
+"use strict";
+const express = require("express");
 const router = express.Router();
-const {create, login } = require('../controllers/userController');
+const { create, login, deleteUser } = require("../controllers/userController");
 
 //Cadastro de novo Usuário:
-router.post("/", create)
+router.post("/", create);
 
 // Login
 router.post("/login", login);
 
-module.exports = router
+// Login
+router.delete("/delete/:id", deleteUser);
+
+module.exports = router;
