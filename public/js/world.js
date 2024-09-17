@@ -1,3 +1,5 @@
+if (!sessionStorage.getItem("data")) window.location = "/";
+
 window.onload = getDataPlayer();
 const btnDirections = document.querySelectorAll(".btnDirections");
 
@@ -110,6 +112,18 @@ function newCordinates(newx, newy) {
 
 	// Verifica se é igual a atual. Se assim for, chama a função printNarration, caso contrario busca a nova região no banco de dados
 	if (!dataCurrentRegion || region != dataCurrentRegion.name) {
+		if (!region) {
+			insertCardContent(`
+				<div class="cardText">
+				  <span class = "title">Região Bloqueada</span>
+				  <p class="description">
+					Essa região ainda não está disponivel para esploração
+				  </p>
+				</div>
+				`);
+			return;
+		}
+
 		getDataRegion(region);
 		return;
 	}
@@ -228,7 +242,7 @@ function openArena() {
 	const painelDefault = document.querySelector(".painel");
 	const btnActions = document.querySelector(".actions");
 
-	updateBattleLog(dataPlayer, opponentData, "Inicio da batalha!");
+	updateBattleLog("Inicio da batalha!");
 
 	painelBatle.classList.remove("hiddenComponet");
 	painelDefault.classList.add("hiddenComponet");
@@ -246,7 +260,10 @@ function openArena() {
 
 	sessionStorage.setItem("opponent", JSON.stringify(opponentData));
 
-	mobAtack(opponentData);
+	updateBattleStatus(dataPlayer, opponentData);
+	setTimeout(() => {
+		mobAtack(opponentData);
+	}, 1000);
 }
 
 function exitArena(message) {
@@ -271,17 +288,17 @@ function skillToUse(skillId, e) {
 	const skill = dataPlayer.skills[index];
 
 	if (checkObjectAttribute(dataPlayer.stun)) {
-		updateBattleLog(dataPlayer, opponentData, `${dataPlayer.name} está estunado`);
+		updateBattleLog(`${dataPlayer.name} está estunado`);
 		return;
 	}
 
 	if (checkObjectAttribute(skill.isCooldown)) {
-		updateBattleLog(dataPlayer, opponentData, `${skill.name} está em tempo de recarga!`);
+		updateBattleLog(`${skill.name} está em tempo de recarga!`);
 		return;
 	}
 
 	if (dataPlayer.mp < skill.cost) {
-		updateBattleLog(dataPlayer, opponentData, "Você não tem mp o sufiente");
+		updateBattleLog("Você não tem mp o sufiente");
 		return;
 	}
 
@@ -293,7 +310,7 @@ function skillToUse(skillId, e) {
 		if (checkObjectAttribute(JSON.parse(skill.data).damage)) {
 			damage = calculateDamage(dataPlayer, JSON.parse(skill.data), opponentData);
 			opponentData.hp -= damage;
-			updateBattleLog(dataPlayer, opponentData, `Você causou ${damage} de dano`);
+			updateBattleLog(`Você causou ${damage} de dano`);
 		}
 
 		checkSkillTypeAndAplly("player", skill);
@@ -345,7 +362,7 @@ function mobAtack(mob) {
 		}
 
 		if (checkObjectAttribute(opponentData.stun)) {
-			updateBattleLog(dataPlayer, opponentData, `${mob.name} está estunado`);
+			updateBattleLog(`${mob.name} está estunado`);
 			return;
 		}
 
@@ -367,7 +384,7 @@ function mobAtack(mob) {
 				if (checkObjectAttribute(JSON.parse(skill.data).damage)) {
 					damage = calculateDamage(mob, JSON.parse(skill.data), dataPlayer);
 					dataPlayer.hp -= damage;
-					updateBattleLog(dataPlayer, opponentData, `Você sofreu ${damage} de dano`);
+					updateBattleLog(`Você sofreu ${damage} de dano`);
 				}
 				checkSkillTypeAndAplly("enemy", skill);
 			}
@@ -454,7 +471,7 @@ function checkSkillTypeAndAplly(user, skill, addressee = "") {
 			}
 
 			if (effectSkill.type == "BURN") {
-				updateBattleLog(dataPlayer, opponentData, `${addressee.name} está queimando`);
+				updateBattleLog(`${addressee.name} está queimando`);
 
 				effect = setInterval(() => {
 					addressee.hp -= effectSkill.damage;
@@ -462,7 +479,7 @@ function checkSkillTypeAndAplly(user, skill, addressee = "") {
 			}
 
 			if (effectSkill.type == "bleed") {
-				updateBattleLog(dataPlayer, opponentData, `${addressee.name} está sangrando`);
+				updateBattleLog(`${addressee.name} está sangrando`);
 
 				effect = setInterval(() => {
 					addressee.hp -= effectSkill.damage;
@@ -470,7 +487,7 @@ function checkSkillTypeAndAplly(user, skill, addressee = "") {
 			}
 
 			if (effectSkill.type == "STUN") {
-				updateBattleLog(dataPlayer, opponentData, `${addressee.name} está estunado`);
+				updateBattleLog(""`${addressee.name} está estunado`);
 
 				effect = setInterval(() => {
 					addressee.stun = true;
@@ -548,7 +565,7 @@ function checkSkillTypeAndAplly(user, skill, addressee = "") {
 		case "ESCAPE":
 			const escapeChance = user.dexterity * 2 + user.luck * 1.5 - skillData.accuracy * 0.5;
 			if (escapeChance < addressee.dexterity * 2 + addressee.luck * 1.5) {
-				updateBattleLog(dataPlayer, opponentData, `${user.name} tentou mas não conseguiu fugir`);
+				updateBattleLog(`${user.name} tentou mas não conseguiu fugir`);
 				return;
 			}
 			user.escape = true;
@@ -796,65 +813,13 @@ openMenu.addEventListener("click", () => {
 				<li><button><img src="public\\assets\\img\\menuIcons\\skills.png"></button></li>
 				<li><button><img src="public\\assets\\img\\menuIcons\\inventory.png"></button></li>
 				<li><a href="/home"><button><img src="public\\assets\\img\\menuIcons\\home.png"></button></a></li>
-				<li><a href="#"><button><img src="public\\assets\\img\\menuIcons\\logout.png"></button></a></li>
+				<li onClick="logout()"><button><img src="public\\assets\\img\\menuIcons\\logout.png"></button>li>
 				<li><a href="#"><button><img src="public\\assets\\img\\menuIcons\\settings.png"></button></a></li>
 			</ul>
 		`,
 		footer: `
 			<p class="title">Sombras da eternidade</p>
 		`,
-	});
-	return;
-
-	const menu = createMenu(["Status", "Habilidades", "Inventário"]);
-	const menuListItem = document.querySelectorAll(".menuListItem>button") ?? "";
-	const closeMenu = document.getElementById("btnClose");
-
-	menuListItem[0].addEventListener("click", () => {
-		const list = menu.childNodes[1].childNodes[0];
-
-		list.innerHTML = "";
-
-		getPlayer((player) => {
-			listItem = {
-				hp: player.hp,
-				mp: player.mp,
-				strenght: player.strenght,
-				defense: player.defense,
-				dexterity: player.dexterity,
-				resistence: player.resistence,
-				intelligence: player.intelligence,
-				luck: player.luck,
-			};
-
-			Object.entries(listItem).forEach((item) => {
-				[key, value] = item;
-
-				createAndInsertElement("li", "", "", `${key}: ${value}`, list, "beforeend");
-			});
-		});
-	}) ?? "";
-
-	menuListItem[1].addEventListener("click", () => {
-		const list = menu.childNodes[1].childNodes[0];
-
-		list.innerHTML = "";
-
-		getPlayer((player) => {
-			Object.entries(player.skills).forEach((item) => {
-				[key, value] = item;
-
-				createAndInsertElement("li", "", "", value.name, list, "beforeend");
-			});
-		});
-	}) ?? "";
-
-	console.log(menuListItem[0]);
-
-	closeMenu.addEventListener("click", () => {
-		card.classList.remove("hiddenComponet");
-
-		containerContent.removeChild(menu);
 	});
 });
 
@@ -883,11 +848,70 @@ function createMenu(menuContent) {
 	`;
 }
 
-function contentMenu(insert, insertIn) {
-	insert.forEach((item) => {
-		const listItem = createAndInsertElement("li", "menuListItem", "", "", insertIn, "beforeend");
-		const listItemBtn = createAndInsertElement("button", "", "", item, listItem, "beforeend");
+function createStatusMenu(data) {
+	const menu = document.querySelector(".menu");
+
+	menu.innerHTML = `
+	</span class="title">Status</span>
+
+	<div class="menuContent">
+		<ul>
+			<li>
+				<span>${data.vitality}</span>
+				<button onclick="addStatus(${data.vitality})"><img src="#"></button>
+			</li>
+			<li>
+				<span>${data.intelligence}</span>
+				<button onclick="addStatus(${data.intelligence})"><img src="#"></button>
+			</li>
+			<li>
+				<span>${data.defense}</span>
+				<button onclick="addStatus(${data.defense})"><img src="#"></button>
+			</li>
+			<li>
+				<span>${data.strength}</span>
+				<button onclick="addStatus(${data.strength})"><img src="#"></button>
+			</li>
+			<li>
+				<span>${data.luck}</span>
+				<button onclick="addStatus(${data.luck})"><img src="#"></button>
+			</li>
+			<li>
+				<span>${data.dexterity}</span>
+				<button onclick="addStatus(${data.dexterity})"><img src="#"></button>
+			</li>
+		</ul>
+	</div>
+	
+	<div class="menuFooter">
+		<a href="#">Fechar</a>
+	</div>
+	`;
+}
+
+function createInventoryMenu(data) {
+	const menu = document.querySelector(".menu");
+
+	menu.innerHTML = `
+	</span class="title">Status</span>
+
+	<div class="menuContent">
+		<ul>`;
+
+	Object.entries(data.inventory).forEach((item) => {
+		const [key, value] = item;
+		if (key == "name") {
+			component.innerHTML += `<li>${value}</li>`;
+		}
 	});
+
+	`</ul>
+	</div>
+	
+	<div class="menuFooter">
+		<a href="#">Fechar</a>
+	</div>
+	`;
 }
 
 function regenHp() {
@@ -911,23 +935,45 @@ function regenMp() {
 	}, 1000);
 }
 
-function updateBattleLog(player, enemie, message) {
-	insertCardContent(`
-		<div class="batleInfo">
-			<div class="enemy">
-				<span class="title">Name: ${enemie.name}</span>
-				<span class="hp">HP: ${enemie.hp < 0 ? 0 : enemie.hp.toString().slice(0, 4)}</span>
+function updateBattleStatus(player, enemie) {
+	const statusBatle = setInterval(() => {
+		if (!isBatle) {
+			clearInterval(statusBatle);
+			return;
+		}
+
+		insertCardContent(`
+			<div class="batleInfo">
+				<div class="enemy">
+					<span class="title">Name: ${enemie.name}</span>
+					<span class="hp">HP: ${enemie.hp < 0 ? 0 : enemie.hp.toString().slice(0, 4)}</span>
+				</div>
+				<div class="player">
+					<span class="title">Name: ${player.name}</span>
+					<span class="hp">HP: ${player.hp < 0 ? 0 : player.hp.toString().slice(0, 4)}</span>
+					<span class="mp">MP: ${player.mp < 0 ? 0 : player.mp.toString().slice(0, 4)}</span>
+				</div>
 			</div>
-			<div class="player">
-				<span class="title">Name: ${player.name}</span>
-				<span class="hp">HP: ${player.hp < 0 ? 0 : player.hp.toString().slice(0, 4)}</span>
-				<span class="mp">MP: ${player.mp < 0 ? 0 : player.mp.toString().slice(0, 4)}</span>
-			</div>
-		</div>
-		<div class="batleLog">
-			<p class = "log">${message}</p>
-		</div>
-		`);
+			`);
+	}, 1000);
+}
+
+function updateBattleLog(message) {
+	const card = document.querySelector(".card");
+	const log = document.createElement("span");
+
+	log.className = "log";
+	log.innerText = message;
+
+	card.innerHTML += "<div class='batleLog'></div>";
+	const batleLog = document.querySelector(".batleLog");
+
+	batleLog.insertAdjacentElement("beforeend", log);
+}
+
+function logout() {
+	sessionStorage.clear();
+	window.location = "/";
 }
 
 /**

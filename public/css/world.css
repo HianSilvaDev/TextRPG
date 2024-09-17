@@ -251,7 +251,7 @@ main {
 	color: var(--btn-bg-2);
 }
 
-.batleLog .log {
+.log {
 	font-size: 1rem;
 	font-weight: 400;
 	font-family: var(--cardo);
