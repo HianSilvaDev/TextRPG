@@ -914,6 +914,35 @@ function createInventoryMenu(data) {
 	`;
 }
 
+function createSkillsMenu(data) {
+	const menu = document.querySelector(".menu");
+
+	menu.innerHTML = `
+	</span class="title">Status</span>
+
+	<div class="menuContent">
+		<ul>`;
+
+	Object.entries(data.skills).forEach((item) => {
+		const [key, value] = item;
+		if (key == "name") {
+			component.innerHTML += `
+			<li>
+				<span>${value}</span>
+				<buttton>Equipar</buttton>
+			</li>`;
+		}
+	});
+
+	`</ul>
+	</div>
+	
+	<div class="menuFooter">
+		<a href="#">Fechar</a>
+	</div>
+	`;
+}
+
 function regenHp() {
 	if (dataPlayer.hp == JSON.parse(sessionStorage.getItem("player")).hp || isBatle) {
 		return;
