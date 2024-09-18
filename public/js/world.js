@@ -809,16 +809,16 @@ openMenu.addEventListener("click", () => {
 		title: "Menu",
 		content: `
 			<ul>
-				<li><button><img src="public\\assets\\img\\menuIcons\\status.png"></button></li>
-				<li><button><img src="public\\assets\\img\\menuIcons\\skills.png"></button></li>
-				<li><button><img src="public\\assets\\img\\menuIcons\\inventory.png"></button></li>
+				<li><button onClick="createStatusMenu()"><img src="public\\assets\\img\\menuIcons\\status.png"></button></li>
+				<li><button onClick="createInventoryMenu"><img src="public\\assets\\img\\menuIcons\\skills.png"></button></li>
+				<li><button onClick="createSkillsMenu"><img src="public\\assets\\img\\menuIcons\\inventory.png"></button></li>
 				<li><a href="/home"><button><img src="public\\assets\\img\\menuIcons\\home.png"></button></a></li>
 				<li onClick="logout()"><button><img src="public\\assets\\img\\menuIcons\\logout.png"></button>li>
 				<li><a href="#"><button><img src="public\\assets\\img\\menuIcons\\settings.png"></button></a></li>
 			</ul>
 		`,
 		footer: `
-			<p class="title">Sombras da eternidade</p>
+			<p class="title" onClick="exitMenu()">Fechar</p>
 		`,
 	});
 });
@@ -858,27 +858,27 @@ function createStatusMenu(data) {
 		<ul>
 			<li>
 				<span>${data.vitality}</span>
-				<button onclick="addStatus(${data.vitality})"><img src="#"></button>
+				<button onclick="addStatus(${data.vitality})"><img src="public\\assets\\img\\menuIcons\\add.png"></button>
 			</li>
 			<li>
 				<span>${data.intelligence}</span>
-				<button onclick="addStatus(${data.intelligence})"><img src="#"></button>
+				<button onclick="addStatus(${data.intelligence})"><img src="public\\assets\\img\\menuIcons\\add.png"></button>
 			</li>
 			<li>
 				<span>${data.defense}</span>
-				<button onclick="addStatus(${data.defense})"><img src="#"></button>
+				<button onclick="addStatus(${data.defense})"><img src="public\\assets\\img\\menuIcons\\add.png"></button>
 			</li>
 			<li>
 				<span>${data.strength}</span>
-				<button onclick="addStatus(${data.strength})"><img src="#"></button>
+				<button onclick="addStatus(${data.strength})"><img src="public\\assets\\img\\menuIcons\\add.png"></button>
 			</li>
 			<li>
 				<span>${data.luck}</span>
-				<button onclick="addStatus(${data.luck})"><img src="#"></button>
+				<button onclick="addStatus(${data.luck})"><img src="public\\assets\\img\\menuIcons\\add.png"></button>
 			</li>
 			<li>
 				<span>${data.dexterity}</span>
-				<button onclick="addStatus(${data.dexterity})"><img src="#"></button>
+				<button onclick="addStatus(${data.dexterity})"><img src="public\\assets\\img\\menuIcons\\add.png"></button>
 			</li>
 		</ul>
 	</div>
@@ -901,7 +901,11 @@ function createInventoryMenu(data) {
 	Object.entries(data.inventory).forEach((item) => {
 		const [key, value] = item;
 		if (key == "name") {
-			component.innerHTML += `<li>${value}</li>`;
+			if (item.isEquiped == false) {
+				component.innerHTML += `<li><span>${value}</span><button class="notEquiped">Equipar</button></li>`;
+			} else {
+				component.innerHTML += `<li><span>${value}</span><button class="equiped">Equipado</button></li>`;
+			}
 		}
 	});
 
@@ -909,7 +913,7 @@ function createInventoryMenu(data) {
 	</div>
 	
 	<div class="menuFooter">
-		<a href="#">Fechar</a>
+		<span onClick="exitMenu()">Fechar</span>
 	</div>
 	`;
 }
@@ -928,7 +932,7 @@ function createSkillsMenu(data) {
 		if (key == "name") {
 			component.innerHTML += `
 			<li>
-				<span>${value}</span>
+				<span>${value.toString().slice(0, 20)}</span>
 				<buttton>Equipar</buttton>
 			</li>`;
 		}
@@ -938,9 +942,19 @@ function createSkillsMenu(data) {
 	</div>
 	
 	<div class="menuFooter">
-		<a href="#">Fechar</a>
+		<span onClick="exitMenu()">Fechar</span>
 	</div>
 	`;
+}
+
+function exitMenu() {
+	const menu = document.querySelector(".menu");
+	const card = document.querySelector(".card");
+
+	menu.classList.add("hiddenComponet");
+	card.classList.remove("hiddenComponet");
+
+	menu.innerHTML = "";
 }
 
 function regenHp() {
