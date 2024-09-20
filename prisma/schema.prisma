@@ -59,6 +59,7 @@ model Player {
   mp           Int
   vitality     Int?
   strength     Int
+  statuspoint  Int           @default(0)
   defense      Int
   dexterity    Int
   resistance   Int
