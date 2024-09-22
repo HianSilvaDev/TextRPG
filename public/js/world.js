@@ -1,8 +1,8 @@
 if (!sessionStorage.getItem("data")) window.location = "/";
 
 window.onload = getDataPlayer();
-const btnDirections = document.querySelectorAll(".btnDirections");
 
+const btnDirections = document.querySelectorAll(".btnDirections");
 btnDirections.forEach((btn) => {
 	btn.addEventListener("click", () => {
 		let vector2 = JSON.parse(btn.value);
@@ -10,8 +10,19 @@ btnDirections.forEach((btn) => {
 	});
 });
 
-const verifyMp = setInterval(() => regenMp(), 3000);
-const verifyHp = setInterval(() => regenHp(), 3000);
+const verifyMp = setInterval(() => {
+	Math.max(
+		0,
+		Math.min(
+			JSON.parse(sessionStorage.getItem("player")).hp,
+			(dataPlayer.mp * dataPlayer.intelligence) / 100
+		)
+	);
+}, 1500);
+
+const verifyHp = setInterval(() => {
+	Math.max(0, Math.min(JSON.parse(sessionStorage.getItem("player")).hp, 1));
+}, 1500);
 
 const openMenu = document.getElementById("openMenu");
 
@@ -24,6 +35,7 @@ let dataPlayer;
 let opponentData;
 let isBatle = false;
 let itemData;
+let exp = 0;
 
 const canvas = document.getElementById("mapCanvas");
 const ctx = canvas.getContext("2d", { willReadFrequently: true }); //retorna um objeto com metodos para desenhar no canvas
@@ -279,6 +291,7 @@ function exitArena(message) {
 
 	escapeAction();
 	isBatle = false;
+	updateLvl();
 }
 
 // pega os dados da skill que irá ser usada
@@ -323,11 +336,9 @@ function skillToUse(skillId, e) {
 		e.target.style = "background: #1d282c;";
 	}, skill.cooldown * 1000);
 
-	if (opponentData.hp <= 0) {
-		console.log("Inimigo derrotado!");
-		setTimeout(() => {
-			exitArena();
-		}, 1500);
+	if (checkObjectAttribute(dataPlayer.escape)) {
+		printNarration(`${dataPlayer.name} conseguiu fugir da batalha`);
+		delete dataPlayer.escape;
 	}
 }
 
@@ -338,22 +349,12 @@ function skillToUse(skillId, e) {
  */
 function mobAtack(mob) {
 	const mobIntervalAtacking = setInterval(async () => {
-		if (checkObjectAttribute(opponentData.escape)) {
+		if (opponentData.hp <= 0 || dataPlayer.hp <= 0 || opponentData.escape) {
 			clearInterval(mobIntervalAtacking);
 			return;
 		}
 
-		if (opponentData.hp <= 0) {
-			clearInterval(mobIntervalAtacking);
-			exitArena(`Você derrrotOU um ${opponentData.name}`);
-			return;
-		}
-		if (dataPlayer.hp <= 0) {
-			dataPlayer.hp = 0;
-			clearInterval(mobIntervalAtacking);
-			exitArena(`Você foi derrotado por um ${opponentData.name}`);
-			return;
-		}
+		balanceMobStatus();
 
 		const opponent = JSON.parse(sessionStorage.getItem("opponent"));
 
@@ -403,7 +404,26 @@ function mobAtack(mob) {
 			console.log("Todas as habilidades estão em cooldown. Aguardando...");
 			await new Promise((resolve) => setTimeout(resolve, 1000));
 		}
+		if (checkObjectAttribute(opponentData.escape)) {
+			printNarration(`${opponentData.name} conseguiu fugir da batalha`);
+			delete opponentData.escape;
+		}
 	}, 1000);
+}
+
+function balanceMobStatus() {
+	if (opponentData.level >= dataPlayer.level) return;
+
+	const levelDiference = dataPlayer.level - opponentData.level;
+	const percentHp = (opponentData.spawnrate * opponentData.hp) / 100;
+	const percentMp = (opponentData.spawnrate * opponentData.mp) / 100;
+	const percentStrength = (opponentData.spawnrate * opponentData.strength) / 100;
+	const percentDefense = (opponentData.spawnrate * opponentData.defense) / 100;
+
+	opponentData.hp = levelDiference * percentHp;
+	opponentData.mp = levelDiference * percentMp;
+	opponentData.strength = levelDiference * percentStrength;
+	opponentData.defense = levelDiference * percentDefense;
 }
 
 /**
@@ -652,6 +672,21 @@ function debuffingThestrength(baseStrength, skillDebuff) {
 	return baseStrength;
 }
 
+function updateLvl() {
+	const expBase = 120;
+	const expRequired = expBase * dataPlayer.level;
+	if (exp < expRequired) return;
+
+	exp -= expRequired;
+	dataPlayer.level += 1;
+
+	if (checkObjectAttribute(dataPlayer.statuspoint)) {
+		const data = sessionStorage.getItem("player");
+		data.statuspoint += 3;
+		dataPlayer.statuspoint += 3;
+	}
+}
+
 /**
  * Faz a troca do nome padrão para o do spawn
  *
@@ -805,13 +840,14 @@ function insertCardContent(content) {
 }
 
 openMenu.addEventListener("click", () => {
+	directionsBlock(true);
 	createMenu({
 		title: "Menu",
 		content: `
 			<ul>
 				<li><button onClick="createStatusMenu()"><img src="public\\assets\\img\\menuIcons\\status.png"></button></li>
-				<li><button onClick="createInventoryMenu"><img src="public\\assets\\img\\menuIcons\\skills.png"></button></li>
-				<li><button onClick="createSkillsMenu"><img src="public\\assets\\img\\menuIcons\\inventory.png"></button></li>
+				<li><button onClick="createSkillsMenu()"><img src="public\\assets\\img\\menuIcons\\skills.png"></button></li>
+				<li><button onClick="createInventoryMenu()"><img src="public\\assets\\img\\menuIcons\\inventory.png"></button></li>
 				<li><a href="/home"><button><img src="public\\assets\\img\\menuIcons\\home.png"></button></a></li>
 				<li onClick="logout()"><button><img src="public\\assets\\img\\menuIcons\\logout.png"></button>li>
 				<li><a href="#"><button><img src="public\\assets\\img\\menuIcons\\settings.png"></button></a></li>
@@ -848,68 +884,71 @@ function createMenu(menuContent) {
 	`;
 }
 
-function createStatusMenu(data) {
+function createStatusMenu() {
 	const menu = document.querySelector(".menu");
 
 	menu.innerHTML = `
-	</span class="title">Status</span>
+	<span class="title">Status</span>
 
 	<div class="menuContent">
 		<ul>
 			<li>
-				<span>${data.vitality}</span>
-				<button onclick="addStatus(${data.vitality})"><img src="public\\assets\\img\\menuIcons\\add.png"></button>
+				<p>Vitalidade <span class="vitality">${dataPlayer.vitality}</span></p>
+				<button onclick="updateStatus('vitality')"><img src="public\\assets\\img\\menuIcons\\add.png"></button>
 			</li>
 			<li>
-				<span>${data.intelligence}</span>
-				<button onclick="addStatus(${data.intelligence})"><img src="public\\assets\\img\\menuIcons\\add.png"></button>
+				<p>Inteligencia <span class="intelligence">${dataPlayer.intelligence}</span></p>
+				<button onclick="updateStatus('intelligence',)"><img src="public\\assets\\img\\menuIcons\\add.png"></button>
 			</li>
 			<li>
-				<span>${data.defense}</span>
-				<button onclick="addStatus(${data.defense})"><img src="public\\assets\\img\\menuIcons\\add.png"></button>
+				<p>Defesa <span class="defense">${dataPlayer.defense}</span></p>
+				<button onclick="updateStatus('defense')"><img src="public\\assets\\img\\menuIcons\\add.png"></button>
 			</li>
 			<li>
-				<span>${data.strength}</span>
-				<button onclick="addStatus(${data.strength})"><img src="public\\assets\\img\\menuIcons\\add.png"></button>
+				<p>Força <span class="strength">${dataPlayer.strength}</span></p>
+				<button onclick="updateStatus('strength')"><img src="public\\assets\\img\\menuIcons\\add.png"></button>
 			</li>
 			<li>
-				<span>${data.luck}</span>
-				<button onclick="addStatus(${data.luck})"><img src="public\\assets\\img\\menuIcons\\add.png"></button>
+				<p>Sorte <span class="luck">${dataPlayer.luck}</span></p>
+				<button onclick="updateStatus('luck')"><img src="public\\assets\\img\\menuIcons\\add.png"></button>
 			</li>
 			<li>
-				<span>${data.dexterity}</span>
-				<button onclick="addStatus(${data.dexterity})"><img src="public\\assets\\img\\menuIcons\\add.png"></button>
+				<p>Destreza <span class="dexterity">${dataPlayer.dexterity}</span></p>
+				<button onclick="updateStatus('dexterity')"><img src="public\\assets\\img\\menuIcons\\add.png"></button>
+			</li>
+			<li>
+				<span>Pontos</span>
+				<span>${dataPlayer.statuspoint}</span>
 			</li>
 		</ul>
 	</div>
 	
 	<div class="menuFooter">
-		<a href="#">Fechar</a>
+		<span onClick="exitMenu()">Fechar</span>
 	</div>
 	`;
 }
 
-function createInventoryMenu(data) {
+function createInventoryMenu() {
 	const menu = document.querySelector(".menu");
 
 	menu.innerHTML = `
-	</span class="title">Status</span>
+	<span class="title">Inventario</span>
 
 	<div class="menuContent">
 		<ul>`;
 
-	Object.entries(data.inventory).forEach((item) => {
-		const [key, value] = item;
-		if (key == "name") {
+	dataPlayer.inventory.forEach((item) => {
+		if (item.name) {
 			if (item.isEquiped == false) {
-				component.innerHTML += `<li><span>${value}</span><button class="notEquiped">Equipar</button></li>`;
+				menu.innerHTML += `<li><span>${item.name}</span><button class="notEquiped">Equipar</button></li>`;
 			} else {
-				component.innerHTML += `<li><span>${value}</span><button class="equiped">Equipado</button></li>`;
+				menu.innerHTML += `<li><span>${item.name}</span><button class="equiped">Equipado</button></li>`;
 			}
 		}
 	});
 
-	`</ul>
+	menu.innerHTML += `</ul>
 	</div>
 	
 	<div class="menuFooter">
@@ -918,33 +957,107 @@ function createInventoryMenu(data) {
 	`;
 }
 
-function createSkillsMenu(data) {
+function createSkillsMenu() {
 	const menu = document.querySelector(".menu");
 
 	menu.innerHTML = `
-	</span class="title">Status</span>
+	<span class="title">Skills</span>
 
 	<div class="menuContent">
 		<ul>`;
 
-	Object.entries(data.skills).forEach((item) => {
-		const [key, value] = item;
-		if (key == "name") {
-			component.innerHTML += `
+	dataPlayer.skills.forEach((item) => {
+		if (item.name) {
+			if (item.isEquiped) {
+				menu.innerHTML += `
+				<li>
+					<span>${item.name.toString().slice(0, 20)}</span>
+					<button onClick="equipAndUnequipSkill(${item.id_skill})">Desequipar</button>
+				</li>`;
+			}
+
+			if (!item.isEquiped) {
+				menu.innerHTML += `
 			<li>
-				<span>${value.toString().slice(0, 20)}</span>
-				<buttton>Equipar</buttton>
+				<span>${item.name.toString().slice(0, 20)}</span>
+				<button onClick="equipAndUnequipSkill(${item.id_skill})">Equipar</button>
 			</li>`;
+			}
 		}
 	});
 
-	`</ul>
+	menu.innerHTML += `</ul>
 	</div>
 	
 	<div class="menuFooter">
 		<span onClick="exitMenu()">Fechar</span>
 	</div>
 	`;
+}
+
+function updateStatus(status) {
+	if (dataPlayer.statuspoint <= 0) return;
+	const component = document.querySelector("." + status);
+	const data = JSON.parse(sessionStorage.getItem("player"));
+	let newValue = 0;
+
+	switch (status) {
+		case "vitality":
+			newValue = parseInt(component.innerText) + 1;
+			dataPlayer.vitality += 1;
+			dataPlayer.hp += 10;
+
+			data.vitality += 1;
+			data.hp += 10;
+		case "intelligence":
+			newValue = parseInt(component.innerText) + 1;
+			dataPlayer.intelligence += 1;
+			dataPlayer.mp += 10;
+
+			data.intelligence += 1;
+			data.mp += 10;
+			break;
+		case "defense":
+			newValue = parseInt(component.innerText) + 1;
+			dataPlayer.defense += 1;
+			data.defense += 1;
+			break;
+		case "strength":
+			newValue = parseInt(component.innerText) + 1;
+			dataPlayer.strength += 1;
+			data.strength += 1;
+			break;
+		case "luck":
+			newValue = parseInt(component.innerText) + 1;
+			dataPlayer.luck += 1;
+			data.luck += 1;
+			break;
+		case "dexterity":
+			newValue = parseInt(component.innerText) + 1;
+			dataPlayer.dexterity += 1;
+			data.dexterity += 1;
+			break;
+
+		default:
+			return;
+			break;
+	}
+
+	sessionStorage.setItem("player", JSON.stringify(data));
+	component.innerHTML = newValue;
+}
+
+function equipAndUnequipSkill(id) {
+	const data = JSON.parse(sessionStorage.getItem("player"));
+	dataPlayer.skills.forEach((skill) => {
+		if (skill.id_skill == id) skill.isEquiped = !skill.isEquiped;
+	});
+	data.skills.forEach((skill) => {
+		if (skill.id_skill == id) skill.isEquiped = !skill.isEquiped;
+	});
+
+	createSkillsMenu();
+	sessionStorage.setItem("player", JSON.stringify(data));
 }
 
 function exitMenu() {
@@ -955,27 +1068,7 @@ function exitMenu() {
 	card.classList.remove("hiddenComponet");
 
 	menu.innerHTML = "";
-}
-
-function regenHp() {
-	if (dataPlayer.hp == JSON.parse(sessionStorage.getItem("player")).hp || isBatle) {
-		return;
-	}
-
-	setTimeout(() => {
-		dataPlayer.hp += 0.5;
-		// dataPlayer.hp += vitality;
-	}, 1000);
-}
-
-function regenMp() {
-	if (dataPlayer.mp == JSON.parse(sessionStorage.getItem("player")).mp) {
-		return;
-	}
-
-	setTimeout(() => {
-		dataPlayer.mp += (dataPlayer.mp * dataPlayer.intelligence) / 100;
-	}, 1000);
+	directionsBlock(false);
 }
 
 function updateBattleStatus(player, enemie) {
@@ -1019,9 +1112,21 @@ function logout() {
 	window.location = "/";
 }
 
-/**
- * Caso o ataque tenha algum efeito aplicavel, chamar a função de aplicação de efeito
- */
+const batleStatus = setInterval(() => {
+	if (!isBatle) {
+		return;
+	}
+	if (opponentData.hp <= 0) {
+		exitArena(`${dataPlayer.name} derrotou ${opponentData.name}`);
+		exp += 20;
+		clearInterval(batleStatus);
+	}
+	if (dataPlayer.hp <= 0) {
+		exitArena(`${opponentData.name} derrotou ${dataPlayer.name}`);
+		dataPlayer.hp = 0;
+		clearInterval(batleStatus);
+	}
+}, 500);
 
 /*
   <div class="menu">
