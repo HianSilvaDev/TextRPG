@@ -938,9 +938,9 @@ function createInventoryMenu() {
 	dataPlayer.inventory.forEach((item) => {
 		if (item.name) {
 			if (item.isEquiped == false) {
-				menu.innerHTML += `<li><span>${item.name}</span><button class="notEquiped">Equipar</button></li>`;
+				menu.innerHTML += `<li><span>${item.name}</span><button class="notEquiped" onClick="equipOrUnequipItem(${item.item_id})">Equipar</button></li>`;
 			} else {
-				menu.innerHTML += `<li><span>${item.name}</span><button class="equiped">Equipado</button></li>`;
+				menu.innerHTML += `<li><span>${item.name}</span><button class="equiped" onClick="equipOrUnequipItem(${item.item_id})">Equipado</button></li>`;
 			}
 		}
 	});
@@ -1062,6 +1062,19 @@ function equipAndUnequipSkill(id) {
 	});
 
 	createSkillsMenu();
+	sessionStorage.setItem("player", JSON.stringify(data));
+}
+
+function equipOrUnequipItem(id) {
+	const data = JSON.parse(sessionStorage.getItem("player"));
+	dataPlayer.inventory.forEach((item) => {
+		if (item.item_id == id) item.equiped = !item.equiped;
+	});
+	data.skills.forEach((skill) => {
+		if (item.item_id == id) item.equiped = !item.equiped;
+	});
+
+	createInventoryMenu();
 	sessionStorage.setItem("player", JSON.stringify(data));
 }
 
