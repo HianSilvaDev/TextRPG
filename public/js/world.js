@@ -11,13 +11,13 @@ btnDirections.forEach((btn) => {
 });
 
 setInterval(() => {
-	if (dataPlayer.mp == JSON.parse(sessionStorage.getItem("player")).mp) return;
+	if (dataPlayer.mp >= JSON.parse(sessionStorage.getItem("player")).mp) return;
 	dataPlayer.mp +=
 		(JSON.parse(sessionStorage.getItem("player")).mp * dataPlayer.intelligence) / 100;
 }, 1000);
 
 setInterval(() => {
-	if (dataPlayer.hp == JSON.parse(sessionStorage.getItem("player")).hp || isBatle) return;
+	if (dataPlayer.hp >= JSON.parse(sessionStorage.getItem("player")).hp || isBatle) return;
 	dataPlayer.hp += (JSON.parse(sessionStorage.getItem("player")).hp * dataPlayer.vitality) / 100;
 }, 1000);
 
@@ -360,7 +360,7 @@ function mobAtack(mob) {
 		const opponent = JSON.parse(sessionStorage.getItem("opponent"));
 
 		if (opponentData.mp < opponent.mp) {
-			opponentData.mp += 1.5;
+			opponentData.mp += (opponent.mp * opponent.intelligence) / 100;
 		}
 
 		if (checkObjectAttribute(opponentData.stun)) {
