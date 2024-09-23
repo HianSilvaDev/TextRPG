@@ -10,19 +10,16 @@ btnDirections.forEach((btn) => {
 	});
 });
 
-const verifyMp = setInterval(() => {
-	Math.max(
-		0,
-		Math.min(
-			JSON.parse(sessionStorage.getItem("player")).hp,
-			(dataPlayer.mp * dataPlayer.intelligence) / 100
-		)
-	);
-}, 1500);
+setInterval(() => {
+	if (dataPlayer.mp == JSON.parse(sessionStorage.getItem("player")).mp) return;
+	dataPlayer.mp +=
+		(JSON.parse(sessionStorage.getItem("player")).mp * dataPlayer.intelligence) / 100;
+}, 1000);
 
-const verifyHp = setInterval(() => {
-	Math.max(0, Math.min(JSON.parse(sessionStorage.getItem("player")).hp, 1));
-}, 1500);
+setInterval(() => {
+	if (dataPlayer.hp == JSON.parse(sessionStorage.getItem("player")).hp || isBatle) return;
+	dataPlayer.hp += (JSON.parse(sessionStorage.getItem("player")).hp * dataPlayer.vitality) / 100;
+}, 1000);
 
 const openMenu = document.getElementById("openMenu");
 
@@ -349,6 +346,10 @@ function skillToUse(skillId, e) {
  */
 function mobAtack(mob) {
 	const mobIntervalAtacking = setInterval(async () => {
+		if (!isBatle) {
+			clearInterval(mobIntervalAtacking);
+			return;
+		}
 		if (opponentData.hp <= 0 || dataPlayer.hp <= 0 || opponentData.escape) {
 			clearInterval(mobIntervalAtacking);
 			return;
@@ -499,6 +500,7 @@ function checkSkillTypeAndAplly(user, skill, addressee = "") {
 			}
 
 			if (effectSkill.type == "bleed") {
+				console.log("bleed");
 				updateBattleLog(`${addressee.name} está sangrando`);
 
 				effect = setInterval(() => {
@@ -556,29 +558,22 @@ function checkSkillTypeAndAplly(user, skill, addressee = "") {
 			const timeDebuffing = skillData.duration * 1000;
 
 			if (JSON.parse(skill.data).debuffType == "defense") {
-				addressee.debuff = {
-					value: skillData.debuffValue,
-				};
 				addressee.defense = debuffingTheDefense(addressee.defense, JSON.parse(skill.data));
 
 				reset = () => {
-					addressee.defense -= addressee.defense.value;
+					addressee.defense = JSON.parse(sessionStorage.getItem("player")).defense;
 				};
 			}
 			if (JSON.parse(skill.data).debuffType == "strength") {
-				addressee.debuff = {
-					value: skillData.debuffValue,
-				};
 				addressee.strenght = debuffingThestrength(addressee.strenght, JSON.parse(skill.data));
 
 				reset = () => {
-					addressee.strenght -= addressee.debuff.value;
+					addressee.strength = JSON.parse(sessionStorage.getItem("player")).strength;
 				};
 			}
 
 			setTimeout(() => {
 				reset();
-				delete user.debuff;
 			}, timeDebuffing);
 			break;
 
@@ -639,15 +634,17 @@ function buffingTheDefense(baseDefense, skillBuff) {
 	return baseDefense;
 }
 
-function debuffingTheDefense(baseDefense, skillDebuff) {
+function debuffingTheDefense(defense, skillDebuff) {
+	let newDefense = defense;
+
 	if (skillDebuff.type == "percent") {
-		baseDefense -= (skillDebuff.amount * baseDefense) / 100;
+		newDefense = defense - (skillDebuff.debuffValue * defense) / 100;
 	}
 	if (skillDebuff.type == "quantify") {
-		baseDefense -= skillDebuff.amount;
+		newDefense = defense - skillDebuff.amount;
 	}
 
-	return baseDefense;
+	return newDefense;
 }
 
 function buffingThestrength(baseStrength, skillBuff) {
@@ -1050,9 +1047,17 @@ function updateStatus(status) {
 function equipAndUnequipSkill(id) {
 	const data = JSON.parse(sessionStorage.getItem("player"));
 	dataPlayer.skills.forEach((skill) => {
+		if (skill.id_skill == id)
+			if (!skill.isEquiped)
+				if (dataPlayer.skills.filter((item) => item.isEquiped == "true").length >= 5) return;
+
 		if (skill.id_skill == id) skill.isEquiped = !skill.isEquiped;
 	});
 	data.skills.forEach((skill) => {
+		if (skill.id_skill == id)
+			if (!skill.isEquiped)
+				if (data.skills.filter((item) => item.isEquiped == "true").length >= 5) return;
+
 		if (skill.id_skill == id) skill.isEquiped = !skill.isEquiped;
 	});
 
