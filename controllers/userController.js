@@ -8,7 +8,9 @@ const create = async (req, res) => {
     await userModel.createUser(name, email, hashedPassword, classe);
     return res.status(201).json({ message: "Usuario criado com sucesso!" });
   } catch (err) {
-    return res.status(500).json({ error: err.message });
+    if (err.code === "P2002") {
+      res.status(400).json({ error: "Este email já está cadastrado." });
+    }
   }
 };
 
