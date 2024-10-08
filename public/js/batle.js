@@ -3,7 +3,13 @@ if (!sessionStorage.getItem("data")) window.location = "/";
 import { Player } from "./objects/player";
 import { Enemy } from "./objects/enemy";
 
-let dataPlayer = new Player(JSON.parse(sessionStorage.getItem("data")));
+let dataPlayer;
+
+if (!sessionStorage.getItem("player")) {
+	dataPlayer = new Player(parent(JSON.parse(sessionStorage.getItem("data"))));
+} else {
+	dataPlayer = JSON.parse(sessionStorage.getItem("player"));
+}
 
 const btnDirections = document.querySelectorAll(".btnDirections");
 btnDirections.forEach((btn) => {
@@ -12,6 +18,21 @@ btnDirections.forEach((btn) => {
 		newCordinates(vector2.x, vector2.y);
 	});
 });
+
+setInterval(() => {
+	if (dataPlayer.mp >= JSON.parse(sessionStorage.getItem("player")).mp) return;
+	dataPlayer.mp +=
+		(JSON.parse(sessionStorage.getItem("player")).mp * dataPlayer.intelligence) / 100;
+}, 1000);
+
+setInterval(() => {
+	if (dataPlayer.hp >= JSON.parse(sessionStorage.getItem("player")).hp || isBatle) return;
+	dataPlayer.hp += (JSON.parse(sessionStorage.getItem("player")).hp * dataPlayer.vitality) / 100;
+}, 1000);
+
+const openMenu = document.getElementById("openMenu");
+
+const containerContent = document.querySelector(".content");
 
 let cordinatesX = 1;
 let cordinatesY = 1;
@@ -36,9 +57,20 @@ img.onload = function () {
 // Lembrar de modificar os valores subsequente a clareira mais tarde
 const colorToLocality = {
 	"rgb(0, 100, 0)": "Floresta do Esquecimento",
+	"rgb(85, 153, 68)": "Clareira",
+	"rgb(182, 45, 45)": "Cidade",
+	"rgb(204, 255, 51)": "Vilarejo",
+	"rgb(255, 255, 255)": "Topo da Montanha",
+	"rgb(153, 170, 119)": "Pé da Montanha",
+	"rgb(51, 102, 153)": "Lago ou rio",
 };
 
-// Busca o nome da região de acordo com a cor da cordenada
+/**
+ *
+ * @param {Number} x
+ * @param {Number} y
+ * @returns Number|String
+ */
 function getLocalityNameByColor(x, y) {
 	//Recebe a posição x e y do pixel e atribui a variavel color a cor do mesmo em formato rgb
 	const imageData = ctx.getImageData(x, y, 1, 1).data;
@@ -49,19 +81,32 @@ function getLocalityNameByColor(x, y) {
 
 /**
  * atribui um valor minimo e maximo, e se o valor infringir-los retorna o valor corrigido ao valor mais proximo dentro do intervalo definido.
+ *
+ * @param {Number} value
+ * @param {Number} min
+ * @param {Number} max
+ * @returns Number
  */
 function limitValue(value, min, max) {
 	return Math.min(Math.max(value, min), max);
 }
 
-// verificar depois a definição dessa função
+/**
+ *
+ * @param {Number} x
+ * @param {Number} y
+ * @returns
+ */
 function getPixelColor(x, y) {
 	const imageData = ctx.getImageData(x, y, 1, 1).data;
 	return `rgb(${imageData[0]}, ${imageData[1]}, ${imageData[2]})`;
 }
 
 /**
- * Define as cordenadas do players
+ * Define as cordenadas do player
+ *
+ * @param {Number} newx
+ * @param {Number} newy
  */
 function newCordinates(newx, newy) {
 	// Soma as cordenadas atuais do player com a adição do movimento
@@ -105,11 +150,31 @@ function newCordinates(newx, newy) {
 
 /**
  * Verificar se o player irá se encontrar com algo ou não e determinar qual narração irá aparecer
+ *
+ * @param {Object} data
  */
 function checkTypeOfNarrationToBePrinted(data) {
 	let messages = "";
 	let spawn;
+	const d40 = Math.floor(Math.random() * 40);
 
+	messages = data.EventPhrase.filter((events) => events.eventType === "no_item_found") ?? "";
+
+	if (d40 <= 10) {
+		spawn = raffleMobOurItens(data.enemies);
+		opponentData = spawn;
+		createTheSpawnCard(spawn, ["lutar", "fugir"]);
+		messages = data.EventPhrase.filter((events) => events.eventType === "encounter_enemy") ?? "";
+	}
+
+	if (d40 > 10 && d40 <= 20) {
+		spawn = raffleMobOurItens(data.findableItems);
+		createTheSpawnCard(spawn, ["pegar", "ignorar"]);
+		itemData = spawn;
+		messages = data.EventPhrase.filter((events) => events.eventType === "find_item") ?? "";
+	}
+
+	const message = randomize(messages).text;
 	printNarration(message, spawn);
 }
 
@@ -745,7 +810,6 @@ function insertCardContent(content) {
 	card.innerHTML += content;
 }
 
-const openMenu = document.getElementById("openMenu");
 openMenu.addEventListener("click", () => {
 	directionsBlock(true);
 	createMenu({
@@ -1063,3 +1127,37 @@ const batleStatus = setInterval(() => {
 		clearInterval(batleStatus);
 	}
 }, 500);
+
+/*
+  <div class="menu">
+    <div class="menuHeader">
+      <button id="btnClose">X</button>
+      <span class="title">Menu</span>
+    </div>
+    <div class="menuContent">
+      <ul class="menuList">
+        <li class="menuListItem"><button>Status</button></li>
+        <li class="menuListItem"><button>Habilidades</button></li>
+        <li class="menuListItem"><button>Inventário</button></li>
+
+        <li class="menuListItem">
+          
+          <div class="status">
+            <span>hp</span>
+            <input type="number" value="10">
+          </div>
+          
+
+          <div class="skills">
+            <img src="public/assets/img/mage_icon.png" alt="icone da skills">
+            <span>Fireball</span>
+          </div>
+          <button id="addStatus">+</button>
+        </li>
+      </ul>
+    </div>
+    <div class="menuFooter">
+      <span>Sombras da Eternidade</span>
+    </div>
+  </div>
+*/

@@ -1,4 +1,4 @@
-if (!sessionStorage.getItem("data")) window.location = "/";
+// if (!sessionStorage.getItem("data")) window.location = "/";
 
 let player;
 window.onload = getPlayer;
@@ -26,7 +26,7 @@ function listing(component, data, isListingSkills) {
 
 function getPlayer() {
 	try {
-		fetch(`/player?id=${parseInt(sessionStorage.getItem("data"))}`, {
+		fetch(`/player?id=${parseInt(JSON.parse(sessionStorage.getItem("data")))}`, {
 			method: "GET",
 			headers: {
 				"Content-Type": "application/json",
