@@ -1,5 +1,4 @@
 import { swordsman, archer, mage, barbarian } from "./objects/classes.js";
-
 window.dropForm = dropForm;
 
 // Controle dos Formulários
@@ -77,6 +76,12 @@ function highlightCard(selectedCard) {
 	cards.forEach((card) => card.classList.remove("chosen"));
 	selectedCard.classList.add("chosen");
 }
+
+// const login = document.getElementById("formLogin");
+
+// login.onsubmit = function (e) {
+// 	e.preventDefault();
+// };
 
 // validando formularios
 const btnLogin = document.getElementById("loginSubmit");

@@ -5,7 +5,7 @@ export class Enemy {
 		balanceMobStatus(playerLvl);
 	}
 
-	#getSkill() {
+	getSkill() {
 		const skillsThatAreNotOnCooldown = this.enemy.filter((skill) => !skill.isCooldown);
 
 		if (!checkObjectAttribute(skillsThatAreNotOnCooldown)) return;
@@ -15,23 +15,20 @@ export class Enemy {
 		return skill;
 	}
 
-	setSkillDamage() {
-		const skill = this.#getSkill();
+	skillDamageExist(skill) {
+		let exist = true;
+		if (!this.#checkObjectAttribute(JSON.parse(skill.data).damage)) exist = false;
 
-		if (
-			!this.#checkObjectAttribute(skill) ||
-			!this.#checkObjectAttribute(JSON.parse(skill.data).damage)
-		)
-			return;
+		return exist;
+	}
 
+	setSkillDamage(skillDamage) {
 		const damage = JSON.parse(skill.data).damage + this.enemy.strength;
-
+		if (damage < 0) return 0;
 		return parseInt(damage);
 	}
 
 	setEffect() {
-		const skill = this.#getSkill();
-
 		if (
 			!this.#checkObjectAttribute(skill) ||
 			!this.#checkObjectAttribute(JSON.parse(skill.data)) ||
@@ -53,6 +50,10 @@ export class Enemy {
 		this.enemy.mp = levelDiference * percentMp;
 		this.enemy.strength = levelDiference * percentStrength;
 		this.enemy.defense = levelDiference * percentDefense;
+	}
+
+	updateStatus() {
+		return this.enemy;
 	}
 
 	#checkObjectAttribute(param) {

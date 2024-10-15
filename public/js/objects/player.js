@@ -2,28 +2,48 @@ export class Player {
 	constructor(id) {
 		this.dataPlayer;
 
-		this.#thereIsPlayerData();
-
-		return this.dataPlayer;
+		this.#getDataPlayer(id);
 	}
 
-	#getDataPlayer(id) {
-		fetch(`/player?id=${parseInt(id)}`, {
+	async #getDataPlayer(id) {
+		if (sessionStorage.getItem("player") && !this.#checkObjectAttribute(this.dataPlayer)) {
+			this.dataPlayer = JSON.parse(sessionStorage.getItem("player"));
+			return;
+		}
+		await fetch(`/player?id=${id}`, {
 			method: "GET",
 			headers: {
 				"Content-Type": "application/json",
 			},
 		})
-			.then((res) => res.json())
+			.then((res) => {
+				if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
+				return res.json();
+			})
 			.then((data) => {
 				this.dataPlayer = data;
-
 				sessionStorage.setItem("player", JSON.stringify(data));
 			})
-
 			.catch((err) => {
-				throw new Error(err.message);
+				throw new Error(err);
 			});
+	}
+
+	getData() {
+		return this.dataPlayer;
+	}
+
+	getStatus() {
+		return {
+			hp: this.dataPlayer.hp,
+			mp: this.dataPlayer.mp,
+			força: this.dataPlayer.strength,
+			defesa: this.dataPlayer.defense,
+			destreza: this.dataPlayer.dexterity,
+			resistencia: this.dataPlayer.resistance,
+			inteligencia: this.dataPlayer.intelligence,
+			sorte: this.dataPlayer.luck,
+		};
 	}
 
 	getAllSkills() {
@@ -38,20 +58,22 @@ export class Player {
 		return this.dataPlayer.skills.filter((skill) => skill.equiped);
 	}
 
-	skillDamageExist(skill) {
-		let exist = true;
-		if (!this.#checkObjectAttribute(JSON.parse(skill.data).damage)) {
-			exist = false;
-		}
-
-		return exist;
+	setSkillToUse(id) {
+		const skillsEquiped = this.getSkillEquiped();
+		const skill = skillsEquiped.find((skill) => skill.id == id);
+		return skill;
 	}
 
-	setSkillDamage(skillDamage) {
+	skillDamageExist(skill) {
+		if (!this.#checkObjectAttribute(JSON.parse(skill.data).damage)) return;
+
+		const damage = this.#setSkillDamage(JSON.parse(skill.data).damage);
+		return damage;
+	}
+
+	#setSkillDamage(skillDamage) {
 		const damage = this.dataPlayer.strength + skillDamage;
-
 		if (damage < 0) return 0;
-
 		return damage;
 	}
 
@@ -168,13 +190,6 @@ export class Player {
 			return false;
 		}
 		return true;
-	}
-
-	#thereIsPlayerData() {
-		if (sessionStorage.getItem("player") && !this.#checkObjectAttribute(this.dataPlayer))
-			this.dataPlayer = JSON.parse(sessionStorage.getItem("player"));
-
-		if (!sessionStorage.getItem("player")) this.dataPlayer = this.#getDataPlayer(id);
 	}
 
 	regenHP() {}

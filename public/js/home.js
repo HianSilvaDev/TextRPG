@@ -1,13 +1,10 @@
-// if (!sessionStorage.getItem("data")) window.location = "/";
+if (!sessionStorage.getItem("data")) window.location = "/";
 
-let player;
-window.onload = getPlayer;
+import { Player } from "./objects/player.js";
+window.onload = function () {
+	info();
+};
 
-const username = document.getElementById("username");
-const className = document.getElementById("class");
-const level = document.getElementById("lvl");
-const gold = document.getElementById("gold");
-const list = document.querySelectorAll(".listing");
 const btnInventory = document.getElementById("btnInventory");
 
 function listing(component, data, isListingSkills) {
@@ -24,46 +21,6 @@ function listing(component, data, isListingSkills) {
 	});
 }
 
-function getPlayer() {
-	try {
-		fetch(`/player?id=${parseInt(JSON.parse(sessionStorage.getItem("data")))}`, {
-			method: "GET",
-			headers: {
-				"Content-Type": "application/json",
-			},
-		})
-			.then((res) => res.json())
-			.then((data) => {
-				if (data.error) throw new Error(data.error);
-				player = data;
-
-				addElementValue(gold, `# ${player.wallet}`);
-				addElementValue(username, player.name);
-				addElementValue(className, player.class);
-				addElementValue(level, `lvl: ${player.level ?? 0}`);
-
-				listing(
-					list[0],
-					{
-						hp: player.hp,
-						mp: player.mp,
-						strenght: player.strength,
-						defense: player.defense,
-						dexterity: player.dexterity,
-						resistence: player.resistance,
-						intelligence: player.intelligence,
-						luck: player.luck,
-					},
-					false
-				);
-
-				listing(list[1], player.skills, true);
-			});
-	} catch (error) {
-		console.log(error.message);
-	}
-}
-
 /**
  * adicionar ao elemento um valor de acordo com a classe do player
  * @param {*} element
@@ -77,3 +34,25 @@ btnInventory.addEventListener("click", () => {
 	const inventory = document.getElementById("inventory");
 	inventory.classList.toggle("hiddenComponet");
 });
+
+function info() {
+	const username = document.getElementById("username");
+	const className = document.getElementById("class");
+	const level = document.getElementById("lvl");
+	const gold = document.getElementById("gold");
+	const list = document.querySelectorAll(".listing");
+
+	const player = new Player(parseInt(JSON.parse(sessionStorage.getItem("data"))));
+	const dataPlayer = player.getData();
+	console.log(player);
+	return;
+
+	addElementValue(username, dataPlayer.name);
+	addElementValue(className, dataPlayer.class);
+	addElementValue(level, `lvl: ${dataPlayer.level ?? 0}`);
+	addElementValue(gold, `# ${dataPlayer.wallet}`);
+
+	listing(list[0], player.getStatus(), false);
+
+	listing(list[1], player.getAllSkills(), true);
+}

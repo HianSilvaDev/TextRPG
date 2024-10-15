@@ -1,9 +1,10 @@
 if (!sessionStorage.getItem("data")) window.location = "/";
 
-import { Player } from "./objects/player";
-import { Enemy } from "./objects/enemy";
+import { Player } from "./objects/player.js";
+import { Enemy } from "./objects/enemy.js";
 
-let dataPlayer = new Player(JSON.parse(sessionStorage.getItem("data")));
+const player = new Player(JSON.parse(sessionStorage.getItem("data")));
+let dataPlayer = player.getData();
 
 const btnDirections = document.querySelectorAll(".btnDirections");
 btnDirections.forEach((btn) => {
@@ -109,7 +110,25 @@ function newCordinates(newx, newy) {
 function checkTypeOfNarrationToBePrinted(data) {
 	let messages = "";
 	let spawn;
+	const d40 = Math.floor(Math.random() * 40);
 
+	messages = data.EventPhrase.filter((events) => events.eventType === "no_item_found") ?? "";
+
+	if (d40 <= 10) {
+		spawn = raffleMobOurItens(data.enemies);
+		opponentData = spawn;
+		createTheSpawnCard(spawn, ["lutar", "fugir"]);
+		messages = data.EventPhrase.filter((events) => events.eventType === "encounter_enemy") ?? "";
+	}
+
+	if (d40 > 10 && d40 <= 20) {
+		spawn = raffleMobOurItens(data.findableItems);
+		createTheSpawnCard(spawn, ["pegar", "ignorar"]);
+		itemData = spawn;
+		messages = data.EventPhrase.filter((events) => events.eventType === "find_item") ?? "";
+	}
+
+	const message = randomize(messages).text;
 	printNarration(message, spawn);
 }
 
@@ -130,9 +149,8 @@ function createTheSpawnCard(spawn, options) {
   `;
 
 	options.forEach((option) => {
-		card += `<button onclick="actionForBtn('${option}')">${option}</button>`;
+		card += `<button OnClick="actionForBtn(${option})">${option}</button>`;
 	});
-
 	card += "</div>";
 
 	insertCardContent(card);
@@ -190,19 +208,14 @@ function escapeAction() {
 // Cria o campo de batalha
 function openArena() {
 	isBatle = true;
-	const painelBatle = document.querySelector(".painelBatle");
-	const painelDefault = document.querySelector(".painel");
 	const btnActions = document.querySelector(".actions");
 
 	updateBattleLog("Inicio da batalha!");
 
-	painelBatle.classList.remove("hiddenComponet");
-	painelDefault.classList.add("hiddenComponet");
-
-	dataPlayer.skills.forEach((skill) => {
-		if (skill.isEquiped) {
-			btnActions.innerHTML += `<button onClick="skillToUse(${skill.id_skill},event)">${skill.name}</button>`;
-		}
+	statusArena();
+	const skills = dataPlayer.getSkillEquiped();
+	skills.forEach((skill) => {
+		btnActions.innerHTML += `<button onClick="skillToUse(${skill.id_skill},event)">${skill.name}</button>`;
 	});
 
 	if (dataPlayer.hp <= 0) {
@@ -219,12 +232,8 @@ function openArena() {
 }
 
 function exitArena(message) {
-	const painelBatle = document.querySelector(".painelBatle");
-	const painelDefault = document.querySelector(".painel");
+	statusArena();
 	const btnActions = document.querySelector(".actions");
-
-	painelDefault.classList.remove("hiddenComponet");
-	painelBatle.classList.add("hiddenComponet");
 	btnActions.innerHTML = "";
 
 	printNarration(message);
@@ -236,41 +245,20 @@ function exitArena(message) {
 
 // pega os dados da skill que irá ser usada
 function skillToUse(skillId, e) {
-	let damage = 0;
-	const index = dataPlayer.skills.findIndex((p) => p.id_skill == skillId);
-	const skill = dataPlayer.skills[index];
-
-	if (checkObjectAttribute(dataPlayer.stun)) {
-		updateBattleLog(`${dataPlayer.name} está estunado`);
-		return;
-	}
-
-	if (checkObjectAttribute(skill.isCooldown)) {
-		updateBattleLog(`${skill.name} está em tempo de recarga!`);
-		return;
-	}
-
-	if (dataPlayer.mp < skill.cost) {
-		updateBattleLog("Você não tem mp o sufiente");
-		return;
-	}
+	const skill = player.setSkillToUse(skillId);
 
 	e.target.style = "background: var(--btn-bg-2);";
-
 	dataPlayer.mp -= skill.cost;
 
-	if (checkObjectAttribute(JSON.parse(skill.data))) {
-		if (checkObjectAttribute(JSON.parse(skill.data).damage)) {
-			damage = calculateDamage(dataPlayer, JSON.parse(skill.data), opponentData);
-			opponentData.hp -= damage;
-			updateBattleLog(`Você causou ${damage} de dano`);
-		}
+	if (player.skillDamageExist(skill)) {
+		const damage = calculateDamage(dataPlayer, player.skillDamageExist(skill), opponentData);
+	}
 
-		checkSkillTypeAndAplly("player", skill);
+	if (player.skillEffectExist(skill)) {
+		console.log(player.getSkillEffect(skill));
 	}
 
 	skill.isCooldown = true;
-
 	setTimeout(() => {
 		skill.isCooldown = false;
 		e.target.style = "background: #1d282c;";
@@ -287,62 +275,46 @@ function skillToUse(skillId, e) {
  *
  * @param {object} mob
  */
-function mobAtack(mob) {
+function mobAtack() {
+	const enemy = new Enemy(opponentData, dataPlayer.level);
+	opponentData = enemy.updateStatus();
 	const mobIntervalAtacking = setInterval(async () => {
 		if (!isBatle) {
 			clearInterval(mobIntervalAtacking);
 			return;
 		}
-		if (opponentData.hp <= 0 || dataPlayer.hp <= 0 || opponentData.escape) {
-			clearInterval(mobIntervalAtacking);
-			return;
-		}
-
-		balanceMobStatus();
-
-		const opponent = JSON.parse(sessionStorage.getItem("opponent"));
-
-		if (opponentData.mp < opponent.mp) {
-			opponentData.mp += (opponent.mp * opponent.intelligence) / 100;
-		}
-
-		if (checkObjectAttribute(opponentData.stun)) {
-			updateBattleLog(`${mob.name} está estunado`);
-			return;
-		}
 
 		// Randomiza a habilidade que o mob irá ultilizar para atacar
-		let damage = 0;
-		const skillsThatAreNotOnCooldown = mob.skills.filter((skill) => !skill.isCooldown);
+		const skill = enemy.getSkill();
 
-		if (skillsThatAreNotOnCooldown.length > 0) {
-			const skill = randomize(skillsThatAreNotOnCooldown);
-
+		if (skill) {
 			if (opponentData.mp < skill.cost) {
 				console.log(`O mp atual de ${mob.name} é ${mob.mp}`);
 				return;
 			}
-
 			opponentData.mp -= skill.cost;
 
-			if (checkObjectAttribute(skill.data)) {
-				if (checkObjectAttribute(JSON.parse(skill.data).damage)) {
-					damage = calculateDamage(mob, JSON.parse(skill.data), dataPlayer);
-					dataPlayer.hp -= damage;
-					updateBattleLog(`Você sofreu ${damage} de dano`);
-				}
-				checkSkillTypeAndAplly("enemy", skill);
+			if (enemy.skillDamageExist(skill)) {
+				damage = calculateDamage(
+					opponentData,
+					enemy.setSkillDamage(JSON.parse(skill.data).damage),
+					dataPlayer
+				);
+				dataPlayer.hp -= damage;
+				updateBattleLog(`Você sofreu ${damage} de dano`);
+			}
+			if (enemy.skillEffectExist(skill)) {
+				console.log(skill);
 			}
 
-			const index = mob.skills.findIndex((m) => m.id_skill == skill.id_skill);
-			mob.skills[index].isCooldown = true;
-			const time = mob.skills[index].cooldown * 1000;
+			skill.isCooldown = true;
+			const cooldown = skill.cooldown * 1000;
 
 			await new Promise((resolve) =>
 				setTimeout(() => {
-					mob.skills[index].isCooldown = false;
+					skill.isCooldown = false;
 					resolve();
-				}, time)
+				}, cooldown)
 			);
 		} else {
 			console.log("Todas as habilidades estão em cooldown. Aguardando...");
@@ -377,15 +349,10 @@ function balanceMobStatus() {
  * @param {Object} skillData
  * @param {Object} addressee
  */
-function calculateDamage(user, skillData, addressee) {
-	let damage =
-		user.strength + skillData.damage >= 0 && typeof (user.strength + skillData.damage) === "number"
-			? user.strength + skillData.damage
-			: 0;
+function calculateDamage(user, skillDamage, addressee) {
+	let damage = skillDamage + user.strength;
 
 	if (checkObjectAttribute(addressee.shielding)) {
-		// console.log(user.shielding);
-
 		damage = shieldAplly(damage, addressee.shielding);
 	}
 	console.log(`
@@ -1063,3 +1030,11 @@ const batleStatus = setInterval(() => {
 		clearInterval(batleStatus);
 	}
 }, 500);
+
+function statusArena() {
+	const painelBatle = document.querySelector(".painelBatle");
+	const painelDefault = document.querySelector(".painel");
+
+	painelBatle.classList.toggle("hiddenComponet");
+	painelDefault.classList.toggle("hiddenComponet");
+}
