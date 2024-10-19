@@ -1,8 +1,24 @@
 if (!sessionStorage.getItem("data")) window.location = "/";
-
 import { Player } from "./objects/player.js";
+
+const username = document.getElementById("username");
+const className = document.getElementById("class");
+const level = document.getElementById("lvl");
+const gold = document.getElementById("gold");
+const list = document.querySelectorAll(".listing");
+
 window.onload = function () {
-	info();
+	try {
+		username.innerHTML = "carregando...";
+		className.innerHTML = "carregando...";
+		level.innerHTML = "carregando...";
+		gold.innerHTML = "carregando...";
+		list.innerHTML = "carregando...";
+		const player = new Player(JSON.parse(sessionStorage.getItem("data")));
+		info(player);
+	} catch (error) {
+		console.error(error);
+	}
 };
 
 const btnInventory = document.getElementById("btnInventory");
@@ -35,17 +51,9 @@ btnInventory.addEventListener("click", () => {
 	inventory.classList.toggle("hiddenComponet");
 });
 
-function info() {
-	const username = document.getElementById("username");
-	const className = document.getElementById("class");
-	const level = document.getElementById("lvl");
-	const gold = document.getElementById("gold");
-	const list = document.querySelectorAll(".listing");
-
-	const player = new Player(parseInt(JSON.parse(sessionStorage.getItem("data"))));
-	const dataPlayer = player.getData();
-	console.log(player);
-	return;
+async function info(player) {
+	// const player = await new Player(parseInt(JSON.parse(sessionStorage.getItem("data"))));
+	const dataPlayer = await player.getData();
 
 	addElementValue(username, dataPlayer.name);
 	addElementValue(className, dataPlayer.class);

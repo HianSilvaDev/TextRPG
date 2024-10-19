@@ -3,9 +3,6 @@ if (!sessionStorage.getItem("data")) window.location = "/";
 import { Player } from "./objects/player.js";
 import { Enemy } from "./objects/enemy.js";
 
-const player = new Player(JSON.parse(sessionStorage.getItem("data")));
-let dataPlayer = player.getData();
-
 const btnDirections = document.querySelectorAll(".btnDirections");
 btnDirections.forEach((btn) => {
 	btn.addEventListener("click", () => {
@@ -14,9 +11,11 @@ btnDirections.forEach((btn) => {
 	});
 });
 
+const player = new Player(JSON.parse(sessionStorage.getItem("data")));
 let cordinatesX = 1;
 let cordinatesY = 1;
 let dataCurrentRegion;
+let dataPlayer;
 let opponentData;
 let isBatle = false;
 let itemData;
@@ -138,7 +137,7 @@ function checkTypeOfNarrationToBePrinted(data) {
  * @param {Array} spawn
  * @param {Array} options
  */
-function createTheSpawnCard(spawn, options) {
+async function createTheSpawnCard(spawn, options) {
 	directionsBlock(true);
 	let card = `
     <div class="cardText">
@@ -149,11 +148,17 @@ function createTheSpawnCard(spawn, options) {
   `;
 
 	options.forEach((option) => {
-		card += `<button OnClick="actionForBtn(${option})">${option}</button>`;
+		card += `<button class="btnAction" value="${option}">${option}</button>`;
 	});
 	card += "</div>";
-
 	insertCardContent(card);
+
+	await document.querySelectorAll(".btnAction").forEach((btn) => {
+		btn.addEventListener("click", () => {
+			console.log(btn.value);
+			actionForBtn(btn.value);
+		});
+	});
 }
 
 /**
@@ -181,10 +186,8 @@ function actionForBtn(action) {
 			break;
 
 		case "pegar":
-			dataPlayer.inventory.push(itemData);
-			let player = JSON.parse(sessionStorage.getItem("player"));
-			player.inventory.push(itemData);
-			sessionStorage.setItem("player", JSON.stringify(player));
+			player.setNewItem(itemData);
+
 			escapeAction();
 			break;
 
@@ -206,16 +209,21 @@ function escapeAction() {
 }
 
 // Cria o campo de batalha
-function openArena() {
+async function openArena() {
 	isBatle = true;
-	const btnActions = document.querySelector(".actions");
-
+	dataPlayer = player.getStatus();
 	updateBattleLog("Inicio da batalha!");
-
 	statusArena();
-	const skills = dataPlayer.getSkillEquiped();
+
+	const skills = await player.getSkillEquiped();
+	const btnActions = document.querySelector(".actions");
 	skills.forEach((skill) => {
-		btnActions.innerHTML += `<button onClick="skillToUse(${skill.id_skill},event)">${skill.name}</button>`;
+		btnActions.innerHTML += `<button class="btnSkill" value="${skill.id_skill}">${skill.name}</button>`;
+	});
+	document.querySelectorAll(".btnSkill").forEach((btn) => {
+		btn.addEventListener("click", () => {
+			skillToUse(btn.value);
+		});
 	});
 
 	if (dataPlayer.hp <= 0) {
@@ -226,6 +234,8 @@ function openArena() {
 	sessionStorage.setItem("opponent", JSON.stringify(opponentData));
 
 	updateBattleStatus(dataPlayer, opponentData);
+	return;
+
 	setTimeout(() => {
 		mobAtack(opponentData);
 	}, 1000);
@@ -719,17 +729,32 @@ openMenu.addEventListener("click", () => {
 		title: "Menu",
 		content: `
 			<ul>
-				<li><button onClick="createStatusMenu()"><img src="public\\assets\\img\\menuIcons\\status.png"></button></li>
-				<li><button onClick="createSkillsMenu()"><img src="public\\assets\\img\\menuIcons\\skills.png"></button></li>
-				<li><button onClick="createInventoryMenu()"><img src="public\\assets\\img\\menuIcons\\inventory.png"></button></li>
+				<li><button class="statusMenu"><img src="public\\assets\\img\\menuIcons\\status.png"></button></li>
+				<li><button class="skillsMenu"><img src="public\\assets\\img\\menuIcons\\skills.png"></button></li>
+				<li><button class="inventoryMenu"><img src="public\\assets\\img\\menuIcons\\inventory.png"></button></li>
 				<li><a href="/home"><button><img src="public\\assets\\img\\menuIcons\\home.png"></button></a></li>
-				<li onClick="logout()"><button><img src="public\\assets\\img\\menuIcons\\logout.png"></button>li>
+				<li class="logout"><button><img src="public\\assets\\img\\menuIcons\\logout.png"></button>li>
 				<li><a href="#"><button><img src="public\\assets\\img\\menuIcons\\settings.png"></button></a></li>
 			</ul>
 		`,
 		footer: `
-			<p class="title" onClick="exitMenu()">Fechar</p>
+			<p class="title exitMenu">Fechar</p>
 		`,
+	});
+	document.querySelector(".statusMenu").addEventListener("click", () => {
+		createStatusMenu();
+	});
+	document.querySelector(".skillsMenu").addEventListener("click", () => {
+		createSkillsMenu();
+	});
+	document.querySelector(".inventoryMenu").addEventListener("click", () => {
+		createInventoryMenu();
+	});
+	document.querySelector(".logout").addEventListener("click", () => {
+		logout();
+	});
+	document.querySelector(".exitMenu").addEventListener("click", () => {
+		exitMenu();
 	});
 });
 
@@ -760,6 +785,7 @@ function createMenu(menuContent) {
 
 function createStatusMenu() {
 	const menu = document.querySelector(".menu");
+	dataPlayer = player.dataPlayer;
 
 	menu.innerHTML = `
 	<span class="title">Status</span>
@@ -812,7 +838,7 @@ function createInventoryMenu() {
 	<div class="menuContent">
 		<ul>`;
 
-	dataPlayer.inventory.forEach((item) => {
+	player.getInventory().forEach((item) => {
 		if (item.name) {
 			if (item.isEquiped == false) {
 				menu.innerHTML += `<li><span>${item.name}</span><button class="notEquiped" onClick="equipOrUnequipItem(${item.item_id})">Equipar</button></li>`;
@@ -840,7 +866,7 @@ function createSkillsMenu() {
 	<div class="menuContent">
 		<ul>`;
 
-	dataPlayer.skills.forEach((item) => {
+	player.getAllSkills().forEach((item) => {
 		if (item.name) {
 			if (item.isEquiped) {
 				menu.innerHTML += `

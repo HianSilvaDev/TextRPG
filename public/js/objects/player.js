@@ -30,7 +30,19 @@ export class Player {
 	}
 
 	getData() {
-		return this.dataPlayer;
+		return new Promise((resolve) => {
+			// Simulando um tempo de resposta variável (entre 1 e 5 segundos)
+			const randomTime = Math.floor(Math.random() * 5000) + 1000; // entre 1 e 5 segundos
+			setTimeout(() => {
+				const data = {
+					name: this.dataPlayer.name,
+					class: this.dataPlayer.class,
+					level: this.dataPlayer.level,
+					wallet: this.dataPlayer.wallet,
+				};
+				resolve(data);
+			}, randomTime);
+		});
 	}
 
 	getStatus() {
@@ -55,7 +67,7 @@ export class Player {
 	}
 
 	getSkillEquiped() {
-		return this.dataPlayer.skills.filter((skill) => skill.equiped);
+		return this.dataPlayer.skills.filter((skill) => skill.isEquiped);
 	}
 
 	setSkillToUse(id) {
@@ -179,10 +191,15 @@ export class Player {
 
 	getGold() {}
 
-	getInventoey() {}
+	getInventory() {
+		return this.dataPlayer.inventory;
+	}
 
 	setNewItem(item) {
-		dataPlayer.inventory += item;
+		this.dataPlayer.inventory.push(item);
+		let player = JSON.parse(sessionStorage.getItem("player"));
+		player.inventory.push(item);
+		sessionStorage.setItem("player", JSON.stringify(player));
 	}
 
 	#checkObjectAttribute(param) {
