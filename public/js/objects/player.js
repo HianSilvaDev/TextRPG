@@ -72,7 +72,7 @@ export class Player {
 
 	setSkillToUse(id) {
 		const skillsEquiped = this.getSkillEquiped();
-		const skill = skillsEquiped.find((skill) => skill.id == id);
+		const skill = skillsEquiped.find((skill) => skill.id_skill == id);
 		return skill;
 	}
 

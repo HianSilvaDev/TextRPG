@@ -222,22 +222,21 @@ async function openArena() {
 	});
 	document.querySelectorAll(".btnSkill").forEach((btn) => {
 		btn.addEventListener("click", () => {
-			skillToUse(btn.value);
+			skillToUse(btn.value, btn);
 		});
 	});
 
 	if (dataPlayer.hp <= 0) {
-		exitArena(`Você foi derratado por ${opponentData.name}`);
+		exitArena(`Você foi derrotado por ${opponentData.name}`);
 		return;
 	}
 
 	sessionStorage.setItem("opponent", JSON.stringify(opponentData));
 
-	updateBattleStatus(dataPlayer, opponentData);
+	updateBattleStatus(player.dataPlayer, opponentData);
 	return;
-
 	setTimeout(() => {
-		mobAtack(opponentData);
+		mobAtack();
 	}, 1000);
 }
 
@@ -254,10 +253,10 @@ function exitArena(message) {
 }
 
 // pega os dados da skill que irá ser usada
-function skillToUse(skillId, e) {
-	const skill = player.setSkillToUse(skillId);
+async function skillToUse(skillId, btn) {
+	const skill = await player.setSkillToUse(skillId);
 
-	e.target.style = "background: var(--btn-bg-2);";
+	btn.style = "background: var(--btn-bg-2);";
 	dataPlayer.mp -= skill.cost;
 
 	if (player.skillDamageExist(skill)) {
@@ -271,7 +270,7 @@ function skillToUse(skillId, e) {
 	skill.isCooldown = true;
 	setTimeout(() => {
 		skill.isCooldown = false;
-		e.target.style = "background: #1d282c;";
+		btn.style = "background: #1d282c;";
 	}, skill.cooldown * 1000);
 
 	if (checkObjectAttribute(dataPlayer.escape)) {
