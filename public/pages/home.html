@@ -10,95 +10,96 @@
 <body>
 
   <main>
-    <section>
+    <section id="painel">
+
       <div class="container">
-        
-        <div class="painel">
-  
-          <div class="gold">
-            <span id="gold" class="title"></span>
+
+        <div class="gold">
+          <span id="gold" class="title"></span>
+        </div>
+
+        <div class="user">
+
+          <img src="https://i.pinimg.com/736x/31/4f/2a/314f2a1f891f259d70d75b603616827a.jpg" alt="icone de usuário">
+
+          <div class="text">
+
+            <h2 id="username" class="title"></h3>
+
+            <span id="class" class="subtitle"></span>
+
+            <span id="lvl" class="subtitle"></span>
+
           </div>
-  
-          <div class="user">
-  
-            <img src="https://i.pinimg.com/736x/31/4f/2a/314f2a1f891f259d70d75b603616827a.jpg" alt="icone de usuário">
-  
-            <div class="text">
-  
-              <h2 id="username" class="title"></h3>
-  
-              <span id="class" class="subtitle"></span>
-  
-              <span id="lvl" class="subtitle"></span>
-  
+
+        </div>
+
+        <div class="status">
+            <p class="title">Status</p>
+
+
+            <div class="statusListing">
+
+              <ul class="listing"></ul>
+
             </div>
+
+        </div>
+
+        <div class="btn-group">
   
-          </div>
-  
-          <div class="proprets">
-  
-            <div class="status">
-  
-              <p class="title">Status</p>
-  
-              <div class="statusListing">
-  
-                <ul class="listing"></ul>
-  
-              </div>
-  
-            </div>
-  
-            <div class="skills">
-  
-              <p class="title">Habilidades</p>
-  
-              <div class="skillsListing">
-  
-                <ul class="listing"></ul>
-  
-              </div>
-  
-            </div>
-  
-          </div>
-  
-          <div class="btn-group">
-  
-            <button id="btnInventory">Inventario</button>
-  
-            <a href="/world">Explorar</a>
-  
-          </div>
+          <button id="btnInventory">Inventario</button>
           
+          <button id="btnSkills">Habilidades</button>
+
+          <a href="/world">Explorar</a>
+
         </div>
         
       </div>
       
     </section>
   
-    <section style="display: none;" id="inventory" class="hiddenComponet">
+    <section id="inventory" class="hiddenComponet">
       <div class="container">
   
-        <div class="inventory">
-          <div class="inventoryTitle">
-            <h2>Inventário</h2>
+        <!-- <div class="inventory"> -->
+          <div class="inventoryText">
+            <h2 class="title">Inventário</h2>
+            <button class="close">Voltar</button>
           </div>
   
           <div class="inventory-content">
   
             <div class="inventory-content-list">
   
-              <ul class="listing"></ul>
+              <!-- <ul class="listing"></ul>/ -->
   
             </div>
   
           </div>
   
           
-        </div>
+        <!-- </div> -->
         
       </div>
+    </section>
+
+    <section id="skills" class="hiddenComponet">
+
+      <div class="container">
+        <div class="skillsText">
+          <h2 class="title">Habilidades</h2>
+          <button class="close">Voltar</button>
+        </div>
+
+      <div class="skillsListing">
+
+        <ul class="listing"></ul>
+
+      </div>
+      </div>
+
     </section>
   </main>
   
