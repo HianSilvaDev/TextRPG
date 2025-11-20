@@ -1,189 +1,48 @@
 <!DOCTYPE html>
-  <html lang="pt-br">
-    <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <link rel="stylesheet" href="public/css/index.css">
-      <title>RPG de Texto</title>
-    </head>
-      <body>
+<html lang="pt-br">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Hanalei+Fill&family=Handjet:wght@100..900&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../css/index.css" />
+		<title>Sombras da Eternidade</title>
+	</head>
 
-      <button id="closeBtn"><img src="/public/assets/img/close.png" alt=""></button>
-        <div class="bg">
+	<body>
+		<header>
+			<span>Sombras da Eternidade</span>
+			<div class="btnGroup">
+				<button onclick="dropForm('cadastro')">Cadastrar-se</button>
+				<button onclick="dropForm('login')">Entrar</button>
+			</div>
+		</header>
 
-          <div class="container">
+		<main>
+			<div class="container">
+				<div class="about">
+					<h2 class="title">Sombras da Eternidade</h2>
+					<p class="describer">
+						Em Sombras da Eternidade, cada passo que você dá ecoa pelo destino de um mundo à beira
+						do caos. Suas escolhas não apenas moldarão sua jornada, mas também alterarão o rumo das
+						forças que disputam o controle da realidade. Seja um guerreiro destemido que enfrenta
+						monstros colossais, um mago capaz de dobrar os elementos à própria vontade, ou um
+						berserker tomado pela fúria ancestral, cada decisão que você tomar deixará marcas
+						permanentes na história. Encare alianças difíceis, desafie forças sombrias e descubra
+						segredos antigos enquanto vive uma experiência profunda, imersiva e verdadeiramente
+						inesquecível.
+					</p>
+				</div>
+			</div>
+		</main>
 
-              <div id="init">
+		<!-- </div> -->
 
-                <div class="text">
-                  <h2 class="title">Sombra dos Eternos</h2>
-                  <p>Em Sombra dos Eternos, suas escolhas moldarão o destino do mundo. Seja você um guerreiro destemido, um mago poderoso ou um ladrão astuto, cada decisão sua influenciará a narrativa, oferecendo uma experiência única e inesquecível.</p>
-                  <span>Cadastre-se agora e comece sua jornada!</span>
-                </div>
-
-                <div class="btnGroup">
-                  <button onclick="dropForm('login')">LOGIN</button>
-                  <button onclick="dropForm('cadastro')">CADASTRO</button>
-                </div>
-
-              </div>
-          
-              <div class="Forms" id="loginForm">
-                <h2 class="title">Entrar em sua conta</h2>
-          
-                <form class="formControll" id="formLogin">
-                  <div class="formControlItem">
-                    <label class="formControlLabel" for="userLogin">Nome</label>
-                    <input class="formControlInput" type="text" id="userLogin" name="user" placeholder="Insira seu nome ou email"/>
-                  </div>
-                
-                  <div class="formControlItem">
-                    <label class="formControlLabel" for="passwordLogin">Senha</label>
-                    <input class="formControlInput" type="password" id="passwordLogin" name="password" placeholder="Insira sua senha"/>
-                  </div>
-
-                </form>
-                <button id="loginSubmit">Entrar</button>
-          
-          
-                <p>Não tem uma conta? <a onclick="dropForm('cadastro')">Cadastre-se</a> | <a href="#">esqueci minha senha</a></p>
-          
-              </div>
-          
-              <div class="Forms" id="registerForm">
-          
-                <div id="registerFormForm">
-          
-                  <h2 class="title">Cadastro de Usuário</h2>
-                  
-                  <form class="formControll" method="post">
-                  
-                    <div class="formControlItem">
-                      <label class="formControlLabel" for="userNameRegister">nome</label>
-                      <input class="formControlInput" type="text" id="userNameRegister" placeholder="Insira uma nome" name="name" required>
-                    </div>
-          
-                    <div class="formControlItem">
-                      <label class="formControlLabel" for="emailRegister">email</label>
-                      <input class="formControlInput" type="email" id="emailRegister" name="email" placeholder="Insira um email" required>
-                    </div>
-                  
-                    <div class="formControlItem">
-                      <label class="formControlLabel" for="passwordRegister">senha</label>
-                      <input class="formControlInput" type="password" id="passwordRegister" name="password" placeholder="Insira uma senha" required>
-                    </div>
-                  
-                    <div class="formControlItem">
-                      <label class="formControlLabel" for="passwordAgain">Insira a senha novamente</label>
-                      <input class="formControlInput" type="password" id="passwordAgain" placeholder="Insira a senha novamente" required>
-                    </div>
-
-                  </form>
-                  <button id="registerSubmit">Cadastrar-se</button>
-          
-          
-                  <p>Já tem uma conta? <a onclick="dropForm('login')">Fazer login</a></p>
-          
-                </div>
-          
-                <div class="cardGroup" >
-                  <div class="card" data-value="archer">
-                    <div class="cardContent">
-                      <div class="cardFront">
-                        <div class="cardImg">
-                          <img src="public/assets/img/archer_icon.png" alt="archer">
-                        </div>
-                        <p class="cardDescription">Mestre das flechas, usa velocidade e precisão para atacar inimigos à distância, garantindo vantagem tática em qualquer batalha.</p>
-                        <div class="cardBack">
-                          <ul>
-                            <li>HP: <span>60</span></li>
-                            <li>MP: <span>20</span></li>
-                            <li>FORÇA: <span>10</span></li>
-                            <li>DEFESA: <span>9</span></li>
-                            <li>DESTREZA: <span>15</span></li>
-                            <li>RESISTENCIA: <span>2</span></li>
-                            <li>INTELIGENCIA: <span>5</span></li>
-                          </ul>
-                        </div>
-                      </div>
-                      
-                    </div>
-                  </div>
-                  <div class="card" data-value="mage">
-                    <div class="cardContent">
-                      <div class="cardFront">
-                        <div class="cardImg">
-                          <img src="public/assets/img/mage_icon.png" alt="archer">
-                        </div>
-                        <p class="cardDescription">Manipula os elementos com precisão. Utiliza feitiços poderosos e encantamentos para controlar o campo de batalha.</p>
-                        <div class="cardBack">
-                          <ul>
-                            <li>HP: <span>60</span></li>
-                            <li>MP: <span>100</span></li>
-                            <li>FORÇA: <span>10</span></li>
-                            <li>DEFESA: <span>5</span></li>
-                            <li>DESTREZA: <span>10</span></li>
-                            <li>RESISTENCIA: <span>2</span></li>
-                            <li>INTELIGENCIA: <span>15</span></li>
-                          </ul>
-                          
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="card" data-value="swordsman">
-                    <div class="cardContent">
-                      <div class="cardFront">
-                        <div class="cardImg">
-                          <img src="public/assets/img/swordsman_icon.png" alt="archer">
-                        </div>
-                        <p class="cardDescription">Especialista em combate corpo a corpo, o espadachim utiliza agilidade e precisão, dominando o campo de batalha com destreza.</p>
-                        <div class="cardBack">
-                          <ul>
-                            <li>HP: <span>60</span></li>
-                            <li>MP: <span>100</span></li>
-                            <li>FORÇA: <span>10</span></li>
-                            <li>DEFESA: <span>5</span></li>
-                            <li>DESTREZA: <span>10</span></li>
-                            <li>RESISTENCIA: <span>2</span></li>
-                            <li>INTELIGENCIA: <span>15</span></li>
-                          </ul>
-      
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="card" data-value="barbarian">
-                    <div class="cardContent">
-                      <div class="cardFront">
-                        <div class="cardImg">
-                          <img src="public/assets/img/barbarian_icon.png" alt="archer">
-                        </div>
-                        <p class="cardDescription">Confia na força bruta e na resistência. Usa sua força avassaladora para destruir seus inimigos com força bruta</p>
-                        <div class="cardBack">
-                          <ul>
-                            <li>HP: <span>60</span></li>
-                            <li>MP: <span>10</span></li>
-                            <li>FORÇA: <span>10</span></li>
-                            <li>DEFESA: <span>5</span></li>
-                            <li>DESTREZA: <span>10</span></li>
-                            <li>RESISTENCIA: <span>2</span></li>
-                            <li>INTELIGENCIA: <span>15</span></li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-          
-              </div>
-
-          </div>
-          
-        </div>
-      </section>
-      
-      <script src="https://cdn.jsdelivr.net/npm/dompurify@2.3.4/dist/purify.min.js"></script>
-      <script type="module" src="/public/js/script.js"></script>
-    </body>
-  </html>
+		<script src="https://cdn.jsdelivr.net/npm/dompurify@2.3.4/dist/purify.min.js"></script>
+		<script type="module" src="/public/js/script.js"></script>
+	</body>
+</html>

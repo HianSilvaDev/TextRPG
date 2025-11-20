@@ -1,0 +1,192 @@
+/*
+				<div class="Forms" id="loginForm">
+					<h2 class="title">Entrar em sua conta</h2>
+
+					<form class="formControll" id="formLogin">
+						<div class="formControlItem">
+							<label class="formControlLabel" for="userLogin">Nome</label>
+							<input
+								class="formControlInput"
+								type="text"
+								id="userLogin"
+								name="user"
+								placeholder="Insira seu nome ou email"
+							/>
+						</div>
+
+						<div class="formControlItem">
+							<label class="formControlLabel" for="passwordLogin">Senha</label>
+							<input
+								class="formControlInput"
+								type="password"
+								id="passwordLogin"
+								name="password"
+								placeholder="Insira sua senha"
+							/>
+						</div>
+					</form>
+					<button id="loginSubmit">Entrar</button>
+
+					<p>
+						Não tem uma conta? <a onclick="dropForm('cadastro')">Cadastre-se</a> |
+						<a href="#">esqueci minha senha</a>
+					</p>
+				</div>
+
+				<div class="Forms" id="registerForm">
+					<div id="registerFormForm">
+						<h2 class="title">Cadastro de Usuário</h2>
+
+						<form class="formControll" method="post">
+							<div class="formControlItem">
+								<label class="formControlLabel" for="userNameRegister">nome</label>
+								<input
+									class="formControlInput"
+									type="text"
+									id="userNameRegister"
+									placeholder="Insira uma nome"
+									name="name"
+									required
+								/>
+							</div>
+
+							<div class="formControlItem">
+								<label class="formControlLabel" for="emailRegister">email</label>
+								<input
+									class="formControlInput"
+									type="email"
+									id="emailRegister"
+									name="email"
+									placeholder="Insira um email"
+									required
+								/>
+							</div>
+
+							<div class="formControlItem">
+								<label class="formControlLabel" for="passwordRegister">senha</label>
+								<input
+									class="formControlInput"
+									type="password"
+									id="passwordRegister"
+									name="password"
+									placeholder="Insira uma senha"
+									required
+								/>
+							</div>
+
+							<div class="formControlItem">
+								<label class="formControlLabel" for="passwordAgain">Insira a senha novamente</label>
+								<input
+									class="formControlInput"
+									type="password"
+									id="passwordAgain"
+									placeholder="Insira a senha novamente"
+									required
+								/>
+							</div>
+						</form>
+						<button id="registerSubmit">Cadastrar-se</button>
+
+						<p>Já tem uma conta? <a onclick="dropForm('login')">Fazer login</a></p>
+					</div>
+
+					<div class="cardGroup">
+						<div class="card" data-value="archer">
+							<div class="cardContent">
+								<div class="cardFront">
+									<div class="cardImg">
+										<img src="public/assets/img/archer_icon.png" alt="archer" />
+									</div>
+									<p class="cardDescription">
+										Mestre das flechas, usa velocidade e precisão para atacar inimigos à distância,
+										garantindo vantagem tática em qualquer batalha.
+									</p>
+									<div class="cardBack">
+										<ul>
+											<li>HP: <span>60</span></li>
+											<li>MP: <span>20</span></li>
+											<li>FORÇA: <span>10</span></li>
+											<li>DEFESA: <span>9</span></li>
+											<li>DESTREZA: <span>15</span></li>
+											<li>RESISTENCIA: <span>2</span></li>
+											<li>INTELIGENCIA: <span>5</span></li>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="card" data-value="mage">
+							<div class="cardContent">
+								<div class="cardFront">
+									<div class="cardImg">
+										<img src="public/assets/img/mage_icon.png" alt="archer" />
+									</div>
+									<p class="cardDescription">
+										Manipula os elementos com precisão. Utiliza feitiços poderosos e encantamentos
+										para controlar o campo de batalha.
+									</p>
+									<div class="cardBack">
+										<ul>
+											<li>HP: <span>60</span></li>
+											<li>MP: <span>100</span></li>
+											<li>FORÇA: <span>10</span></li>
+											<li>DEFESA: <span>5</span></li>
+											<li>DESTREZA: <span>10</span></li>
+											<li>RESISTENCIA: <span>2</span></li>
+											<li>INTELIGENCIA: <span>15</span></li>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="card" data-value="swordsman">
+							<div class="cardContent">
+								<div class="cardFront">
+									<div class="cardImg">
+										<img src="public/assets/img/swordsman_icon.png" alt="archer" />
+									</div>
+									<p class="cardDescription">
+										Especialista em combate corpo a corpo, o espadachim utiliza agilidade e
+										precisão, dominando o campo de batalha com destreza.
+									</p>
+									<div class="cardBack">
+										<ul>
+											<li>HP: <span>60</span></li>
+											<li>MP: <span>100</span></li>
+											<li>FORÇA: <span>10</span></li>
+											<li>DEFESA: <span>5</span></li>
+											<li>DESTREZA: <span>10</span></li>
+											<li>RESISTENCIA: <span>2</span></li>
+											<li>INTELIGENCIA: <span>15</span></li>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="card" data-value="barbarian">
+							<div class="cardContent">
+								<div class="cardFront">
+									<div class="cardImg">
+										<img src="public/assets/img/barbarian_icon.png" alt="archer" />
+									</div>
+									<p class="cardDescription">
+										Confia na força bruta e na resistência. Usa sua força avassaladora para destruir
+										seus inimigos com força bruta
+									</p>
+									<div class="cardBack">
+										<ul>
+											<li>HP: <span>60</span></li>
+											<li>MP: <span>10</span></li>
+											<li>FORÇA: <span>10</span></li>
+											<li>DEFESA: <span>5</span></li>
+											<li>DESTREZA: <span>10</span></li>
+											<li>RESISTENCIA: <span>2</span></li>
+											<li>INTELIGENCIA: <span>15</span></li>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+                */

@@ -1,109 +1,114 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="public/css/home.css">
-  <title>Home</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="public/css/home.css">
+    <title>Sombras da Eternidade</title>
 </head>
+
 <body>
 
-  <main>
-    <section id="painel">
+    <main>
+        <section id="painel">
 
-      <div class="container">
+            <div class="container">
 
-        <div class="gold">
-          <span id="gold" class="title"></span>
-        </div>
+                <div class="gold">
+                    <span id="gold" class="title"></span>
+                </div>
 
-        <div class="user">
+                <div class="user">
 
-          <img src="https://i.pinimg.com/736x/31/4f/2a/314f2a1f891f259d70d75b603616827a.jpg" alt="icone de usuário">
+                    <img src="https://i.pinimg.com/736x/31/4f/2a/314f2a1f891f259d70d75b603616827a.jpg"
+                        alt="icone de usuário">
 
-          <div class="text">
+                    <div class="text">
 
-            <h2 id="username" class="title"></h3>
+                        <h2 id="username" class="title">
+                            </h3>
 
-            <span id="class" class="subtitle"></span>
+                            <span id="class" class="subtitle"></span>
 
-            <span id="lvl" class="subtitle"></span>
+                            <span id="lvl" class="subtitle"></span>
 
-          </div>
+                    </div>
 
-        </div>
+                </div>
 
-        <div class="status">
-            <p class="title">Status</p>
+                <div class="status">
+                    <p class="title">Status</p>
 
 
-            <div class="statusListing">
+                    <div class="statusListing">
 
-              <ul class="listing"></ul>
+                        <ul class="listing"></ul>
+
+                    </div>
+
+                </div>
+
+                <div class="btn-group">
+
+                    <button id="btnInventory">Inventario</button>
+
+                    <button id="btnSkills">Habilidades</button>
+
+                    <a href="/world">Explorar</a>
+
+                </div>
 
             </div>
 
-        </div>
+        </section>
 
-        <div class="btn-group">
-  
-          <button id="btnInventory">Inventario</button>
-          
-          <button id="btnSkills">Habilidades</button>
+        <section id="inventory" class="hiddenComponet">
+            <div class="container">
 
-          <a href="/world">Explorar</a>
+                <!-- <div class="inventory"> -->
+                <div class="inventoryText">
+                    <h2 class="title">Inventário</h2>
+                    <button class="close">Voltar</button>
+                </div>
 
-        </div>
-        
-      </div>
-      
-    </section>
-  
-    <section id="inventory" class="hiddenComponet">
-      <div class="container">
-  
-        <!-- <div class="inventory"> -->
-          <div class="inventoryText">
-            <h2 class="title">Inventário</h2>
-            <button class="close">Voltar</button>
-          </div>
-  
-          <div class="inventory-content">
-  
-            <div class="inventory-content-list">
-  
-              <!-- <ul class="listing"></ul>/ -->
-  
+                <div class="inventory-content">
+
+                    <div class="inventory-content-list">
+
+                        <!-- <ul class="listing"></ul>/ -->
+
+                    </div>
+
+                </div>
+
+
+                <!-- </div> -->
+
             </div>
-  
-          </div>
-  
-          
-        <!-- </div> -->
-        
-      </div>
-    </section>
+        </section>
 
-    <section id="skills" class="hiddenComponet">
+        <section id="skills" class="hiddenComponet">
 
-      <div class="container">
-        <div class="skillsText">
-          <h2 class="title">Habilidades</h2>
-          <button class="close">Voltar</button>
-        </div>
+            <div class="container">
+                <div class="skillsText">
+                    <h2 class="title">Habilidades</h2>
+                    <button class="close">Voltar</button>
+                </div>
 
-      <div class="skillsListing">
+                <div class="skillsListing">
 
-        <ul class="listing"></ul>
+                    <ul class="listing"></ul>
 
-      </div>
-      </div>
+                </div>
+            </div>
 
-    </section>
-  </main>
-  
+        </section>
+    </main>
 
-  <script type="module" src="public/js/home.js"></script>
+
+    <script type="module" src="public/js/home.js"></script>
 </body>
+
 </html>

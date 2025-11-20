@@ -1,324 +1,341 @@
-/* fonts google */
-@import url('https://fonts.googleapis.com/css2?family=Cardo:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@400..900&family=Pirata+One&display=swap');
-
-*{
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  text-decoration: none;
-  list-style: none;
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	text-decoration: none;
+	list-style: none;
+	font-family: Hanalei Fill;
 }
 
-input{
-  all: unset;
+input {
+	all: unset;
 }
 
-:root{
-  --color-1: #F2B544;
-  --color-2: #F2D8A7;
-  --color-3: #323940;
-
-  --btn-bg-1: #F25D07;
-  --btn-bg-2: #D9420B;
-
-  --cardo: 'Cardo', serif;
-  --cinzel: 'Cinzel', serif;
-  --pirata: 'Pirata One', serif;
+body {
+	max-width: 1200px;
+	margin: 0 auto;
 }
 
-body{
-  width: 100vw;
-  height: 100vh;
+body::before {
+	content: "";
+	position: fixed;
+	inset: 0;
 
-  
-  background: url("/public/assets/img/backgrounds/paisagem_index.jpg") no-repeat center center fixed;
-  background-size: cover;
+	background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.41) 0%, rgba(0, 0, 0, 0.918) 100%),
+		url("/public/assets/img/backgrounds/paisagem_index.jpg") no-repeat top;
+	background-size: cover;
+	filter: blur(3.4px);
+	transform: scale(1.05);
+	transform-origin: center;
+	z-index: -1;
 }
 
-#closeBtn{
-  position: absolute;
-  top: 30px;
-  right: 30px;
+header {
+	width: 100%;
+	height: 65px;
+	padding: 0 60px;
 
-  background: none;
-  border: none;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+
+	background: none;
 }
 
-#closeBtn img{
-  width: 42px;
+header span {
+	font-size: 20px;
+	color: #e0e2e8;
 }
 
-.bg{
-  width: 100vw;
-  height: 100vh;
-
-  background: rgba(0, 0, 0, 60%);
+header .btnGroup {
+	display: flex;
+	gap: 65px;
 }
 
-.container{
-  width: 80%;
-  height: 100%;
+header .btnGroup button {
+	font-style: normal;
+	font-weight: 400;
+	font-size: 16px;
+	line-height: 21px;
+	text-transform: uppercase;
 
-  margin: 0 auto;
+	color: #f2b544;
 }
 
-.container,
-#init,
-.text{
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.container {
+	width: 80%;
+	height: 100%;
+
+	margin: 140px auto auto;
 }
 
-#init{
-  width: 650px;
+.container .about {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 15px;
+}
 
-  flex-direction: column;
-  gap: 26px;
+.container .about .title {
+	font-style: normal;
+	font-weight: 400;
+	font-size: 34px;
+	line-height: 44px;
+	text-align: center;
+	letter-spacing: 0.15em;
+
+	color: #f2b544;
+
+	text-shadow: -4px 4px 4px rgba(0, 0, 0, 0.4);
+}
+
+.container .about .describer {
+	margin-top: 24px;
+
+	font-family: Handjet;
+	font-style: normal;
+	font-weight: 500;
+	font-size: 24px;
+	line-height: 28px;
+	text-align: center;
+	letter-spacing: 0.08em;
+
+	color: #e0e2e8;
+
+	max-width: 835px;
 }
 
 #init,
 #loginForm,
-#registerForm{
-  background: rgba(50, 57, 64, 0.6);
-  border: 1px solid #FFFFFF;
-  border-radius: 8px;
+#registerForm {
+	background: rgba(50, 57, 64, 0.6);
+	border: 1px solid #ffffff;
+	border-radius: 8px;
 
-  padding: 40px;
+	padding: 40px;
 }
 
-.text{
-  color: var(--color-2);
-  font-family: var(--cinzel);
-
-  flex-direction: column;
-  gap: 40px;
+.title {
+	font-size: 20px;
+	font-family: Hanalei Fill, serif;
 }
 
-.title{
-  font-size: 2rem;
-  font-weight: 800;
-
-  color: var(--color-1);
+.describer {
+	font-size: 16px;
+	font-family: Handjet, serif;
 }
 
-.text p{
-  font-size: 1rem;
-  text-align: center;
-  line-height: 1.8rem;
-  letter-spacing: 0.15em;
+.text span {
+	font-family: var(--pirata);
+	font-size: 1.25rem;
+	font-weight: 400;
+	line-height: 33px;
+	letter-spacing: 0.08em;
+
+	color: var(--color-1);
 }
 
-.text span{
-  font-family: var(--pirata);
-  font-size: 1.25rem;
-  font-weight: 400;
-  line-height: 33px;
-  letter-spacing: 0.08em;
-
-  color: var(--color-1);
+.btnGroup {
+	display: flex;
+	gap: 67px;
 }
 
-.btnGroup{
-  display: flex;
-  gap: 67px;
+button {
+	background: var(--btn-bg-2);
+	color: var(--color-2);
+	border: none;
+	border-radius: 8px;
+
+	font-size: 1.2rem;
+	font-family: var(--cardo);
+	font-weight: 800;
+	line-height: 22px;
+	letter-spacing: 0.15em;
+
+	padding: 10px 20px;
+
+	cursor: pointer;
 }
 
-button{
-  background: var(--btn-bg-2);
-  color: var(--color-2);
-  border: none;
-  border-radius: 8px;
-
-  font-size: 1.2rem;
-  font-family: var(--cardo);
-  font-weight: 800;
-  line-height: 22px;
-  letter-spacing: 0.15em;
-
-  padding: 10px 20px;
-
-  cursor: pointer;
+button:hover {
+	background: var(--btn-bg-1);
 }
 
-button:hover{
-  background: var(--btn-bg-1);
-}
+#loginForm {
+	width: 500px;
 
-#loginForm{
-  width: 500px;
-
-  display: flex;
-  flex-direction: column;
-  align-content: center;
-  gap: 28px;
+	display: flex;
+	flex-direction: column;
+	align-content: center;
+	gap: 28px;
 }
 
 #loginForm .title,
 #loginForm p,
 #registerForm .title,
-#registerForm p{
-  text-align: center;
+#registerForm p {
+	text-align: center;
 }
 
-.formControll .formControlItem{
-  margin-bottom: 25px;
+.formControll .formControlItem {
+	margin-bottom: 25px;
 }
 
-.formControll .formControlItem .formControlLabel{
-  font-size: 0.785rem;
-  font-family: var(--cardo);
-  color: var(--color-1);
-  text-transform: uppercase;
+.formControll .formControlItem .formControlLabel {
+	font-size: 0.785rem;
+	font-family: var(--cardo);
+	color: var(--color-1);
+	text-transform: uppercase;
 
-  margin-left: 5px;
+	margin-left: 5px;
 }
 
-.formControll .formControlItem .formControlInput{
-  width: 97%;
-  height: 25px;
+.formControll .formControlItem .formControlInput {
+	width: 97%;
+	height: 25px;
 
-  display: block;
-  padding: 8px;
+	display: block;
+	padding: 8px;
 
-  background: #ECECEC;
-  border-radius: 8px;
-} 
+	background: #ececec;
+	border-radius: 8px;
+}
 
-.formControll .formControlItem .formControlInput:focus-within{
-  inset: 0;
-  border: 3px solid var(--color-1);
+.formControll .formControlItem .formControlInput:focus-within {
+	inset: 0;
+	border: 3px solid var(--color-1);
 }
 
 #loginForm p,
-#registerForm p{
-  color: var(--color-2);
-  font-size: 0.785rem;
-  font-family: var(--cinzel);
-  font-weight: 800;
-  line-height: 22px;
-  letter-spacing: 0.2px;
+#registerForm p {
+	color: var(--color-2);
+	font-size: 0.785rem;
+	font-family: var(--cinzel);
+	font-weight: 800;
+	line-height: 22px;
+	letter-spacing: 0.2px;
 }
 
-a{
-  color: var(--color-1);
-  text-decoration: underline;
-  cursor: pointer;
+a {
+	color: var(--color-1);
+	text-decoration: underline;
+	cursor: pointer;
 }
 
-#registerForm{
-  width: 1000px;
+#registerForm {
+	width: 1000px;
 
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 30px;
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 30px;
 
-  padding: 30px;
+	padding: 30px;
 }
 
-#registerForm .title{
-  margin-bottom: 30px;
+#registerForm .title {
+	margin-bottom: 30px;
 }
 
-#registerForm button{
-  width: 100%;
+#registerForm button {
+	width: 100%;
 
-  margin-bottom: 20px;
+	margin-bottom: 20px;
 }
 
-#registerForm #registerFormForm .formControll .formControlItem{
-  margin-bottom: 30px;
+#registerForm #registerFormForm .formControll .formControlItem {
+	margin-bottom: 30px;
 }
 
-#registerForm .cardGroup{
-  display: grid;
-  grid-template-rows: repeat(4, 90px);
-  border-radius: 8px;
-  align-items: center;
-  gap: 40px;
+#registerForm .cardGroup {
+	display: grid;
+	grid-template-rows: repeat(4, 90px);
+	border-radius: 8px;
+	align-items: center;
+	gap: 40px;
 }
 
-#registerForm .cardGroup>.card{
-  width: 100%;
-  height: 100%;
+#registerForm .cardGroup > .card {
+	width: 100%;
+	height: 100%;
 
-  background: #ECECEC;
-  border-radius: 8px;
-  cursor: pointer;
-  /* perspective: 1000px; */
+	background: #ececec;
+	border-radius: 8px;
+	cursor: pointer;
+	/* perspective: 1000px; */
 
-  overflow: hidden;
+	overflow: hidden;
 }
 
-#registerForm .cardGroup .card:hover .cardDescription{
-  display: none;
+#registerForm .cardGroup .card:hover .cardDescription {
+	display: none;
 }
 
-#registerForm .cardGroup .card:hover .cardBack{
-  display: inline;
+#registerForm .cardGroup .card:hover .cardBack {
+	display: inline;
 }
 
-#registerForm .cardGroup .card .cardContent .cardFront{
-
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 10px;
+#registerForm .cardGroup .card .cardContent .cardFront {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 10px;
 }
 
-#registerForm .cardGroup .card .cardImg>img{
-  width: 90px;
+#registerForm .cardGroup .card .cardImg > img {
+	width: 90px;
 }
 
-#registerForm .cardGroup .card .cardDescription{
-  font-size: 0.725rem;
-  color: var(--color-3);
+#registerForm .cardGroup .card .cardDescription {
+	font-size: 0.725rem;
+	color: var(--color-3);
 
-  text-align: start;
+	text-align: start;
 }
 
-#registerForm .cardGroup .card .cardBack ul{
-  display: flex;
-  flex-direction: row;
-  gap: 5px 18px;
-  flex-wrap: wrap;
+#registerForm .cardGroup .card .cardBack ul {
+	display: flex;
+	flex-direction: row;
+	gap: 5px 18px;
+	flex-wrap: wrap;
 }
 
-#registerForm .cardGroup .card .cardBack ul li{
-  font-size: 0.785rem;
-  font-family: var(--cardo);
-  font-weight: 800;
+#registerForm .cardGroup .card .cardBack ul li {
+	font-size: 0.785rem;
+	font-family: var(--cardo);
+	font-weight: 800;
 }
 
-#registerForm .cardGroup .card .cardBack ul li span{
-  color: var(--btn-bg-2);
+#registerForm .cardGroup .card .cardBack ul li span {
+	color: var(--btn-bg-2);
 }
 
 #registerForm,
 #loginForm,
 #closeBtn,
-.cardBack{
-  display: none;
+.cardBack {
+	display: none;
 }
 
-.alert{
-  width:100% ;
+.alert {
+	width: 100%;
 
-  font-family: var(--cardo);
-  font-size: 1.2rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  text-align: center;
+	font-family: var(--cardo);
+	font-size: 1.2rem;
+	font-weight: 800;
+	text-transform: uppercase;
+	text-align: center;
 
-  padding: 0.5rem;
+	padding: 0.5rem;
 
-  position: absolute;
-  background: var(--btn-bg-2);
-  color: var(--color-2);
-  display: block;
+	position: absolute;
+	background: var(--btn-bg-2);
+	color: var(--color-2);
+	display: block;
 }
 
-.chosen{
-  inset: 1;
-  box-shadow: rgba(242, 181, 68, 0.16) 0px 10px 36px 0px, rgba(242, 181, 68, 0.6) 0px 0px 0px 1px;
+.chosen {
+	inset: 1;
+	box-shadow: rgba(242, 181, 68, 0.16) 0px 10px 36px 0px, rgba(242, 181, 68, 0.6) 0px 0px 0px 1px;
 }
