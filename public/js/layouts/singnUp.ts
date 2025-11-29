@@ -10,9 +10,9 @@ export function signUpLayout(callback: (form: HTMLElement) => void): HTMLElement
 	form.appendChild(createInput("email", "confirme seu email", "emailConfirmInput"));
 	form.appendChild(createInput("password", "Insira sua senha", "passwordInput"));
 	form.appendChild(createInput("password", "Insira sua senha novamente", "passwordConfirmInput"));
-	form.appendChild(createButton("Cadastrar", "singnUpButton", "submit"));
+	form.appendChild(createButton("Cadastrar", "signUpButton", "submit"));
 
-	callback(form);
+	// callback(form);
 
 	return form;
 }

@@ -22,7 +22,7 @@ body::before {
 	inset: 0;
 
 	background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.41) 0%, rgba(0, 0, 0, 0.918) 100%),
-		url("/public/assets/img/backgrounds/paisagem_index.jpg") no-repeat top;
+		url("/assets/img/backgrounds/paisagem_index.jpg") no-repeat top;
 	background-size: cover;
 	filter: blur(3.4px);
 	transform: scale(1.05);
