@@ -1,13 +1,8 @@
-export function createInput(
-	type: string,
-	placeholder: string,
-	id: string,
-	required: boolean = true
-): HTMLElement {
+export function createInput(type, placeholder, id, required = true, className = "formInput") {
 	const input = document.createElement("input");
 	input.type = type;
 	input.placeholder = placeholder;
-	input.className = "formInput";
+	input.className = className;
 	input.id = id;
 	input.required = required;
 

@@ -1,7 +1,7 @@
-import { createInput } from "../components/input";
-import { createButton } from "../components/button";
+import { createInput } from "../components/input.js";
+import { createButton } from "../components/button.js";
 
-export function signUpLayout(callback: (form: HTMLElement) => void): HTMLElement {
+export function signUpLayout(callback = (form) => {}) {
 	const form = document.createElement("form");
 	form.className = "formControl";
 	form.id = "signUpForm";
@@ -12,7 +12,7 @@ export function signUpLayout(callback: (form: HTMLElement) => void): HTMLElement
 	form.appendChild(createInput("password", "Insira sua senha novamente", "passwordConfirmInput"));
 	form.appendChild(createButton("Cadastrar", "signUpButton", "submit"));
 
-	// callback(form);
+	callback(form);
 
 	return form;
 }

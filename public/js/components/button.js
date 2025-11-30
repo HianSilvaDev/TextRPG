@@ -1,9 +1,4 @@
-export function createButton(
-	text: string,
-	id: string,
-	typeBtn: "submit" | "button" | "reset" = "submit",
-	className: string = "formButton"
-): HTMLElement {
+export function createButton(text, id, typeBtn, className = "formButton") {
 	const button = document.createElement("button");
 	button.id = id;
 	button.className = className;
